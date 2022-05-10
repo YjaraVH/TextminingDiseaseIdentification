@@ -47,8 +47,8 @@ article {
 </head>
 <body>
 <header>
-  <h1>TextminingDiseaseIdentification</h1>
-    <a href="/">homepage</a>
+  <h1>Textmining Disease Identification</h1>
+    <a href="/Homepage">Homepage</a>
     <a href="/About">About</a>
 </header>
 
@@ -57,10 +57,11 @@ article {
     <ul>
         <h2>Upload file</h2>
         <form method="post">
-            <p>Hier iets komen om een bestand of folder te selecteren:</p>
-        <input type="text" name="answer">
+            <p>Choose file:</p>
+        <input type="text" name="file">
         <input type="submit" value="Submit">
         </form>
+        <p>{{ file }}</p>
     </ul>
     </nav>
     <article>
