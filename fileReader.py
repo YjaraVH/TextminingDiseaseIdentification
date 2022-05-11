@@ -18,17 +18,25 @@ import pandas as pd
 
 def fileLezen(file):
     with open(file) as file:
+        file.readline()
         metabolen_zscores = {}
         count = 0
         for line in file:
             count += 1
-            if line != "":
-                line = line.split(";")
-                print(len(line))
+            line = line.strip()
+            line = line.split("\t")
+            # print(line)
+            # print(len(line))
+            try:
                 key = line[62]
-                value = line[127:153]
-                metabolen_zscores[key] = value
-    print(metabolen_zscores)
+                print(key)
+                value = line[103:153]
+                #print(value)
+                metabolen_zscores[key] += value
+            except KeyError:
+                pass
+
+    # print(metabolen_zscores)
 
 
 def lezen():
@@ -51,5 +59,5 @@ def bestand_lezen():
 if __name__ == '__main__':
     #lezen()
     #bestand_lezen()
-    file = "Dataset/Metabolics.csv"
+    file = "Dataset/Untargeted_metabolomics.txt"
     fileLezen(file)
