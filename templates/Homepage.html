@@ -55,17 +55,20 @@ article {
 <section>
     <nav>
     <ul>
-        <h2>Upload file</h2>
-        <form method="post">
-            <p>Choose file:</p>
-        <input type="text" name="file">
-        <input type="submit" value="Submit">
+        <b>Choose and upload file</b>
+        <form action="/Homepage" method="post" enctype="multipart/form-data">
+            <p>Select File</p>
+            <input type="file" name="file"><br />
+            <p>Upload file</p>
+            <input type="submit" name="upload" value="Upload">
         </form>
-        <p>{{ file }}</p>
+
+        {% if error %}
+            <p style="color: brown" >{{ error }}</p>
+        {%  endif %}
     </ul>
     </nav>
     <article>
-
     </article>
 </section>
 </body>
