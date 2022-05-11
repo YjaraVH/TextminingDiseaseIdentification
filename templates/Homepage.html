@@ -47,24 +47,28 @@ article {
 </head>
 <body>
 <header>
-  <h1>TextminingDiseaseIdentification</h1>
-    <a href="/">homepage</a>
+  <h1>Textmining Disease Identification</h1>
+    <a href="/Homepage">Homepage</a>
     <a href="/About">About</a>
 </header>
 
 <section>
     <nav>
     <ul>
-        <h2>Upload file</h2>
-        <form method="post">
-            <p>Hier iets komen om een bestand of folder te selecteren:</p>
-        <input type="text" name="answer">
-        <input type="submit" value="Submit">
+        <b>Choose and upload file</b>
+        <form action="/Homepage" method="post" enctype="multipart/form-data">
+            <p>Select File</p>
+            <input type="file" name="file"><br />
+            <p>Upload file</p>
+            <input type="submit" name="upload" value="Upload">
         </form>
+
+        {% if error %}
+            <p style="color: brown" >{{ error }}</p>
+        {%  endif %}
     </ul>
     </nav>
     <article>
-
     </article>
 </section>
 </body>

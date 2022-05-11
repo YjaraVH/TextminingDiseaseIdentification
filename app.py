@@ -5,14 +5,29 @@ from Bio import Entrez
 
 app = Flask(__name__)
 
-
 @app.route('/',methods=["POST", "GET"])
-def hello_world():  # put application's code here
+def start():
+    return render_template("start.html")
+
+@app.route('/Homepage',methods=["POST", "GET"])
+def hello_world():
     if request.method == "POST":
-        answer = request.form.get("answer", "")
-        return render_template("Homepage.html", answer=answer)
+        if 'file' not in request.files:
+            error = "File not selected"
+            return render_template("Homepage.html", error=error)
+        file = request.files['file']
+        filename = file.filename
+        print(filename)
+        if filename == '':
+            error = "Filename is empty"
+            return render_template("Homepage.html", error=error)
+        if filename.endswith(".xlsx") == False:
+            error = "This file is not allowed"
+            return render_template("Homepage.html", error=error)
+        else:
+            return render_template("Homepage.html", error="")
     else:
-        return render_template("Homepage.html", answer="")
+        return render_template("Homepage.html")
 
 @app.route('/About',methods=["POST", "GET"])
 def info():
