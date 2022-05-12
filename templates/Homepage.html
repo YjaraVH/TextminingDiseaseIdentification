@@ -9,53 +9,51 @@
 
 body {
   font-family: Arial, Helvetica, sans-serif;
+    background-color: lightblue;
 }
 
 /* Style of the header */
 header {
-  background-color: #666;
+  background-color: darksalmon;
   padding: 6px;
   text-align: center;
   font-size: 20px;
   color: white;
 }
 
-/* Create two columns/boxes next to each other */
-nav {
-  float: left;
-  width: 20%;
-  background: #ccc;
-  padding: 20px;
+.all-browsers {
+  margin: 0;
+  padding: 5px;
+  background-color: lightgray;
 }
 
-article {
-  float: left;
-  padding: 20px;
-  width: 80%;
-  background-color: #f1f1f1;
+.all-browsers > h1, .browser {
+  margin: 10px;
+  padding: 5px;
 }
 
+.browser {
+  background: white;
+}
 
-/*places columns/box on top of each other for a small screen */
-@media (max-width: 600px) {
-  nav, article {
-    width: 100%;
-    height: auto;
-  }
+.browser > h2, p {
+  margin: 4px;
+  font-size: 90%;
 }
 </style>
 </head>
 <body>
 <header>
-  <h1>Textmining Disease Identification</h1>
+  <h1>Disease Identification</h1>
     <a href="/Homepage">Homepage</a>
     <a href="/About">About</a>
 </header>
 
 <section>
-    <nav>
-    <ul>
-        <b>Choose and upload file</b>
+    <article class="all-browsers">
+  <h1>Completed the following steps</h1>
+  <article class="browser">
+    <h2>Choose and upload file</h2>
         <form action="/Homepage" method="post" enctype="multipart/form-data">
             <p>Select File</p>
             <input type="file" name="file"><br />
@@ -66,10 +64,17 @@ article {
         {% if error %}
             <p style="color: brown" >{{ error }}</p>
         {%  endif %}
-    </ul>
-    </nav>
-    <article>
-    </article>
+  </article>
+  <article class="browser">
+    <h2>Obtain information</h2>
+    <p>Please understand that this can take some time</p>
+      <p>There are two options: the fast one with an high error rate or the slow one with a low error rate</p>
+  </article>
+  <article class="browser">
+    <h2>Explore findings</h2>
+    <p>Press the button to go to the page with the information</p>
+  </article>
+</article>
 </section>
 </body>
 </html>

@@ -10,11 +10,15 @@ body {
 
 body {
   font-family: Arial, Helvetica, sans-serif;
+    background-image: url('https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fgetwallpapers.com%2Fwallpaper%2Ffull%2Fe%2Ff%2F2%2F441670.jpg&f=1&nofb=1');
+    background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
 }
 
 /* Style of the header */
 header {
-  background-color: #666;
+  background-color: darksalmon;
   padding: 6px;
   text-align: center;
   font-size: 20px;
