@@ -51,24 +51,44 @@ header {
 
 <section>
     <article class="all-browsers">
-  <h1>Completed the following steps</h1>
+  <h1>Complete the following steps</h1>
   <article class="browser">
     <h2>Choose and upload file</h2>
-        <form action="/Homepage" method="post" enctype="multipart/form-data">
-            <p>Select File</p>
-            <input type="file" name="file"><br />
-            <p>Upload file</p>
-            <input type="submit" name="upload" value="Upload">
-        </form>
+     <div id="hid1">
+           <form action="/Homepage" method="post" enctype="multipart/form-data">
+               <p>Select File</p>
+               <input type="file" name="file"><br />
+               <p>Upload file</p>
+               <input type="submit" name="upload" value="Upload">
+           </form>
+     </div>
+      {% if error == '' %}
+          <p style="color: lime" onclick="hidAndShow('hid1')">Check: First step completed</p>
+      {% endif %}
+      {% if error %}
+          <p style="color: brown" >{{ error }}</p>
+      {%  endif %}
+         <script>
 
-        {% if error %}
-            <p style="color: brown" >{{ error }}</p>
-        {%  endif %}
+    function hidAndShow(id) {
+            var x = document.getElementById(id);
+            if (x.style.display === "none") {
+              x.style.display = "block";
+            } else {
+              x.style.display = "none";
+            }
+        }
+    </script>
+
   </article>
   <article class="browser">
     <h2>Obtain information</h2>
     <p>Please understand that this can take some time</p>
       <p>There are two options: the fast one with an high error rate or the slow one with a low error rate</p>
+    <nobr>Enter negative z-score threshold:</nobr>
+      <input type="text" name="zscoreNeg" size="5">
+      <nobr>Enter positive z-score threshold:</nobr>
+      <input type="text" name="zscorePos" size="5">
   </article>
   <article class="browser">
     <h2>Explore findings</h2>

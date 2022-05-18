@@ -11,8 +11,31 @@
 </header>
 
 <h2>About the project</h2>
-<br>
     <p>This application is being developed at the request of UMC Utrecht (Wilhelmina Children's Hospital) and uses text mining to diagnose metabolic diseases.</p>
     <p> As a result, the condition can be identified and treated more quickly.<p>
     <p> Excel files can be uploaded to the Homepage.<p>
+    <button onclick="hidAndShow('hid1')">How does it work?</button>
+    <div id="hid1" style="display:none;">
+    <p>Complete the steps in the homepage.</p>
+    <p>Only excel files can be uploaded.</p>
+    </div>
+    <button onclick="hidAndShow('hid2')">About the makers</button>
+    <div id="hid2" style="display:none;">
+    <p>Students at HAN University of Applied Sciences</p>
+    <p>Yjara Verhagen</p>
+    <p>Tosca Frederiks<p>
+    <p>Nienke Gertsen<p>
+    </div>
+
+    <script>
+    function hidAndShow(id) {
+            var x = document.getElementById(id);
+            if (x.style.display === "none") {
+              x.style.display = "block";
+            } else {
+              x.style.display = "none";
+            }
+        }
+    </script>
+
 {% endblock %}
