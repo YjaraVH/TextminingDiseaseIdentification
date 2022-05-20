@@ -1,63 +1,132 @@
-# Name = 62
-# Z-score = 127 t/m 153
 import pandas as pd
 
-
-# def fileLezen(file):
-#     with open(file) as file:
-#         metabolen_zscores = {}
-#         count = 0
-#         for line in file:
-#             count += 1
-#             if line != "":
-#                 line = line.strip().replace(",", "").replace(";", "")
-#                 print(line)
-#                 metabolen_zscores.setdefault(line[62], []).append(line[127:153])
-#
-#     print(metabolen_zscores)
-
-def fileLezen(file):
-    with open(file) as file:
-        file.readline()
-        metabolen_zscores = {}
-        count = 0
-        for line in file:
-            count += 1
-            line = line.strip()
-            line = line.split("\t")
-            # print(line)
-            # print(len(line))
-            try:
-                key = line[62]
-                print(key)
-                value = line[103:153]
-                #print(value)
-                metabolen_zscores[key] += value
-            except KeyError:
-                pass
-
-    # print(metabolen_zscores)
+def readFile(file):
+    data = pd.read_excel(file)
+    return data
 
 
-def lezen():
-    df = pd.read_excel("Untargeted_metabolomics.xlsx", sheet_name="Blad1")
-    df.head()
-    print(df)
-
-def bestand_lezen():
-    data = pd.read_excel("Dataset/Untargeted_metabolomics.xlsx")
+def getPatientsId(data):
     columns = data.columns
     person_ids = []
+    count = 0
+    firstCount = 0
     for i in columns:
-        print(i)
+        if firstCount == 0:
+            count = count + 1
         string_i = str(i)
-        if string_i.startswith("P") and string_i.endswith(".1"):
+        if string_i.startswith("P") and string_i.endswith("Zscore"):
+            if firstCount == 0:
+                firstCount = count - 1
+            count = count + 1
             person_ids.append(string_i)
-    print(person_ids)
+    return person_ids, firstCount, count
+
+
+def getMetabolites(data):
+    metabolites = data["name"]
+    return list(metabolites)
+
+
+def getDicMetbZscore(data, metabolites, start, stop):
+    dict = {}
+    for index in range(0, len(metabolites)):
+        dict[metabolites[index]] = list(data.loc[index])[start:stop]
+    return dict
+
+
+def printDictionary(dict):
+    for item in dict:
+        print("key: {}, Value {}".format(item, dict[item]))
+
+
+def getMetabolieten(data):
+    metabolieten = []
+    metabolites = data["name"]
+    metabolieten.append(list(metabolites))
+    return metabolieten
+
+
+def getRelevance(data):
+    relevance = []
+    rele = data["relevance"]
+    relevance.append(list(rele))
+    return relevance
+
+
+def getDescription(data):
+    description = []
+    desc = data["descr"]
+    description.append(list(desc))
+    return description
+
+
+def getOrigin(data):
+    origin = []
+    ori = data["origin"]
+    origin.append(list(ori))
+    return origin
+
+
+def getFluids(data):
+    fluids = []
+    fluid = data["fluids"]
+    fluids.append(list(fluid))
+    return fluids
+
+
+def getTissue(data):
+    tissue = []
+    tiss = data["tissue"]
+    tissue.append(list(tiss))
+    return tissue
+
+
+def getDisease(data):
+    disease = []
+    dis = data["disease"]
+    disease.append(list(dis))
+    return disease
+
+
+def getPathway(data):
+    pathway = []
+    path = data["pathway"]
+    pathway.append(list(path))
+    return pathway
+
+
+def getHMDBcode(data):
+    hmdb_code = []
+    code = data["HMDB_code"]
+    hmdb_code.append(list(code))
+    return hmdb_code
 
 
 if __name__ == '__main__':
-    #lezen()
-    #bestand_lezen()
-    file = "Dataset/Untargeted_metabolomics.txt"
-    fileLezen(file)
+    #File name
+    file = "Dataset/Untargeted_metabolomics.xlsx"
+
+    data = readFile(file)
+    metabolites = getMetabolites(data)
+    person_ids, start, stop = getPatientsId(data)
+    dict = getDicMetbZscore(data, metabolites, start, stop)
+    #print best wel veel uit, maar dan kun je even kijken hoe het eruit ziet:)
+    # printDictionary(dict)
+
+    # print(person_ids)
+    metabolieten = getMetabolieten(data)
+    # print(metabolieten)
+    relevance = getRelevance(data)
+    # print(relevance)
+    description = getDescription(data)
+    # print(description)
+    origin = getOrigin(data)
+    # print(origin)
+    fluids = getFluids(data)
+    # print(fluids)
+    disease = getDisease(data)
+    # print(disease)
+    pathway = getPathway(data)
+    # print(pathway)
+    hmdb_code = getHMDBcode(data)
+    # print(hmdb_code)
