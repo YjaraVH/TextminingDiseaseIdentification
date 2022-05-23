@@ -120,87 +120,102 @@ def insert_database(key, value, fluids, tissue, patient_id, relevance, paths,
     # open een cursor
     cursor = conn.cursor()
     update_fluids(fluids, getal, conn, cursor)
-    update_link_fluids_metb(getal, conn, cursor)
+    print("tabel fluids geupdate")
     update_tissue(tissue, getal, conn, cursor)
+    print("tabel tissue geupdate")
     update_patiens(patient_id, getal, conn, cursor)
-    update_link_patient_metb(getal, conn, cursor)
+    print("tabel patiens geupdate")
     update_diseases(disease, getal, conn, cursor)
-    update_link_diseases_metb(getal, conn, cursor)
+    print("tabel diseases geupdate")
     update_origins(origin, getal, conn, cursor)
-    update_link_origins_metb(getal, conn, cursor)
+    print("tabel origins geupdate")
     update_pathways(paths, getal, conn, cursor)
-    update_link_pathways_metb(getal, conn, cursor)
+    print("tabel pathways geupdate")
     update_Metabolieten(getal, name, desc, HMBD_code, cursor, conn)
+    print("tabel metabolieten geupdate")
+    update_link_fluids_metb(getal, conn, cursor)
+    print("tabel link fluids metabolieten geupdate")
+    update_link_tissue_metb(getal, conn, cursor)
+    print("tabel link tissue metabolieten geupdate")
+    update_link_patient_metb(getal, conn, cursor)
+    print("tabel link patient metabolieten geupdate")
+    update_link_diseases_metb(getal, conn, cursor)
+    print("tabel link diseases metabolieten geupdate")
+    update_link_origins_metb(getal, conn, cursor)
+    print("tabel link origins metabolieten geupdate")
+    update_link_pathways_metb(getal, conn, cursor)
+    print("tabel link pathways metabolieten geupdate")
 
+    conn.close()
 
 def update_fluids(fluids, getal, conn, cursor):
     cursor.execute("insert into fluids(id_fluids, fluids_name)"
-                   "values ('{}', '{}')").format(getal, fluids[getal])
+                   "values ('{}', '{}')".format(getal, fluids[0][getal]))
     conn.commit()
 
 def update_link_fluids_metb(getal, conn, cursor):
     cursor.execute("insert into Metabolieten_fluids(Metabolieten_id_metaboliet, fluids_id_fluids)"
-                   "values ('{}', '{}')").format(getal, getal)
+                   "values ('{}', '{}')".format(getal, getal))
     conn.commit()
 
 def update_tissue(tissue, getal, conn, cursor):
     cursor.execute("insert into tissue(id_tissue, tissue_name)"
-                       "values ('{}', '{}')").format(getal, tissue[getal])
+                       "values ('{}', '{}')".format(getal, tissue[0][getal]))
     conn.commit()
 
 def update_link_tissue_metb(getal, conn, cursor):
     cursor.execute("insert into Metabolieten_tissue(Metabolieten_id_metaboliet, tissue_id_tissue)"
-                       "values ('{}', '{}')").format(getal, getal)
+                       "values ('{}', '{}')".format(getal, getal))
     conn.commit()
 
 def update_patiens(patient_id, getal, conn, cursor):
-    cursor.execute("insert into Patients(id_patient, id_metaboliet, z_score)"
-                   "values ('{}', '{}', '{}')").format(patient_id[getal], getal,
-                                                       str(value))
-    conn.commit()
+    for i in value:
+        cursor.execute("insert into Patients(id_patient, id_metaboliet, z_score) "
+                       "values ('{}', '{}', '{}')".format(patient_id[0][getal], getal, i))
+        conn.commit()
 
 def update_link_patient_metb(getal, conn, cursor):
     cursor.execute("insert into Patients_Metabolieten(Patients_id_patient, Metabolieten_id_metaboliet)"
-                   "values ('{}', '{}')").format(getal, getal)
+                   "values ('{}', '{}')".format(getal, getal))
     ### moet dit patient_patient releatie gelijk zijn aan patient id?
     conn.commit()
 
 def update_diseases(disease, getal, conn, cursor):
     cursor.execute("insert into diseases(id_disease, disease_name)"
-                   "values ('{}', '{}')").format(getal, disease[getal])
+                   "values ('{}', '{}')".format(getal, disease[0][getal]))
     conn.commit()
 
 def update_link_diseases_metb(getal, conn, cursor):
     cursor.execute("insert into Metabolieten_diseases(Metabolieten_id_metaboliet, diseases_id_disease)"
-                   "values ('{}', '{}')").format(getal, getal)
+                   "values ('{}', '{}')".format(getal, getal))
     conn.commit()
 
 def update_origins(origin, getal, conn, cursor):
     cursor.execute("insert into fluids(id_orgins, orgin_name)"
-                   "values ('{}', '{}')").format(getal, origin[getal])
+                   "values ('{}', '{}')".format(getal, origin[0][getal]))
     conn.commit()
 
 def update_link_origins_metb(getal, conn, cursor):
     cursor.execute("insert into origins_Metabolieten(orings_id_origins, Metabolieten_id_metaboliet)"
-                   "values ('{}', '{}')").format(getal, getal)
+                   "values ('{}', '{}')".format(getal, getal))
     conn.commit()
 
 def update_pathways(paths, getal, conn, cursor):
     cursor.execute("insert into pathways(id_path, path_name)"
-                   "values ('{}', '{}')").format(getal, paths[getal])
+                   "values ('{}', '{}')")
     conn.commit()
 
 def update_link_pathways_metb(getal, conn, cursor):
     cursor.execute("insert into pathways_Metabolieten(pathways_id_pathways, Metabolieten_id_metaboliet)"
-                   "values ('{}', '{}')").format(getal, getal)
+                   "values ('{}', '{}')".format(getal, getal))
     conn.commit()
 
 def update_Metabolieten(getal, name, desc, HMBD_code, cursor, conn):
     cursor.execute("insert into Metabolieten(id_relevance, id_metaboliet, id_origin, id_fluids, name,"
                    " description, HMBD_code, relevance_id_relevance)"
-                   "values ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')").format(getal, getal, getal, getal,
-                                                                                     name[getal], desc[getal],
-                                                                                     HMBD_code[getal], getal)
+                   "values ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')".format(getal, getal, getal, getal,
+                                                                                     name[0][getal], desc[0][getal],
+                                                                                     HMBD_code[0][getal], getal))
     conn.commit()
 
 
