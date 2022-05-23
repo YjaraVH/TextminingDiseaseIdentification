@@ -16,32 +16,6 @@ import sys
 
 
 import fileReader
-
-def get_synonyms(word):
-    synonyms = []
-
-    for syn in wordnet.synsets(word):
-        for l in syn.lemmas():
-            synonyms.append(l.name())
-    stringSyn = str(set(synonyms)).replace("', '", " OR ").replace("{'",
-                                                                   "").replace(
-        "'}", "")
-    if stringSyn == 'set()':
-        stringSyn = word
-    return stringSyn
-
-def get_ids(combie):
-    startdate = 2000
-    maxDate = 2022
-    date = startdate
-    handle = Entrez.esearch(db='pubmed', term=f"{combie}[Title/Abstract]",
-                            mindate=f'{date}/01/01',
-                            maxdate=f'{maxDate}/12/31')
-    record = Entrez.read(handle)
-    handle.close()
-    idlist = record["IdList"]
-    return idlist
-
 def obtain_info_single_article():
     # submit request
     Format = "pubtator"
@@ -86,18 +60,37 @@ def get_title_diseases(ids):
     r = requests.get(
         f"https://www.ncbi.nlm.nih.gov/research/pubtator-api/publications/export/{Format}?{Type}={identities[0:len(identities)-1]}&concepts={Bioconcepts}")
     print(r)
-    print(">>>>>>>>>>")
-    print(r.text)
-    diseases = []
- # for item in r.text.split(ident):
- #     if item.startswith("|t|"):
- #         title = item[3:len(item)-1]
- #     elif item.startswith("\t"):
- #         diseases.append(item.split("\t")[3])
- # print(title)
- # print(diseases)
+   # print(">>>>>>>>>>")
+    #print(r.text)
+    info_per_article(r.text.split("\n"))
+    return r.text.split("\n")
 
 
+
+def get_synonyms(word):
+    synonyms = []
+
+    for syn in wordnet.synsets(word):
+        for l in syn.lemmas():
+            synonyms.append(l.name())
+    stringSyn = str(set(synonyms)).replace("', '", " OR ").replace("{'",
+                                                                   "").replace(
+        "'}", "")
+    if stringSyn == 'set()':
+        stringSyn = word
+    return stringSyn
+
+def get_ids(combie):
+    startdate = 2000
+    maxDate = 2022
+    date = startdate
+    handle = Entrez.esearch(db='pubmed', term=f"{combie}[Title/Abstract]",
+                            mindate=f'{date}/01/01',
+                            maxdate=f'{maxDate}/12/31')
+    record = Entrez.read(handle)
+    handle.close()
+    idlist = record["IdList"]
+    return idlist
 
 def get_ids_all_pubmed(metabolites):
     Entrez.email = 'A.C.Other@example.com'
@@ -115,9 +108,35 @@ def get_ids_all_pubmed(metabolites):
         get_title_diseases(idlist)
        # return idlist
 
+def info_per_article(info):
+    articles = {}
+    diseases = []
+    title = ""
+    id_n = ""
+    id = ""
+    print("########################")
+    for item in info:
+        id = item[0:8]
+        if id == "" and title != "":
+            articles[id_n] = [title,diseases]
+            diseases = []
+        if item[9:11] == "t|":
+            title = item.split("t|")[1]
+        elif item.startswith(f"{id}\t"):
+            diseases.append(item.split("\t")[3])
+        id_n = item[0:8]
+
+    #!!!
+    print("print one of them")
+    print(articles["32866201"])
+
+
+
+
 
 if __name__ == '__main__':
-    metabolieten = ["1,3-Diaminopropane","2-Ketobutyric acid","2-Hydroxybutyric acid"]
+   # metabolieten = ["1,3-Diaminopropane","2-Ketobutyric acid","2-Hydroxybutyric acid"]
+    metabolieten = ["2-Ketobutyric acid"]
     get_ids_all_pubmed(metabolieten)
 
     #get_title_diseases()
