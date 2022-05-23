@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}TextminingDiseaseIdentification - Resutls{% endblock %}
+
+{% block content %}
+
+<header>
+  <h1>About</h1>
+  <div class="topnav">
+    <a href="/Homepage">Homepage</a>
+    <a href="/Results">Results</a>
+    <a href="/About">About</a>
+
+  </div>
+</header>
+
+<section>
+    <nav>
+    <ul>
+        <h2>Filter</h2>
+        <p>Enter negative z-score threshold:<input type="text" name="zscoreNeg" size="5"></p>
+        <p>Enter positive z-score threshold:<input type="text" name="zscorePos" size="5"></p>
+        <h2>Options</h2>
+        <!--  Text input: header/organism/protein name  -->
+        <p>Chose on what you want to search</p>
+        <div id="wrapper">
+            <input onclick="hidAndShow('patient','disease','metabolites')" type="radio" name="org_pro" value="patient" checked>patient</input><br>
+            <input onclick="hidAndShow('metabolites','disease','patient')" type="radio" name="org_pro" value="metabolites">metabolites</input><br>
+            <input onclick="hidAndShow('disease','patient','metabolites')" type="radio" name="org_pro" value="disease">disease</input><br>
+        </div>
+
+        <!--  Checkbox for the parameters  -->
+        <form method="post">
+        <div id="patient">
+            <p>Select all categories for analysis</p>
+           <input type="checkbox" id="diseases" name="diseases" value="diseases">
+            <label for="diseases">disease</label><br>
+            <input type="checkbox" id="meta" name="meta" value="meta">
+            <label for="meta">metabolites</label><br>
+            <input type="checkbox" id="z-scores" name="z-scores" value="z-scores">
+            <label for="z-scores">z scores</label><br>
+     </div>
+            <div id="disease" style="display:none;">
+            <p>Select all categories for analysis</p>
+           <input type="checkbox" id="patients" name="patients" value="patients">
+            <label for="patients">patients</label><br>
+            <input type="checkbox" id="z-scores" name="z-scores" value="z-scores">
+            <label for="z-scores">z scores</label><br>
+     </div>
+            <div id="metabolites" style="display:none;">
+            <p>Select all categories for analysis</p>
+           <input type="checkbox" id="patients" name="patients" value="patients">
+            <label for="patients">patients</label><br>
+            <input type="checkbox" id="z-scores" name="z-scores" value="z-scores">
+            <label for="z-scores">z scores</label><br>
+           <input type="checkbox" id="diseases" name="diseases" value="diseases">
+            <label for="diseases">disease</label><br>
+            <input type="checkbox" id="articles" name="articles" value="articles">
+            <label for="articles">articles</label><br>
+     </div>
+
+
+        <!--  Search choise: protein or organism name  -->
+        <p>Type your search word:</p>
+        <input type="text" name="answer">
+        <input type="submit" value="Submit">
+        </form>
+
+        <script>
+
+    function hidAndShow(id,id2,id3) {
+            var x = document.getElementById(id);
+            var z = document.getElementById(id2);
+            var y = document.getElementById(id3);
+            if (x.style.display === "none") {
+              x.style.display = "block";
+              z.style.display = "none";
+              y.style.display = "none";
+            } else {
+              x.style.display = "none";
+              z.style.display = "block";
+              y.style.display = "block";
+            }
+        }
+    </script>
+    </ul>
+    </nav>
+    <article>
+    <p>......</p>
+        </article>
+  </section>
+{% endblock %}

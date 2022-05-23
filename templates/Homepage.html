@@ -36,9 +36,16 @@ header {
   background: white;
 }
 
-.browser > h2, p {
+.browser > h2{
   margin: 4px;
   font-size: 90%;
+        color: darksalmon;
+}
+
+.browser > h3,p,strong{
+  margin: 3px;
+  font-size: 80%;
+
 }
 </style>
 </head>
@@ -46,6 +53,7 @@ header {
 <header>
   <h1>Disease Identification</h1>
     <a href="/Homepage">Homepage</a>
+    <a href="/Results">Results</a>
     <a href="/About">About</a>
 </header>
 
@@ -54,7 +62,26 @@ header {
   <h1>Complete the following steps</h1>
   <article class="browser">
     <h2>Choose and upload file</h2>
-     <div id="hid1">
+    <p>Only excel files are accepted</p>
+    <p>Please select one of the following by clicking on them:</p>
+    <h3 onclick="hidAndShow('hid2')">> All metabolites in this file have not been present in a file submitted in a previous session</h3>
+    <h3 onclick="hidAndShow('hid1')">> File contains only new patients</h3>
+
+    <div id="hid2" style="display:none;">
+                <p style="color: hotpink">WARNING!</p>
+                <p>This process can take a while depending on the number of metabolites.</p>
+                <p>If there are more than ?2000 metabolites we advice you to upload your file, complete the following step and wait a full day for the results.</p>
+               <p>Please enter an email adres, an email while be send when all information is obtained.</p>
+            <form action="/Homepage" method="post" enctype="multipart/form-data">
+                <br /><strong>Email</strong><br/>
+            <input type="text" name="email">
+               <br /><strong>Select file</strong><br/>
+               <input type="file" name="file"><br/>
+               <input type="submit" name="upload" value="submit">
+           </form>
+     </div>
+
+     <div id="hid1" style="display:none;">
            <form action="/Homepage" method="post" enctype="multipart/form-data">
                <p>Select file</p>
                <input type="file" name="file"><br />
@@ -85,8 +112,6 @@ header {
     <h2>Obtain information</h2>
     <p>Please understand that this can take some time</p>
       <p>There are two options: the fast one with an high error rate or the slow one with a low error rate</p><br>
-      <p>Enter negative z-score threshold:<input type="text" name="zscoreNeg" size="5"></p>
-      <p>Enter positive z-score threshold:<input type="text" name="zscorePos" size="5"></p>
   </article>
   <article class="browser">
     <h2>Explore findings</h2>

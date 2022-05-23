@@ -1,4 +1,5 @@
 import io
+import time
 
 from flask import Flask,request,render_template
 from Bio import Entrez
@@ -16,8 +17,14 @@ def hello_world():
             error = "File not selected"
             return render_template("Homepage.html", error=error)
         file = request.files['file']
+        email = request.form.get("email","")
+        print(email)
         filename = file.filename
         print(filename)
+        if email == "":
+            print("no email is needed")
+        else:
+            print(email)
         if filename == '':
             error = "Filename is empty"
             return render_template("Homepage.html", error=error)
@@ -33,9 +40,25 @@ def hello_world():
 def info():
     return render_template("About.html")
 
+@app.route('/Results',methods=["POST", "GET"])
+def results():
+    return render_template("Results.html")
+
 @app.errorhandler(404)
 def not_found(e):
     return render_template("errorPage.html")
+
+
+
+def get_email(reciever):
+    import smtplib
+    # SERVER = "localhost"
+    FROM = 'monty@python.com'
+    msg = "lets test this"
+    # Send the mail
+    smtp = smtplib.SMTP('localhost')
+    smtp.sendmail(FROM, reciever, msg)
+    smtp.quit()
 
 
 if __name__ == '__main__':
