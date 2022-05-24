@@ -22,7 +22,6 @@ def getPatientsId(data):
     return person_ids, firstCount, count
 
 
-
 def getMetabolites(data):
     metabolites = data["name"]
     return list(metabolites)
@@ -103,11 +102,16 @@ def getHMDBcode(data):
     return hmdb_code
 
 
+def getPatient1(data):
+    patient1 = []
+    zscores = data["P1002.1_Zscore"]
+    patient1.append(list(zscores))
+    return patient1
+
 
 if __name__ == '__main__':
     #File name
     file = "Dataset/Untargeted_metabolomics.xlsx"
-
     data = readFile(file)
     metabolites = getMetabolites(data)
     person_ids, start, stop = getPatientsId(data)
@@ -132,3 +136,5 @@ if __name__ == '__main__':
     # print(pathway)
     hmdb_code = getHMDBcode(data)
     # print(hmdb_code)
+    patient1 = getPatient1(data)
+    print(patient1)
