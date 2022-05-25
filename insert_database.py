@@ -549,7 +549,7 @@ def update_relevance(relevance, conn, cursor):
 
 if __name__ == '__main__':
     # File name
-    file = "Untargeted_metabolomics.xlsx"
+    file = "Dataset/Untargeted_metabolomics.xlsx"
     # file = 'Compounds_DIMS_HEXA.xlsx'
 
     data = readFile(file)

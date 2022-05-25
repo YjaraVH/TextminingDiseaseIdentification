@@ -1,6 +1,5 @@
 import pandas as pd
 
-
 def readFile(file):
     data = pd.read_excel(file)
     return data
@@ -320,7 +319,7 @@ def getPatient31(data):
     return patient31
 
 
-if __name__ == '__main__':
+def main():
     #File name
     file = "Dataset/Untargeted_metabolomics.xlsx"
     data = readFile(file)
@@ -341,6 +340,7 @@ if __name__ == '__main__':
     origin = getOrigin(data)
     # print(origin)
     fluids = getFluids(data)
+    return fluids
     # print(fluids)
     disease = getDisease(data)
     # print(disease)
@@ -419,3 +419,4 @@ if __name__ == '__main__':
                                patient21, patient22, patient23, patient24,
                                patient25, patient26, patient27, patient28,
                                patient29, patient30, patient31]
+
