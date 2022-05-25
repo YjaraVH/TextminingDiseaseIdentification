@@ -133,7 +133,7 @@ def info_per_article(info):
 
 
 def ophalen():
-    data = fileReader.readFile("Dataset/Untargeted_metabolomics.xlsx")
+    data = fileReader.readFile("Untargeted_metabolomics.xlsx")
     # print(person_ids)
     metabolieten = fileReader.getMetabolieten(data)
     # print(metabolieten)
