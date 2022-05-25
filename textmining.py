@@ -96,11 +96,10 @@ def get_ids_all_pubmed(metabolites):
     Entrez.email = 'A.C.Other@example.com'
     for item in metabolites:
         startdate = 2000
-        maxDate = 2022
+        #maxDate = 2022
         date = startdate
         handle = Entrez.esearch(db='pubmed', term=f"{get_synonyms(item)}[Title/Abstract]",
-                                mindate=f'{date}/01/01',
-                                maxdate=f'{maxDate}/12/31')
+                                mindate=f'{date}/01/01') #maxdate=f'{maxDate}/12/31'
         record = Entrez.read(handle)
         handle.close()
         idlist = record["IdList"]
@@ -126,17 +125,113 @@ def info_per_article(info):
             diseases.append(item.split("\t")[3])
         id_n = item[0:8]
 
+    for key, value in articles.items():
+        print(key, ':', value)
     #!!!
-    print("print one of them")
-    print(articles["32866201"])
+   # print("print one of them")
+   # print(articles["32866201"])
 
 
+def ophalen():
+    data = fileReader.readFile("Dataset/Untargeted_metabolomics.xlsx")
+    # print(person_ids)
+    metabolieten = fileReader.getMetabolieten(data)
+    # print(metabolieten)
+    relevance = fileReader.getRelevance(data)
+    # print(relevance)
+    description = fileReader.getDescription(data)
+    # print(description)
+    origin = fileReader.getOrigin(data)
+    # print(origin)
+    fluids = fileReader.getFluids(data)
+    # print(fluids)
+    disease = fileReader.getDisease(data)
+    # print(disease)
+    pathway = fileReader.getPathway(data)
+    # print(pathway)
+    hmdb_code = fileReader.getHMDBcode(data)
+    # print(hmdb_code)
+    patient1 = fileReader.getPatient1(data)
+    # print(patfileReader.ent1)
+    patient2 = fileReader.getPatient2(data)
+    # print(patfileReader.gent2)
+    patient3 = fileReader.getPatient3(data)
+    # print(patfileReader.gent3)
+    patient4 = fileReader.getPatient4(data)
+    # print(patfileReader.gent4)
+    patient5 = fileReader.getPatient5(data)
+    # print(patfileReader.gent5)
+    patient6 = fileReader.getPatient6(data)
+    # print(patfileReader.gent6)
+    patient7 = fileReader.getPatient7(data)
+    # print(patfileReader.gent7)
+    patient8 = fileReader.getPatient8(data)
+    # print(patfileReader.gent8)
+    patient9 = fileReader.getPatient9(data)
+    # print(patfileReader.ent9)
+    patient10 =fileReader.getPatient10(data)
+    # print(patfileReader.ent10)
+    patient11 =fileReader.getPatient11(data)
+    # print(patfileReader.ent11)
+    patient12 =fileReader.getPatient12(data)
+    # print(patfileReader.ent12)
+    patient13 =fileReader.getPatient13(data)
+    # print(patfileReader.ent13)
+    patient14 =fileReader.getPatient14(data)
+    # print(patfileReader.ent14)
+    patient15 =fileReader.getPatient15(data)
+    # print(patfileReader.ent15)
+    patient16 =fileReader.getPatient16(data)
+    # print(patfileReader.ent16)
+    patient17 =fileReader.getPatient17(data)
+    # print(patfileReader.ent17)
+    patient18 =fileReader.getPatient18(data)
+    # print(patfileReader.ent18)
+    patient19 =fileReader.getPatient19(data)
+    # print(patfileReader.ent19)
+    patient20 =fileReader.getPatient20(data)
+    # print(patfileReader.ent20)
+    patient21 =fileReader.getPatient21(data)
+    # print(patfileReader.ent21)
+    patient22 =fileReader.getPatient22(data)
+    # print(patfileReader.ent22)
+    patient23 =fileReader.getPatient23(data)
+    # print(patfileReader.ent23)
+    patient24 =fileReader.getPatient24(data)
+    # print(patfileReader.ent24)
+    patient25 =fileReader.getPatient25(data)
+    # print(patfileReader.ent25)
+    patient26 =fileReader.getPatient26(data)
+    # print(patfileReader.ent26)
+    patient27 =fileReader.getPatient27(data)
+    # print(patfileReader.ent27)
+    patient28 =fileReader.getPatient28(data)
+    # print(patfileReader.ent28)
+    patient29 =fileReader.getPatient29(data)
+    # print(patfileReader.ent29)
+    patient30 =fileReader.getPatient30(data)
+    # print(patfileReader.ent30)
+    patient31 =fileReader.getPatient31(data)
+    # print(patient31)
 
+    lijst_patienten_lijsten = [patient1, patient2, patient3, patient4,
+                               patient5, patient6, patient7, patient8,
+                               patient9, patient10, patient11, patient12,
+                               patient13, patient14, patient15, patient16,
+                               patient17, patient18, patient19, patient20,
+                               patient21, patient22, patient23, patient24,
+                               patient25, patient26, patient27, patient28,
+                               patient29, patient30, patient31]
 
 
 if __name__ == '__main__':
-   # metabolieten = ["1,3-Diaminopropane","2-Ketobutyric acid","2-Hydroxybutyric acid"]
-    metabolieten = ["2-Ketobutyric acid"]
+
+
+
+
+
+    metabolieten = ["1,3-Diaminopropane","2-Ketobutyric acid","2-Hydroxybutyric acid"]
+    #metabolieten = ["2-Ketobutyric acid"]
     get_ids_all_pubmed(metabolieten)
 
     #get_title_diseases()
