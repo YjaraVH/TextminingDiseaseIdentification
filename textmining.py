@@ -3,6 +3,7 @@ from nltk.corpus import wordnet
 #nltk.download('omw-1.4')
 from Bio import Entrez
 import requests
+import fileReader
 
 
 
@@ -27,6 +28,7 @@ def get_synonyms(word):
         "'}", "")
     if stringSyn == 'set()':
         stringSyn = word
+    print(stringSyn)
     return stringSyn
 
 def get_ids_all_pubmed(metabolites):
@@ -60,15 +62,18 @@ def get_title_diseases(ids):
     # pubtator parameters
     Format = "pubtator"
     Type = "pmids"
-    Bioconcepts = "disease"
+    Bioconcepts = "disease,gene"
     identities = ''.join([str(elem + ",") for elem in ids])
 
     # web queri
     r = requests.get(
         f"https://www.ncbi.nlm.nih.gov/research/pubtator-api/publications/export/{Format}?{Type}={identities[0:len(identities)-1]}&concepts={Bioconcepts}")
 
+    print(f"https://www.ncbi.nlm.nih.gov/research/pubtator-api/publications/export/{Format}?{Type}={identities[0:len(identities)-1]}&concepts={Bioconcepts}")
+
     if str(r) == "<Response [200]>":
         # to get the wanted information out the data of the pubmed articles
+
         info_per_article(r.text.split("\n"))
     else:
         print("Request was unsuccesfull")
@@ -106,11 +111,11 @@ def info_per_article(info):
                 PMID = id_n
                 article_name = title
                 # fill pubOM table (database)
-                #######fill_PubOM(id_pum_om, PMID, article_name)
+                fill_PubOM(id_pum_om, PMID, article_name)
 
                 # Obtain how frequent a diseases occurs in text
                 # fills pub_disease
-                diseases_freq_article(diseases, mushs)
+                #####diseases_freq_article(diseases, mushs)
 
                 articles[id_n] = [title, diseases]
                 diseases = []
@@ -153,6 +158,11 @@ def fill_PubOM(id_pum_om,PMID,article_name):
     print(f"id={id_pum_om} PMID={PMID} Metab:{metab} article={article_name}")
 
 if __name__ == '__main__':
-    metabolieten = ["1,3-Diaminopropane","2-Ketobutyric acid","2-Hydroxybutyric acid"]
-    #metabolieten = ["2-Ketobutyric acid"]
+    file = "Dataset/Untargeted_metabolomics.xlsx"
+    data = fileReader.readFile(file)
+    #metabolieten = fileReader.getMetabolites(data)[0:2]
+    #metabolieten = ["1,3-Diaminopropane","2-Ketobutyric acid","2-Hydroxybutyric acid"]
+    #metabolieten = [ "Palmitoyl Serinol","Ethyl 2-hydroxyisovalerate", "8-oxo-dGDP"]
+    metabolieten = ["2-Ketobutyric acid"]
+
     get_ids_all_pubmed(metabolieten)
