@@ -91,9 +91,8 @@ article {
         <p>Chose on what you want to search</p>
 
         <div id="wrapper">
-            <input onclick="hidAndShow('patient','disease','metabolites')" type="radio" name="org_pro" value="patient" checked>patient</input><br>
-            <input onclick="hidAndShow('metabolites','disease','patient')" type="radio" name="org_pro" value="metabolites">metabolites</input><br>
-            <input onclick="hidAndShow('disease','patient','metabolites')" type="radio" name="org_pro" value="disease">disease</input><br>
+            <input onclick="hidAndShow('patient','metabolites')" type="radio" name="org_pro" value="patient" checked>patient</input><br>
+            <input onclick="hidAndShow('metabolites','patient')" type="radio" name="org_pro" value="metabolite">metabolites</input><br>
         </div>
 
         <!--  Checkbox for the parameters  -->
@@ -107,23 +106,16 @@ article {
             <input type="checkbox" id="z-scores" name="z-scores" value="z-scores">
             <label for="z-scores">z scores</label><br>
      </div>
-            <div id="disease" style="display:none;">
-            <p>Select all categories for analysis</p>
-           <input type="checkbox" id="patients" name="patients" value="patients">
-            <label for="patients">patients</label><br>
-            <input type="checkbox" id="z-scores" name="z-scores" value="z-scores">
-            <label for="z-scores">z scores</label><br>
-     </div>
             <div id="metabolites" style="display:none;">
             <p>Select all categories for analysis</p>
            <input type="checkbox" id="patients" name="patients" value="patients">
             <label for="patients">patients</label><br>
             <input type="checkbox" id="z-scores" name="z-scores" value="z-scores">
             <label for="z-scores">z scores</label><br>
-           <input type="checkbox" id="diseases" name="diseases" value="diseases">
-            <label for="diseases">disease</label><br>
-            <input type="checkbox" id="articles" name="articles" value="articles">
-            <label for="articles">articles</label><br>
+           <input type="checkbox" id="description" name="description" value="description">
+            <label for="description">description</label><br>
+            <input type="checkbox" id="HMBD_code" name="HMBD_code" value="HMBD_code">
+            <label for="HMBD_code">HMBD_code</label><br>
      </div>
 
 
@@ -133,35 +125,15 @@ article {
         <input type="submit" value="Submit">
         </form>
         <script>
-            function resultTable(id,id2,id3,re1,re2,re3){
-                var x = document.getElementById(id);
-                var z = document.getElementById(id2);
-                var y = document.getElementById(id3);
-                var r1 = document.getElementById(re1);
-                var r2 = document.getElementById(re2);
-                var r3 = document.getElementById(re3);
-                if (x.style.display === "block"){
-                    r1.style.display = "block"
-                }else if(z.style.display === "block"){
-                    r2.style.display = "block"
-                }else if(y.style.display === "block"){
-                    r3.style.display = "block"
-                }
-            }
-        </script>
-        <script>
     function hidAndShow(id,id2,id3) {
             var x = document.getElementById(id);
             var z = document.getElementById(id2);
-            var y = document.getElementById(id3);
             if (x.style.display === "none") {
               x.style.display = "block";
               z.style.display = "none";
-              y.style.display = "none";
             } else {
               x.style.display = "none";
               z.style.display = "block";
-              y.style.display = "block";
             }
         }
     </script>

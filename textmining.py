@@ -129,7 +129,6 @@ def info_per_article(info):
             if items[5] == "":
                 mesh = "NULL"
             else:
-                pub_disease += 1
                 mesh = items[5][5:]
             mushs[item.split("\t")[3].lower()] = mesh
             diseases.append(item.split("\t")[3].lower())
@@ -151,8 +150,10 @@ def diseases_freq_article(diseases, mushs):
 
 
 def fill_pub_disease(diseases_counts,mushs):
+    global pub_disease
     for key, value in diseases_counts.items(): #werkt dan niet met een primary key??!! of zo lijkt het
-       print(f"pubOm: {pub_Om}, disease:{key}, count:{value}, MESH_code: {mushs.get(key)}")
+       pub_disease += 1
+       print(f"pubOm: {pub_Om}, disease:{key}, count:{value}, MESH_code: {mushs.get(key)}, pub_disea:{pub_disease}")
 
 def fill_PubOM(id_pum_om,PMID,article_name):
     print(">>>PubOM<<<<")
@@ -161,9 +162,9 @@ def fill_PubOM(id_pum_om,PMID,article_name):
 if __name__ == '__main__':
     file = "Dataset/Untargeted_metabolomics.xlsx"
     data = fileReader.readFile(file)
-    #metabolieten = fileReader.getMetabolites(data)[0:2]
+    metabolieten = fileReader.getMetabolites(data)[0:50]
     #metabolieten = ["1,3-Diaminopropane","2-Ketobutyric acid","2-Hydroxybutyric acid"]
-    metabolieten = [ "Palmitoyl Serinol","Ethyl 2-hydroxyisovalerate", "8-oxo-dGDP"]
+    #metabolieten = [ "Palmitoyl Serinol","Ethyl 2-hydroxyisovalerate", "8-oxo-dGDP"]
     #metabolieten = ["2-Ketobutyric acid"]
 
     get_ids_all_pubmed(metabolieten)
