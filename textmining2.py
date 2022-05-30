@@ -66,6 +66,7 @@ def get_title_diseases(ids,firstround):
     :param ids: list with PMIDs
     """
     # pubtator parameters
+    global pub_gene
     Format = "pubtator"
     Type = "pmids"
     if firstround:
@@ -86,6 +87,7 @@ def get_title_diseases(ids,firstround):
         if firstround == True:
             info_per_article_plus_gene(r.text.split("\n"),firstround)
         else:
+            pub_gene += 1
             info_per_article(r.text.split("\n"),firstround)
     else:
         print("Request was unsuccesfull")
@@ -148,7 +150,6 @@ def info_per_article_plus_gene(info,firstround):  ##########optioneel
                 if items[5] == "":
                     mesh = "NULL"
                 else:
-                    pub_disease += 1
                     mesh = items[5][5:]
                 mushs[item.split("\t")[3].lower()] = mesh
                 diseases.append(item.split("\t")[3].lower())
@@ -188,7 +189,10 @@ def info_per_article(info,firstround):
                 PMID = id_n
                 article_name = title
                 # fill pubOM table (database)
-                fill_PubOM(id_pum_om, PMID, article_name)
+                if firstround:
+                    fill_PubOM(id_pum_om, PMID, article_name)
+                else:
+                    fill_PubOM_Gene(id_pum_om, PMID, article_name)
 
                 # Obtain how frequent a diseases occurs in text
                 # fills pub_disease
@@ -205,7 +209,6 @@ def info_per_article(info,firstround):
             if items[5] == "":
                 mesh = "NULL"
             else:
-                pub_disease += 1
                 mesh = items[5][5:]
             mushs[item.split("\t")[3].lower()] = mesh
             diseases.append(item.split("\t")[3].lower())
@@ -241,27 +244,31 @@ def diseases_freq_article(diseases, mushs,firstround):
 
 
 def fill_pub_disease(diseases_counts, mushs,firstround):
+    global pub_disease
     for key, value in diseases_counts.items():  # werkt dan niet met een primary key??!! of zo lijkt het
+        pub_disease += 1
         if firstround:
              print(
-                 f"pubOm: {pub_Om}, disease:{key}, count:{value}, MESH_code: {mushs.get(key)},Gene_id:NULL")
+                 f"pubOm: {pub_Om}, disease:{key}, count:{value}, MESH_code: {mushs.get(key)},Gene_id:NULL, pub_disea:{pub_disease}")
         else:
             print(
-                f"pubOm: {pub_Om}, disease:{key}, count:{value}, MESH_code: {mushs.get(key)},Gene_id:{pub_gene}")
+                f"pubOm: {pub_Om}, disease:{key}, count:{value}, MESH_code: {mushs.get(key)},Gene_id:{pub_gene}, pub_disea:{pub_disease}")
+
 
 def fill_pub_gene(gene_count):
+    global pub_gene
     for key, value in gene_count.items():  # werkt dan niet met een primary key??!! of zo lijkt het
+        print(f"{key}")
         print(
             f"pubOm: {pub_Om}, gene:{key}, count:{value}")
-    print(gene_count.keys())
     get_ids_all_pubmed(list(gene_count.keys()), False)
 
 def fill_PubOM(id_pum_om, PMID, article_name):
-    print(">>>PubOM<<<<")
+    print(f"Voor de metabolieten met artikel")
     print(f"id={id_pum_om} PMID={PMID} Metab:{metab} article={article_name}")
 
 def fill_PubOM_Gene(id_pum_om, PMID, article_name):
-    print(">>>PubOM<<<<")
+    print(f"Voor de genen met artikel")
     print(f"id={id_pum_om} PMID={PMID} Metab:{metab} article={article_name}")
 
 

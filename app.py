@@ -47,6 +47,10 @@ def hello_world():
 def info():
     return render_template("About.html")
 
+@app.route('/Resultspatient',methods=["POST", "GET"])
+def resultspatient():
+    return render_template("Resultspatient.html")
+
 @app.route('/Results',methods=["POST", "GET"])
 def results():
     if request.method == "POST":
@@ -84,9 +88,9 @@ def search_queri(mainOpt,keuzes,neg,pos,zoek):
     cursor = conn.cursor()
     cursor = conn.cursor()
     sql = f"select {keuzes} from {mainOpt} " \
-          f"where z_score < {neg} or z_score > {pos}" \
           f"limit 10"
-        # sql = f"select {zoek} from blast where {keuze_2} like '%{orga}%'"
+#f"where z_score < {neg} or z_score > {pos}" \
+    # sql = f"select {zoek} from blast where {keuze_2} like '%{orga}%'"
     cursor.execute(sql)
     row = cursor.fetchall()
     regels = []
