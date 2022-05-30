@@ -62,7 +62,7 @@ def get_title_diseases(ids):
     # pubtator parameters
     Format = "pubtator"
     Type = "pmids"
-    Bioconcepts = "disease,gene"
+    Bioconcepts = "disease"
     identities = ''.join([str(elem + ",") for elem in ids])
 
     # web queri
@@ -115,7 +115,7 @@ def info_per_article(info):
 
                 # Obtain how frequent a diseases occurs in text
                 # fills pub_disease
-                #####diseases_freq_article(diseases, mushs)
+                diseases_freq_article(diseases, mushs)
 
                 articles[id_n] = [title, diseases]
                 diseases = []
@@ -124,6 +124,7 @@ def info_per_article(info):
             title = item.split("t|")[1]
         elif item.startswith(f"{id}\t"):
             # obtain diseases and MeSH
+
             items = item.split("\t")
             if items[5] == "":
                 mesh = "NULL"
@@ -162,7 +163,7 @@ if __name__ == '__main__':
     data = fileReader.readFile(file)
     #metabolieten = fileReader.getMetabolites(data)[0:2]
     #metabolieten = ["1,3-Diaminopropane","2-Ketobutyric acid","2-Hydroxybutyric acid"]
-    #metabolieten = [ "Palmitoyl Serinol","Ethyl 2-hydroxyisovalerate", "8-oxo-dGDP"]
-    metabolieten = ["2-Ketobutyric acid"]
+    metabolieten = [ "Palmitoyl Serinol","Ethyl 2-hydroxyisovalerate", "8-oxo-dGDP"]
+    #metabolieten = ["2-Ketobutyric acid"]
 
     get_ids_all_pubmed(metabolieten)

@@ -66,6 +66,7 @@ def get_title_diseases(ids,firstround):
     :param ids: list with PMIDs
     """
     # pubtator parameters
+    global pub_gene
     Format = "pubtator"
     Type = "pmids"
     if firstround:
@@ -86,6 +87,7 @@ def get_title_diseases(ids,firstround):
         if firstround == True:
             info_per_article_plus_gene(r.text.split("\n"),firstround)
         else:
+            pub_gene += 1
             info_per_article(r.text.split("\n"),firstround)
     else:
         print("Request was unsuccesfull")
@@ -250,18 +252,19 @@ def fill_pub_disease(diseases_counts, mushs,firstround):
                 f"pubOm: {pub_Om}, disease:{key}, count:{value}, MESH_code: {mushs.get(key)},Gene_id:{pub_gene}")
 
 def fill_pub_gene(gene_count):
+    global pub_gene
     for key, value in gene_count.items():  # werkt dan niet met een primary key??!! of zo lijkt het
+        print(f"{key}")
         print(
             f"pubOm: {pub_Om}, gene:{key}, count:{value}")
-    print(gene_count.keys())
     get_ids_all_pubmed(list(gene_count.keys()), False)
 
 def fill_PubOM(id_pum_om, PMID, article_name):
-    print(">>>PubOM<<<<")
+    print(f"Voor de metabolieten met artikel")
     print(f"id={id_pum_om} PMID={PMID} Metab:{metab} article={article_name}")
 
 def fill_PubOM_Gene(id_pum_om, PMID, article_name):
-    print(">>>PubOM<<<<")
+    print(f"Voor de genen met artikel")
     print(f"id={id_pum_om} PMID={PMID} Metab:{metab} article={article_name}")
 
 

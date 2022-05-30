@@ -84,9 +84,9 @@ def search_queri(mainOpt,keuzes,neg,pos,zoek):
     cursor = conn.cursor()
     cursor = conn.cursor()
     sql = f"select {keuzes} from {mainOpt} " \
-          f"where z_score < {neg} or z_score > {pos}" \
           f"limit 10"
-        # sql = f"select {zoek} from blast where {keuze_2} like '%{orga}%'"
+#f"where z_score < {neg} or z_score > {pos}" \
+    # sql = f"select {zoek} from blast where {keuze_2} like '%{orga}%'"
     cursor.execute(sql)
     row = cursor.fetchall()
     regels = []
