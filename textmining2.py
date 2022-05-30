@@ -150,7 +150,6 @@ def info_per_article_plus_gene(info,firstround):  ##########optioneel
                 if items[5] == "":
                     mesh = "NULL"
                 else:
-                    pub_disease += 1
                     mesh = items[5][5:]
                 mushs[item.split("\t")[3].lower()] = mesh
                 diseases.append(item.split("\t")[3].lower())
@@ -190,7 +189,10 @@ def info_per_article(info,firstround):
                 PMID = id_n
                 article_name = title
                 # fill pubOM table (database)
-                fill_PubOM(id_pum_om, PMID, article_name)
+                if firstround:
+                    fill_PubOM(id_pum_om, PMID, article_name)
+                else:
+                    fill_PubOM_Gene(id_pum_om, PMID, article_name)
 
                 # Obtain how frequent a diseases occurs in text
                 # fills pub_disease
@@ -207,7 +209,6 @@ def info_per_article(info,firstround):
             if items[5] == "":
                 mesh = "NULL"
             else:
-                pub_disease += 1
                 mesh = items[5][5:]
             mushs[item.split("\t")[3].lower()] = mesh
             diseases.append(item.split("\t")[3].lower())
@@ -243,13 +244,16 @@ def diseases_freq_article(diseases, mushs,firstround):
 
 
 def fill_pub_disease(diseases_counts, mushs,firstround):
+    global pub_disease
     for key, value in diseases_counts.items():  # werkt dan niet met een primary key??!! of zo lijkt het
+        pub_disease += 1
         if firstround:
              print(
-                 f"pubOm: {pub_Om}, disease:{key}, count:{value}, MESH_code: {mushs.get(key)},Gene_id:NULL")
+                 f"pubOm: {pub_Om}, disease:{key}, count:{value}, MESH_code: {mushs.get(key)},Gene_id:NULL, pub_disea:{pub_disease}")
         else:
             print(
-                f"pubOm: {pub_Om}, disease:{key}, count:{value}, MESH_code: {mushs.get(key)},Gene_id:{pub_gene}")
+                f"pubOm: {pub_Om}, disease:{key}, count:{value}, MESH_code: {mushs.get(key)},Gene_id:{pub_gene}, pub_disea:{pub_disease}")
+
 
 def fill_pub_gene(gene_count):
     global pub_gene

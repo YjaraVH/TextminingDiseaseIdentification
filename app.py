@@ -47,9 +47,9 @@ def hello_world():
 def info():
     return render_template("About.html")
 
-@app.route('/Results2',methods=["POST", "GET"])
-def results2():
-    return render_template("Results2.html")
+@app.route('/Resultspatient',methods=["POST", "GET"])
+def resultspatient():
+    return render_template("Resultspatient.html")
 
 @app.route('/Results',methods=["POST", "GET"])
 def results():
