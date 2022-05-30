@@ -92,7 +92,7 @@ def update_Metabolieten(name, desc, HMBD_code):
         cursor.execute("insert into Metabolieten(id_metaboliet, id_origin, id_fluids, name,"
                        " description, HMBD_code, relevance_id_relevance)"
                        "values ('{}', '{}', '{}', '{}', '{}', '{}', '{}')".format(getal, getal, getal,
-                                                                                        na, desc[0][getal-1].replace("'", ""),
+                                                                                        na.replace("'", ""), str(desc[0][getal-1]).replace("'", ""),
                                                                                         HMBD_code[0][getal - 1],
                                                                                         getal))
         conn.commit()
@@ -100,14 +100,46 @@ def update_Metabolieten(name, desc, HMBD_code):
     print("tabel Metabolieten geupdate")
 
 
-# def update_z_score(lijst_patienten_lijsten):
-#     number = 1
-#     for score in list_patient[number-1][1]:
-#         cursor.execute("insert into Z_scores(z_id, z_score, patients_id_patient, metabolieten_id_metaboliet) "
-#                        "values ('{}', '{}', '{}', '{}')".format(number, score, list_patient[number-1][0], number))
-#         conn.commit()
-#         number += 1
+def update_z_score(lijst_patienten_lijsten):
+    number = 1
+    for patient in lijst_patienten_lijsten:
+        getal = 1
+        for score in patient[1]:
+            cursor.execute("insert into Z_scores(z_id, z_score, patients_id_patient, metabolieten_id_metaboliet) "
+                           "values ('{}', '{}', '{}', '{}')".format(number, score, patient[0], getal))
+            conn.commit()
+            getal += 1
+            number += 1
+    print("tabel Z-scores geupdate")
 
+def update_link_meta_tis(getal):
+    cursor.execute("insert into Metabolieten_tissue(metabolieten_id_metaboliet, tissue_id_tissue) "
+                   "values ('{}', '{}')".format(getal, getal))
+    conn.commit()
+
+
+def update_link_meta_flu(getal):
+    cursor.execute("insert into Metabolieten_fluids(metabolieten_id_metaboliet, fluids_id_fluids) "
+                   "values ('{}', '{}')".format(getal, getal))
+    conn.commit()
+
+
+def update_link_meta_dis(getal):
+    cursor.execute("insert into Metabolieten_diseases(metabolieten_id_metaboliet, diseases_id_disease) "
+                   "values ('{}', '{}')".format(getal, getal))
+    conn.commit()
+
+
+def update_link_meta_ori(getal):
+    cursor.execute("insert into origins_Metabolieten(origins_id_orgins, metabolieten_id_metaboliet) "
+                   "values ('{}', '{}')".format(getal, getal))
+    conn.commit()
+
+
+def update_link_meta_path(getal):
+    cursor.execute("insert into pathways_Metabolieten(pathways_id_path, metabolieten_id_metaboliet) "
+                   "values ('{}', '{}')".format(getal, getal))
+    conn.commit()
 
 
 if __name__ == '__main__':
@@ -125,6 +157,21 @@ if __name__ == '__main__':
     #update_paths(pathway)
     #update_relevance(relevance)
     #update_Patients(person_ids)
-    update_Metabolieten(metabolieten, description, hmdb_code)
+    #update_Metabolieten(metabolieten, description, hmdb_code)
+    #update_z_score(lijst_patienten_lijsten)
+
+    getal = 1
+    for nam in metabolieten:
+        #update_link_meta_tis(getal)
+        #update_link_meta_flu(getal)
+        #update_link_meta_dis(getal)
+        #update_link_meta_ori(getal)
+        #update_link_meta_path(getal)
+        getal += 1
+    print("tabel link Metabolieten_tissue geupdate")
+    print("tabel link Metabolieten_fluids geupdate")
+    print("tabel link Metabolieten_diseases geupdate")
+    print("tabel link origins_Metabolieten geupdate")
+    print("tabel link pathways_Metabolieten geupdate")
 
     conn.close()
