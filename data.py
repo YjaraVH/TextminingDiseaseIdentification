@@ -161,7 +161,7 @@ if __name__ == '__main__':
     #update_z_score(lijst_patienten_lijsten)
 
     getal = 1
-    for nam in metabolieten:
+    for nam in metabolieten[0]:
         #update_link_meta_tis(getal)
         #update_link_meta_flu(getal)
         #update_link_meta_dis(getal)
