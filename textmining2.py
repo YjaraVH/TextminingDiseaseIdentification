@@ -87,7 +87,7 @@ def get_title_diseases(ids,firstround):
         if firstround == True:
             info_per_article_plus_gene(r.text.split("\n"),firstround)
         else:
-            pub_gene += 1
+            #pub_gene += 1
             info_per_article(r.text.split("\n"),firstround)
     else:
         print("Request was unsuccesfull")
@@ -211,8 +211,16 @@ def info_per_article(info,firstround):
             else:
                 mesh = items[5][5:]
             mushs[item.split("\t")[3].lower()] = mesh
-            diseases.append(item.split("\t")[3].lower())
+            diseas = item.split("\t")[3].lower()
+
+            # Om rekening te houden met meervoud en eenvoud
+            if diseas.endswith("s"):
+                diseases.append(diseas[0:len(diseas)-1])
+            else:
+                diseases.append(diseas)
         id_n = item[0:8]
+
+
 
 def genes_freq_article(genes):
     """ Makes an dictionary with as key the disease and value the number of
@@ -245,6 +253,7 @@ def diseases_freq_article(diseases, mushs,firstround):
 
 def fill_pub_disease(diseases_counts, mushs,firstround):
     global pub_disease
+    global pub_gene
     for key, value in diseases_counts.items():  # werkt dan niet met een primary key??!! of zo lijkt het
         pub_disease += 1
         if firstround:
@@ -257,10 +266,27 @@ def fill_pub_disease(diseases_counts, mushs,firstround):
 
 def fill_pub_gene(gene_count):
     global pub_gene
+    keys_del = []
+    for key, value in gene_count.items():  # werkt dan niet met een primary key??!! of zo lijkt het
+        if value < 3:
+            keys_del.append(key)
+        else:
+            pub_gene += 1
+            print(f"{key}")
+            print(
+                f"pubOm: {pub_Om}, gene:{key}, count:{value}, gene:{pub_gene}")
+    for item in keys_del:
+        del gene_count[item]
+    if gene_count:
+        get_ids_all_pubmed(list(gene_count.keys()), False)
+
+
+def fill_pub_gene_V(gene_count):
+    global pub_gene
     for key, value in gene_count.items():  # werkt dan niet met een primary key??!! of zo lijkt het
         print(f"{key}")
         print(
-            f"pubOm: {pub_Om}, gene:{key}, count:{value}")
+            f"pubOm: {pub_Om}, gene:{key}, count:{value}, gene:{pub_gene + 1}")
     get_ids_all_pubmed(list(gene_count.keys()), False)
 
 def fill_PubOM(id_pum_om, PMID, article_name):
@@ -273,12 +299,20 @@ def fill_PubOM_Gene(id_pum_om, PMID, article_name):
 
 
 if __name__ == '__main__':
+    from time import gmtime, strftime
+
+
+
+
     file = "Dataset/Untargeted_metabolomics.xlsx"
     data = fileReader.readFile(file)
-    # metabolieten = fileReader.getMetabolites(data)[0:2]
+    print(strftime("%Y-%m-%d %H:%M:%S", gmtime()))
+
+    metabolieten = fileReader.getMetabolites(data)[0:50]
     # metabolieten = ["1,3-Diaminopropane","2-Ketobutyric acid","2-Hydroxybutyric acid"]
     # metabolieten = [ "Palmitoyl Serinol","Ethyl 2-hydroxyisovalerate", "8-oxo-dGDP"]
-    metabolieten = ["2-Ketobutyric acid"]
+    #metabolieten = ["2-Ketobutyric acid"]
 
     get_ids_all_pubmed(metabolieten,True)
+    print(strftime("%Y-%m-%d %H:%M:%S", gmtime()))
 

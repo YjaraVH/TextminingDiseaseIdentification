@@ -162,7 +162,7 @@ def fill_PubOM(id_pum_om,PMID,article_name):
 if __name__ == '__main__':
     file = "Dataset/Untargeted_metabolomics.xlsx"
     data = fileReader.readFile(file)
-    metabolieten = fileReader.getMetabolites(data)[0:50]
+    metabolieten = fileReader.getMetabolites(data)[0:2]
     #metabolieten = ["1,3-Diaminopropane","2-Ketobutyric acid","2-Hydroxybutyric acid"]
     #metabolieten = [ "Palmitoyl Serinol","Ethyl 2-hydroxyisovalerate", "8-oxo-dGDP"]
     #metabolieten = ["2-Ketobutyric acid"]
