@@ -82,15 +82,15 @@ article {
         <h2>Metabolite</h2>
         <form method="post">
         <p>Select metabolite or type name of metabolite below:
-        <select id="zscoreNeg" name="zscoreNeg">
-          <option value="-1">-1</option>
-          <option value="-1.2">-1.2</option>
-          <option value="-1.5">-1.5</option>
-          <option value="-1.7">-1.7</option>
-         <option value="-2">-2</option> </select>
-
         <p>Enter name metabolite:</p>
         <input type="text" name="answer">
+       <p>Metabolites:
+        </select>
+         <select id="Metabolites" name="Metabolites">
+             {% for Metabolite in Metabolites %}
+          <option value="{{ Metabolite }}">{{ Metabolite }}</option>
+             {% endfor %}
+        </select></p>
         <input type="submit" value="Submit">
         </form>
     </ul>

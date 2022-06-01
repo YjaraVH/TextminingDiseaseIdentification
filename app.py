@@ -60,11 +60,25 @@ def info():
 
 @app.route('/Resultspatient',methods=["POST", "GET"])
 def resultspatient():
-    return render_template("Resultspatient.html")
+    patients = ["piet","jan","iphone"]                                         #Needs query to get all the patient ID's
+    if request.method == "POST":
+        patient = request.form.get('patientC')
+        zscoreP = request.form.getlist('zscorePos')
+        zscoreN = request.form.getlist('zscoreNeg')
+        print(f"patient:{patient}, z-scorep:{zscoreP}, z-scoren:{zscoreN}")
+        return render_template("Resultspatient.html",patients=patients)
+    else:
+        return render_template("Resultspatient.html", patients=patients)
 
 @app.route('/ResultsGlobal',methods=["POST", "GET"])
 def resultsGlobal():
-    return render_template("ResultsGlobal.html")
+    metabolieten = ["dirk","jan","iphone"]                                         #Needs query to get all the metabolietes names
+    if request.method == "POST":
+        metaboliet = request.form.get('Metabolites')
+        print(f"patient:{metaboliet}")
+        return render_template("ResultsGlobal.html",Metabolites=metabolieten)
+    else:
+        return render_template("ResultsGlobal.html",Metabolites=metabolieten)
 
 @app.route('/Results',methods=["POST", "GET"])
 def results():

@@ -87,6 +87,8 @@ article {
           <option value="-1.5">-1.5</option>
           <option value="-1.7">-1.7</option>
           <option value="-2">-2</option>
+          <option value="-3">-2</option>
+          <option value="-4">-2</option>
 
         </select></p>
         <p>Enter positive z-score threshold:
@@ -96,6 +98,9 @@ article {
           <option value="1.4">1.4</option>
           <option value="1.8">1.8</option>
           <option value="2">2</option>
+          <option value="3">-2</option>
+          <option value="4">-2</option>
+          <option value="5">-2</option>
         </select></p>
 
 
@@ -103,6 +108,16 @@ article {
         <h2>Patient</h2>
         <p>Enter patient ID:</p>
         <input type="text" name="answer">
+
+
+
+        <p>Patients:
+        </select>
+         <select id="patientC" name="patientC">
+             {% for patient in patients %}
+          <option value="{{ patient }}">{{ patient }}</option>
+             {% endfor %}
+        </select></p>
         <input type="submit" value="Submit">
         </form>
     </ul>
