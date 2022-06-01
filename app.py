@@ -4,6 +4,8 @@ import time
 from flask import Flask,request,render_template
 from Bio import Entrez
 import mysql.connector
+import fileReader
+import textmining2
 
 conn = mysql.connector.connect(
     host="ensembldb.ensembl.org",
@@ -39,6 +41,15 @@ def hello_world():
             error = "This file is not allowed"
             return render_template("Homepage.html", error=error)
         else:
+            #to obtain all information in file
+
+           ##### data = fileReader.readFile(file)
+
+            # to obtain metabolieten for textmining
+
+
+            ######metabolieten = fileReader.getMetabolites(data)
+            ######textmining2.get_ids_all_pubmed(metabolieten,True)
             return render_template("Homepage.html", error="")
     else:
         return render_template("Homepage.html")
@@ -50,6 +61,10 @@ def info():
 @app.route('/Resultspatient',methods=["POST", "GET"])
 def resultspatient():
     return render_template("Resultspatient.html")
+
+@app.route('/ResultsGlobal',methods=["POST", "GET"])
+def resultsGlobal():
+    return render_template("ResultsGlobal.html")
 
 @app.route('/Results',methods=["POST", "GET"])
 def results():

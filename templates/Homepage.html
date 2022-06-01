@@ -53,7 +53,6 @@ header {
 <header>
   <h1>Disease Identification</h1>
     <a href="/Homepage">Homepage</a>
-    <a href="/Results">Results</a>
     <a href="/About">About</a>
 </header>
 
@@ -63,7 +62,7 @@ header {
   <article class="browser">
     <h2>Choose and upload file</h2>
     <p>Only excel files are accepted</p>
-    <p>Please select one of the following by clicking on them:</p>
+    <p>Please select one of the following by clicking on them:</p><br>
     <h3 onclick="hidAndShow('hid2')">> All metabolites in this file have not been present in a file submitted in a previous session</h3>
     <h3 onclick="hidAndShow('hid1')">> File contains only new patients</h3>
 
@@ -110,15 +109,16 @@ header {
   </article>
   <article class="browser">
     <h2>Obtain information</h2>
-    <p>Please understand that this can take some time</p>
-      <p>There are two options: the fast one with an high error rate or the slow one with a low error rate</p><br>
-    <p>Explore data in excel file:     <a href="/Results">excel</a></p>
-      <p>Explore results per patient: <a href="/Resultspatient">patient</a></p>
-      <p>Explore results per metabolite: </p>
+    <p>To view information from uploaded and privously uloaded files</p>
+    <p>This only contains information that was already present in the submitted files</p><br>
+    <p>Explore data:     <a href="/Results">excel</a></p>
   </article>
   <article class="browser">
     <h2>Explore findings</h2>
-    <p>Press the button to go to the page with the information</p>
+    <p>Provides you with information optained trough textmining, including genes and diseases related to metabolites</p>
+    <p>And predictions of disease(s) per patient</p><br>
+    <p>Explore results per patient: <a href="/Resultspatient">patient</a></p>
+      <p>Explore diseases: <a href="/ResultsGlobal">diseases</a></p>
   </article>
 </article>
 </section>
