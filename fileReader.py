@@ -106,6 +106,7 @@ def getPatient1(data):
     patient1 = []
     zscores = data["P1002.1_Zscore"]
     patient1.append(list(zscores))
+    patient1.insert(0, "P1002.1_Zscore")
     return patient1
 
 
@@ -113,6 +114,7 @@ def getPatient2(data):
     patient2 = []
     zscores = data["P1003.1_Zscore"]
     patient2.append(list(zscores))
+    patient2.insert(0, "P1003.1_Zscore")
     return patient2
 
 
@@ -120,6 +122,7 @@ def getPatient3(data):
     patient3 = []
     zscores = data["P1005.1_Zscore"]
     patient3.append(list(zscores))
+    patient3.insert(0, "P1005.1_Zscore")
     return patient3
 
 
@@ -127,6 +130,7 @@ def getPatient4(data):
     patient4 = []
     zscores = data["P1005.2_Zscore"]
     patient4.append(list(zscores))
+    patient4.insert(0, "P1005.2_Zscore")
     return patient4
 
 
@@ -134,6 +138,7 @@ def getPatient5(data):
     patient5 = []
     zscores = data["P2021M01703.1_Zscore"]
     patient5.append(list(zscores))
+    patient5.insert(0, "P2021M01703.1_Zscore")
     return patient5
 
 
@@ -141,6 +146,7 @@ def getPatient6(data):
     patient6 = []
     zscores = data["P2021M01743.1_Zscore"]
     patient6.append(list(zscores))
+    patient6.insert(0, "P2021M01743.1_Zscore")
     return patient6
 
 
@@ -148,6 +154,7 @@ def getPatient7(data):
     patient7 = []
     zscores = data["P2021M01865.1_Zscore"]
     patient7.append(list(zscores))
+    patient7.insert(0, "P2021M01865.1_Zscore")
     return patient7
 
 
@@ -155,6 +162,7 @@ def getPatient8(data):
     patient8 = []
     zscores = data["P2021M01871.1_Zscore"]
     patient8.append(list(zscores))
+    patient8.insert(0, "P2021M01871.1_Zscore")
     return patient8
 
 
@@ -162,6 +170,7 @@ def getPatient9(data):
     patient9 = []
     zscores = data["P2021M01896.1_Zscore"]
     patient9.append(list(zscores))
+    patient9.insert(0, "P2021M01896.1_Zscore")
     return patient9
 
 
@@ -169,6 +178,7 @@ def getPatient10(data):
     patient10 = []
     zscores = data["P2021M01902.1_Zscore"]
     patient10.append(list(zscores))
+    patient10.insert(0, "P2021M01902.1_Zscore")
     return patient10
 
 
@@ -176,6 +186,7 @@ def getPatient11(data):
     patient11 = []
     zscores = data["P2021M01906.1_Zscore"]
     patient11.append(list(zscores))
+    patient11.insert(0, "P2021M01906.1_Zscore")
     return patient11
 
 
@@ -183,6 +194,7 @@ def getPatient12(data):
     patient12 = []
     zscores = data["P2021M01908.1_Zscore"]
     patient12.append(list(zscores))
+    patient12.insert(0, "P2021M01908.1_Zscore")
     return patient12
 
 
@@ -190,6 +202,7 @@ def getPatient13(data):
     patient13 = []
     zscores = data["P2021M01912.1_Zscore"]
     patient13.append(list(zscores))
+    patient13.insert(0, "P2021M01912.1_Zscore")
     return patient13
 
 
@@ -197,6 +210,7 @@ def getPatient14(data):
     patient14 = []
     zscores = data["P2021M01918.1_Zscore"]
     patient14.append(list(zscores))
+    patient14.insert(0, "P2021M01918.1_Zscore")
     return patient14
 
 
@@ -204,6 +218,7 @@ def getPatient15(data):
     patient15 = []
     zscores = data["P2021M01932.1_Zscore"]
     patient15.append(list(zscores))
+    patient15.insert(0, "P2021M01932.1_Zscore")
     return patient15
 
 
@@ -211,6 +226,7 @@ def getPatient16(data):
     patient16 = []
     zscores = data["P2021M01951.1_Zscore"]
     patient16.append(list(zscores))
+    patient16.insert(0, "P2021M01951.1_Zscore")
     return patient16
 
 
@@ -218,6 +234,7 @@ def getPatient17(data):
     patient17 = []
     zscores = data["P2021M01956.1_Zscore"]
     patient17.append(list(zscores))
+    patient17.insert(0, "P2021M01956.1_Zscore")
     return patient17
 
 
@@ -225,6 +242,7 @@ def getPatient18(data):
     patient18 = []
     zscores = data["P2021M01958.1_Zscore"]
     patient18.append(list(zscores))
+    patient18.insert(0, "P2021M01958.1_Zscore")
     return patient18
 
 
@@ -232,6 +250,7 @@ def getPatient19(data):
     patient19 = []
     zscores = data["P2021M01962.1_Zscore"]
     patient19.append(list(zscores))
+    patient19.insert(0, "P2021M01962.1_Zscore")
     return patient19
 
 
@@ -239,6 +258,7 @@ def getPatient20(data):
     patient20 = []
     zscores = data["P2021M01971.1_Zscore"]
     patient20.append(list(zscores))
+    patient20.insert(0, "P2021M01971.1_Zscore")
     return patient20
 
 
@@ -246,6 +266,7 @@ def getPatient21(data):
     patient21 = []
     zscores = data["P2021M01973.1_Zscore"]
     patient21.append(list(zscores))
+    patient21.insert(0, "P2021M01973.1_Zscore")
     return patient21
 
 
@@ -253,6 +274,7 @@ def getPatient22(data):
     patient22 = []
     zscores = data["P2021M01981.1_Zscore"]
     patient22.append(list(zscores))
+    patient22.insert(0, "P2021M01981.1_Zscore")
     return patient22
 
 
@@ -260,6 +282,7 @@ def getPatient23(data):
     patient23 = []
     zscores = data["P2021M01984.1_Zscore"]
     patient23.append(list(zscores))
+    patient23.insert(0, "P2021M01984.1_Zscore")
     return patient23
 
 
@@ -267,6 +290,7 @@ def getPatient24(data):
     patient24 = []
     zscores = data["P2021M01990.1_Zscore"]
     patient24.append(list(zscores))
+    patient24.insert(0, "P2021M01990.1_Zscore")
     return patient24
 
 
@@ -274,6 +298,7 @@ def getPatient25(data):
     patient25 = []
     zscores = data["P2021M02023.1_Zscore"]
     patient25.append(list(zscores))
+    patient25.insert(0, "P2021M02023.1_Zscore")
     return patient25
 
 
@@ -281,6 +306,7 @@ def getPatient26(data):
     patient26 = []
     zscores = data["P2021M02031.1_Zscore"]
     patient26.append(list(zscores))
+    patient26.insert(0, "P2021M02031.1_Zscore")
     return patient26
 
 
@@ -288,6 +314,7 @@ def getPatient27(data):
     patient27 = []
     zscores = data["P2021M02035.1_Zscore"]
     patient27.append(list(zscores))
+    patient27.insert(0, "P2021M02035.1_Zscore")
     return patient27
 
 
@@ -295,6 +322,7 @@ def getPatient28(data):
     patient28 = []
     zscores = data["P2021M02040.1_Zscore"]
     patient28.append(list(zscores))
+    patient28.insert(0, "P2021M02040.1_Zscore")
     return patient28
 
 
@@ -302,6 +330,7 @@ def getPatient29(data):
     patient29 = []
     zscores = data["P2021M02052.1_Zscore"]
     patient29.append(list(zscores))
+    patient29.insert(0, "P2021M02052.1_Zscore")
     return patient29
 
 
@@ -309,6 +338,7 @@ def getPatient30(data):
     patient30 = []
     zscores = data["P2021M02098.1_Zscore"]
     patient30.append(list(zscores))
+    patient30.insert(0, "P2021M02098.1_Zscore")
     return patient30
 
 
@@ -316,12 +346,13 @@ def getPatient31(data):
     patient31 = []
     zscores = data["P2021M02101.1_Zscore"]
     patient31.append(list(zscores))
+    patient31.insert(0, "P2021M02101.1_Zscore")
     return patient31
 
 
 def main():
     #File name
-    file = "Dataset/Untargeted_metabolomics.xlsx"
+    file = "Dataset/metabolomics.xlsx"
     data = readFile(file)
 
     metabolites = getMetabolites(data)
@@ -340,14 +371,17 @@ def main():
     origin = getOrigin(data)
     # print(origin)
     fluids = getFluids(data)
-    return fluids
+
     # print(fluids)
     disease = getDisease(data)
+
     # print(disease)
     pathway = getPathway(data)
     # print(pathway)
+
     hmdb_code = getHMDBcode(data)
     # print(hmdb_code)
+    tissue = getTissue(data)
     patient1 = getPatient1(data)
     # print(patient1)
     patient2 = getPatient2(data)
@@ -420,3 +454,5 @@ def main():
                                patient25, patient26, patient27, patient28,
                                patient29, patient30, patient31]
 
+    return fluids, tissue, person_ids, relevance, pathway, origin, disease, metabolieten, description,\
+           hmdb_code, lijst_patienten_lijsten
