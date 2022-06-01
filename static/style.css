@@ -1,7 +1,24 @@
+
+
 body {
+
     font-family: "Calibri Light",serif;
     color: black;
     background-color: lightgray;
+}
+
+.btn {
+  background-color: DodgerBlue;
+  border: none;
+  color: white;
+  padding: 12px 16px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Darker background on mouse-over */
+.btn:hover {
+  background-color: RoyalBlue;
 }
 
 * {
