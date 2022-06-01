@@ -7,7 +7,7 @@ import fileReader
 
 pub_disease = 0  # disease id number
 pub_Om = 0  # Omim ID
-pub_gene = 0
+pub_gene = 0 # gene id
 metab = 0  # metabolite key
 
 
@@ -308,7 +308,7 @@ if __name__ == '__main__':
     data = fileReader.readFile(file)
     print(strftime("%Y-%m-%d %H:%M:%S", gmtime()))
 
-    metabolieten = fileReader.getMetabolites(data)[0:50]
+    metabolieten = fileReader.getMetabolites(data)
     # metabolieten = ["1,3-Diaminopropane","2-Ketobutyric acid","2-Hydroxybutyric acid"]
     # metabolieten = [ "Palmitoyl Serinol","Ethyl 2-hydroxyisovalerate", "8-oxo-dGDP"]
     #metabolieten = ["2-Ketobutyric acid"]
