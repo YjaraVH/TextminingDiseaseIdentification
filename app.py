@@ -83,24 +83,27 @@ def resultsGlobal():
 @app.route('/Results',methods=["POST", "GET"])
 def results():
     if request.method == "POST":
+        # Patient or Metabolite
         mainOption = request.form['org_pro']
-        supOpt1 = request.form.getlist('z-scores')
-        supOpt2 = request.form.getlist('patients')
-        supOpt3 = request.form.getlist('diseases')
-        supOpt4 = request.form.getlist('articles')
-        supOpt5 = request.form.getlist('meta')
-        z_score_neg = request.form['zscoreNeg']
-        z_score_pos = request.form['zscorePos']
+        order_desc_asc = request.form['order']
 
-        # Zet de gemaakte keuzes in een lijst en maakt er vervolgens een string van via de functie opbouw_keuzes
-        keuzes = ["".join(supOpt2), "".join(supOpt3), "".join(supOpt5), "".join(supOpt1),
-                  "".join(supOpt4)]
-        keuze = opbouw_keuzes(keuzes)
+        # Name metabolite or patient iD
         search = request.form.get('answer')
-        output = search_queri(mainOption, keuzes,z_score_neg,z_score_pos,search)
-        print(keuze.split(",")) #["getal","type","analysis_id","gene_id"]
+        if mainOption == "patient":
+            z_score_neg = request.form['zscoreNeg']
+            z_score_pos = request.form['zscorePos']
+                                                                                # functie oproepen queri met alle nodige informatie, zie header tabel, onderstaande is een functie voor mezelf om te checken of alles werkt
+            print(f"main otion:{mainOption}, zscoreNeg:{z_score_neg}, zscorePos:{z_score_pos}, id_patient:{search}, order:{order_desc_asc}")
+            output = search_queri(mainOption,z_score_neg, z_score_pos,6)
+            headers = ["Metabolite","Z-score","Disease(s)"]                     # Zou nice zijn als er per disease een top 3 gevonden ziektes kan woorden, nog beter ook met score, kan ik nog een colomn voor bij maken. Laat maar weten
+        else:
+            order_by = request.form['order_type']
+            print(f"mainOption:{mainOption}, order_by:{order_by}, metaboliteName:{search}, order:{order_desc_asc}")
+                                                                                # functie oproepen queri met alle nodige informatie, zie header tabel, onderstaande is een functie voor mezelf om te checken of alles werkt
+            output = search_queri(mainOption,2,3,9)
+            headers = ["Name","Origin","Description","HMBD_code","Relevance"]
 
-        return render_template("Results.html",output=output,keuze=keuze.split(","),answer=search)
+        return render_template("Results.html", output=output, headers=headers)
     else:
         return render_template("Results.html")
 
@@ -108,16 +111,16 @@ def results():
 def not_found(e):
     return render_template("errorPage.html")
 
-def search_queri(mainOpt,keuzes,neg,pos,zoek):
+def search_queri(mainOpt,keuzes,neg,pos):
     if keuzes == "":
         keuzes = "*"
 
     mainOpt = "gene"
-    keuzes = "gene_id,biotype,analysis_id,gene_id"
+    keuzes = "gene_id,biotype,analysis_id"
     cursor = conn.cursor()
     cursor = conn.cursor()
     sql = f"select {keuzes} from {mainOpt} " \
-          f"limit 10"
+          f"limit 50"
 #f"where z_score < {neg} or z_score > {pos}" \
     # sql = f"select {zoek} from blast where {keuze_2} like '%{orga}%'"
     cursor.execute(sql)

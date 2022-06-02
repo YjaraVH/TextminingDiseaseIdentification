@@ -50,7 +50,7 @@ article {
   float: left;
   padding: 20px;
   width: 70%;
-  background-color: lightblue;
+  background-color: powderblue;
 }
 
 
@@ -161,7 +161,19 @@ article {
 }
 
 
+/*table layout*/
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
 
+tr:nth-child(even) {
+  background-color: rgba(150, 212, 212, 0.4);
+}
+
+th:nth-child(even),td:nth-child(even) {
+  background-color: rgba(150, 212, 212, 0.4);
+}
 
 
 
@@ -197,8 +209,18 @@ article {
 <section>
     <nav>
     <ul>
+    <form method="post">
+        <h2>Options</h2>
+        <!--  Text input: header/organism/protein name  -->
+        <p>Chose on what you want to search</p>
+
+        <div id="wrapper">
+            <input onclick="hidAndShow1('patient','metabolites')" type="radio" name="org_pro" value="patient" checked>patient</input><br>
+            <input onclick="hidAndShow2('metabolite','patient')" type="radio" name="org_pro" value="metabolite">metabolite</input><br>
+        </div>
+
+        <div id="filter">
         <h2>Filter</h2>
-        <form method="post">
         <p>Enter negative z-score threshold:
         <select id="zscoreNeg" name="zscoreNeg">
           <option value="-1">-1</option>
@@ -215,85 +237,133 @@ article {
           <option value="1.4">1.4</option>
           <option value="1.8">1.8</option>
           <option value="2">2</option>
-        </select></p>
-
-
-
-        <h2>Options</h2>
-        <!--  Text input: header/organism/protein name  -->
-        <p>Chose on what you want to search</p>
-
-        <div id="wrapper">
-            <input onclick="hidAndShow('patient','metabolites')" type="radio" name="org_pro" value="patient" checked>patient</input><br>
-            <input onclick="hidAndShow('metabolite','patient')" type="radio" name="org_pro" value="metabolite">metabolite</input><br>
-        </div>
+         </select></p> </div>
 
         <!--  Checkbox for the parameters  -->
 
         <div id="patient">
-            <p>Select all categories for analysis</p>
-            <input type="checkbox" id="meta" name="meta" value="meta">
-            <label for="meta">metabolites</label><br>
-            <input type="checkbox" id="z-scores" name="z-scores" value="z-scores">
-            <label for="z-scores">z scores</label><br>
+            <p>Order by z-score:</p>
+            <input type="radio" name="order" value="desc" checked>descending order</input><br>
+            <input type="radio" name="order" value="asc">ascending order</input><br>
+
+         <p>Type patient ID:</p>
+
      </div>
             <div id="metabolite" style="display:none;">
-            <p>Select all categories for analysis</p>
-           <input type="checkbox" id="patients" name="patients" value="patients">
-            <label for="patients">patients</label><br>
-            <input type="checkbox" id="z-scores" name="z-scores" value="z-scores">
-            <label for="z-scores">z scores</label><br>
-           <input type="checkbox" id="description" name="description" value="description">
-            <label for="description">description</label><br>
-            <input type="checkbox" id="HMBD_code" name="HMBD_code" value="HMBD_code">
-            <label for="HMBD_code">HMBD_code</label><br>
-     </div>
+            <p>Order by:</p>
+            <input type="radio" name="order_type" value="origin_name" checked>origin</input><br>
+            <input type="radio" name="order_type" value="fluids_name">fluids</input><br>
+            <input type="radio" name="order_type" value="HMBD_name">HMBD_name</input><br>
+            <input type="radio" name="order_type" value="description">description</input><br>
+            <input type="radio" name="order_type" value="relevance">relevance</input><br>
 
 
-        <!--  Search choise: protein or organism name  -->
-        <p>Type your search word:</p>
+            <p>Order:</p>
+            <input type="radio" name="order" value="desc" checked>descending order</input><br>
+            <input type="radio" name="order" value="asc">ascending order</input><br>
+
+         <p>Type name metabolite:</p>
+  </div>
         <input type="text" name="answer">
         <input type="submit" value="Submit">
-        </form>
         <script>
-    function hidAndShow(id,id2,id3) {
-            var x = document.getElementById(id);
-            var z = document.getElementById(id2);
-            if (x.style.display === "none") {
-              x.style.display = "block";
-              z.style.display = "none";
-            } else {
-              x.style.display = "none";
-              z.style.display = "block";
-            }
+    function hidAndShow1() {
+            var x = document.getElementById('patient');
+            var y = document.getElementById('metabolite');
+            var z = document.getElementById('filter');
+            var a = document.getElementById('MetabolitesR');
+            var b = document.getElementById('patientsR');
+            x.style.display = "block"
+            y.style.display = "none"
+            z.style.display = "block"
+            a.style.display = "none"
+            b.style.display = "block"
         }
     </script>
+        <script>
+    function hidAndShow2() {
+            var x = document.getElementById('metabolite');
+            var y = document.getElementById('patient');
+            var z = document.getElementById('filter');
+            var a = document.getElementById('MetabolitesR');
+            var b = document.getElementById('patientsR');
+            x.style.display = "block"
+            y.style.display = "none"
+            z.style.display = "none"
+            a.style.display = "block"
+            b.style.display = "none"
+        }
+        </script>
+    </form>
     </ul>
     </nav>
     <article>
-        <p>Search word: {{answer}}</p>
     <div id="patientsR">
 
-        <table style="width:100%">
-        <tr>
-            {% for keus in keuze %}
-            <th>{{keus}}</th>
-            {% endfor %}
-        </tr>
-             {% for x in output %}
-                 <tr>
-                     <td>{{ x[0] }}</td>
-                    <td>{{ x[1] }}</td>
-                    <td>{{ x[2] }}</td>
-                    <td>{{ x[3] }}</td>
-                 <td>{{ x[4] }}</td>
+    <table style="width:100%">
+    <tr>
+        {% for items in headers %}
+        <th>{{ items }}</th>
+        {% endfor %}
+    </tr>
+     {% for x in output %}
+    <tr>
+      {% for item in x%}
+     <td>{{ item }}</td>
+       {% endfor %}
+     </tr>
+     {% endfor %}
+</table></div>
 
-                 </tr>
-             {% endfor %}
 
-          </table></div>
+
+
+    <div id="MetabolitesR" style="display:none;">
+
+    <table style="width:100%">
+    <tr>
+        {% for items in headers %}
+        <th>{{ items }}</th>
+        {% endfor %}
+  </tr>
+  <tr>
+    <td> </td>
+    <td> </td>
+    <td> </td>
+    <td> </td>
+    <td> </td>
+    <td> </td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td> </td>
+    <td> </td>
+    <td> </td>
+    <td> </td>
+    <td> </td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td> </td>
+    <td> </td>
+    <td> </td>
+    <td> </td>
+    <td> </td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td> </td>
+    <td> </td>
+    <td> </td>
+    <td> </td>
+    <td> </td>
+  </tr>
+</table></div>
     </article>
 </section>
+
+
+
 <script>
 function myFunction() {
   var x = document.getElementById("myTopnav");
