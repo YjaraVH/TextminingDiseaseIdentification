@@ -3,31 +3,28 @@
 
 {% block content %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<header>
 
-
-
-  <h1>About</h1>
-  <div class="topnav">
-<button class="btn" onclick="location.href='/Homepage';"><i class="fa fa-home"></i> Home</button>
-<button class="btn" onclick="location.href='/About';"><i class="fa fa-share-alt"></i> About</button>
+    <div class="topnav" id="myTopnav">
+  <a href="/Homepage">Home</a>
+  <div class="dropdown">
+    <button class="dropbtn">Results
+      <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-content">
+      <a href="/Results">excel</a>
+      <a href="/Resultspatient">patients</a>
+      <a href="/ResultsGlobal">diseases</a>
+    </div>
   </div>
-
-
-
-
-</header>
+  <a href="/About" class="active">About</a>
+  <a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="myFunction()">&#9776;</a>
+</div>
 
 <h2>About the project</h2>
     <p>This application is being developed at the request of UMC Utrecht (Wilhelmina Children's Hospital) and uses text mining to diagnose metabolic diseases.</p>
     <p> As a result, the condition can be identified and treated more quickly.<p>
     <p> Excel files can be uploaded to the Homepage.<p>
-    <button onclick="hidAndShow('hid1')">How does it work?</button>
-    <div id="hid1" style="display:none;">
-    <p>Complete the steps in the homepage.</p>
-    <p>Only excel files can be uploaded.</p>
-    </div>
-    <button onclick="hidAndShow('hid2')">About the makers</button>
+    <button onclick="hidAndShow('hid2')" class="btn" style="padding: 10px 14px;font-size: 14px" type="submit"><i class="fa fa-group"></i>About the makers</button>
     <div id="hid2" style="display:none;">
     <p>Students at HAN University of Applied Sciences</p>
     <p>Yjara Verhagen</p>
