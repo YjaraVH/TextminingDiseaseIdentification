@@ -41,6 +41,9 @@ header {
   color: white;
 }*/
 
+pre {
+    white-space: pre-wrap;
+}
 /* browsers*/
 .all-browsers {
   margin: 0;
@@ -205,33 +208,40 @@ header {
     <article class="all-browsers">
     <article class="browser">
     <h2>Introduction</h2>
-    <p>Dear user. This applicatio works as follows:</p>
-   <p>Start with uploaden an excel file with the following format:</p>
-   <p>Colomn name patiens start with P, colomn name of control groups with C.....,</p>
-   <p>If the file contains a lot of metabolites not been analyzed in earlier sessions the whole process can take some hours.</p> <br>
-   <p>We advice you to submit your email adress so we can send you a mail when the results are ready.</p>
-   <p>Previous obtained information can always be viewed at the results pages.</p>
+   <pre>
+Dear user. This applicatio works as follows:
+Start with uploaden an excel file with the following format:
+Colomn name patiens start with P, colomn name of control groups with C.....,
+If the file contains a lot of metabolites not been analyzed in earlier sessions the whole process can take some hours.
+We advice you to submit your email adress so we can send you a mail when the results are ready.
+Previous obtained information can always be viewed at the results pages.
+   </pre>
   </article>
 
   <article class="browser">
     <h2>Choose and upload file</h2>
-    <p>Only excel files are accepted</p>
-    <p>Please select one of the following by clicking on them:</p><br>
-    <h3 onclick="hidAndShow('hid2')">> All metabolites in this file have not been present in a file submitted in a previous session</h3>
-    <h3 onclick="hidAndShow('hid1')">> File contains only new patients</h3>
-
-    <div id="hid2" style="display:none;">
-                <p style="color: hotpink">WARNING!</p>
-                <p>This process can take a while depending on the number of metabolites.</p>
-                <p>If there are more than ?2000 metabolites we advice you to upload your file, complete the following step and wait a full day for the results.</p>
-               <p>Please enter an email adres, an email while be send when all information is obtained.</p>
-            <form action="/Homepage" method="post" enctype="multipart/form-data">
-                <br /><strong>Email</strong><br/>
-            <input type="text" name="email">
-               <input type="file" name="file"><br/><br/>
-               <button class="btn" style="padding: 10px 14px;font-size: 14px" type="submit"><i class="fa fa-upload"></i> upload</button>
-           </form>
-     </div>
+    <pre>
+Only excel files are accepted
+Please select one of the following by clicking on them:
+<div id="wrapper">
+<input onclick="hidAndShow('hid2','hid1')" type="radio" name="file" value="longTime">All metabolites in this file have not been present in a file submitted in a previous session</input>
+<input onclick="hidAndShow('hid1','hid2')" type="radio" name="file" value="shortTime">File contains only new patients</input>
+</div>
+</pre>
+<div id="hid2" style="display:none;">
+<pre style="color: hotpink">WARNING!</pre>
+<pre>This process can take a while depending on the number of metabolites.
+If there are more than ?2000 metabolites we advice you to upload your file, complete the following step and wait a full day for the results.
+Please enter an email adres, an email while be send when all information is obtained.</pre>
+<form action="/Homepage" method="post" enctype="multipart/form-data">
+<pre>
+<strong>Email</strong>
+<input type="text" name="email">
+<input type="file" name="file">
+<button class="btn" style="padding: 10px 14px;font-size: 14px" type="submit"><i class="fa fa-upload"></i> upload</button>
+</pre>
+</form>
+</div>
 
      <div id="hid1" style="display:none;">
            <form action="/Homepage" method="post" enctype="multipart/form-data">
@@ -241,30 +251,29 @@ header {
            </form>
      </div>
       {% if error == '' %}
-          <p style="color: lime" onclick="hidAndShow('hid1')">Check: First step completed</p>
+<pre style="color: lime" onclick="hidAndShow('hid1')">Check: First step completed</pre>
       {% endif %}
       {% if error %}
-          <p style="color: brown" >{{ error }}</p>
+<pre style="color: brown" >{{ error }}</pre>
       {%  endif %}
          <script>
 
-    function hidAndShow(id) {
+    function hidAndShow(id,id2) {
             var x = document.getElementById(id);
-            if (x.style.display === "none") {
-              x.style.display = "block";
-            } else {
-              x.style.display = "none";
-            }
+            var y = document.getElementById(id2);
+            x.style.display = "block"
+            y.style.display = "none"
         }
     </script>
 
   </article>
   <article class="browser">
     <h2>Results</h2>
-    <p>Let's type here some explanation about the results and what to expect</p>
-      <p>Some about the information in the excel file</p>
-      <p>Some about the info of a specific patient</p>
-      <p>Some about a specific metabolite</p>
+    <pre>
+Let's type here some explanation about the results and what to expect
+Some about the information in the excel file
+Some about the info of a specific patient
+Some about a specific metabolite</pre>
   </article>
 </article>
 </section>
@@ -280,7 +289,6 @@ function myFunction() {
   }
 }
 </script>
-
 
 
 </body>

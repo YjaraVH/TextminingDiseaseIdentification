@@ -325,39 +325,14 @@ th:nth-child(even),td:nth-child(even) {
         {% for items in headers %}
         <th>{{ items }}</th>
         {% endfor %}
-  </tr>
-  <tr>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-  </tr>
+    </tr>
+     {% for x in output %}
+    <tr>
+      {% for item in x%}
+     <td>{{ item }}</td>
+       {% endfor %}
+     </tr>
+     {% endfor %}
 </table></div>
     </article>
 </section>
