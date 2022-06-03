@@ -224,19 +224,29 @@ th:nth-child(even),td:nth-child(even) {
         <p>Enter negative z-score threshold:
         <select id="zscoreNeg" name="zscoreNeg">
           <option value="-1">-1</option>
-          <option value="-1.2">-1.2</option>
+          <option value="-1.2" selected>-1.2</option>
           <option value="-1.5">-1.5</option>
           <option value="-1.7">-1.7</option>
           <option value="-2">-2</option>
+          <option value="-5">-5</option>
+          <option value="-10">-10</option>
+          <option value="-20">-20</option>
+          <option value="min(z-score)+0.01">lowest</option>
+
+
 
         </select></p>
         <p>Enter positive z-score threshold:
          <select id="zscorePos" name="zscorePos">
           <option value="1">1</option>
           <option value="1.2">1.2</option>
-          <option value="1.4">1.4</option>
+          <option value="1.4" selected>1.4</option>
           <option value="1.8">1.8</option>
           <option value="2">2</option>
+          <option value="5">-5</option>
+          <option value="10">-10</option>
+          <option value="20">-20</option>
+          <option value="max(z-score)-0.01">highest</option>
          </select></p> </div>
 
         <!--  Checkbox for the parameters  -->
@@ -245,7 +255,6 @@ th:nth-child(even),td:nth-child(even) {
             <p>Order by z-score:</p>
             <input type="radio" name="order" value="desc" checked>descending order</input><br>
             <input type="radio" name="order" value="asc">ascending order</input><br>
-
          <p>Type patient ID:</p>
 
      </div>

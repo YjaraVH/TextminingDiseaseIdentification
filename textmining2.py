@@ -297,6 +297,10 @@ def fill_PubOM_Gene(id_pum_om, PMID, article_name):
     print(f"Voor de genen met artikel")
     print(f"id={id_pum_om} PMID={PMID} Metab:{metab} article={article_name}")
 
+def start_textmining(metabolieten):
+    get_ids_all_pubmed(metabolieten, True)
+    print("klaar")
+
 
 if __name__ == '__main__':
     from time import gmtime, strftime
