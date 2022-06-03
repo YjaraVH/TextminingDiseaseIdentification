@@ -7,11 +7,12 @@ import psycopg2
 #
 #     # open een cursor
 #     cursor = conn.cursor()
-
+result = []
 
 def info_ophalen(conn, cursor):
     value = -100
     value2 = 100
+    global result
     patient_name = "P1002.1_Zscore"
     filter = "desc"
     postgre = ("""SELECT name, z_score FROM metabolieten
