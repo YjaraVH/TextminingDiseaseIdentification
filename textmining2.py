@@ -1,6 +1,8 @@
+import nltk
+import psycopg2
 from nltk.corpus import wordnet
-# nltk.download('wordnet')
-# nltk.download('omw-1.4')
+#nltk.download('wordnet')
+#nltk.download('omw-1.4')
 from Bio import Entrez
 import requests
 import fileReader
@@ -9,6 +11,10 @@ pub_disease = 0  # disease id number
 pub_Om = 0  # Omim ID
 pub_gene = 0 # gene id
 metab = 0  # metabolite key
+FK_metaboliet = []
+FK_pub_gene = []
+FK_pub_disease = []
+FK_pub_disease2 = []
 
 
 def get_synonyms(word):
@@ -27,7 +33,7 @@ def get_synonyms(word):
         "'}", "")
     if stringSyn == 'set()':
         stringSyn = word
-    print(stringSyn)
+    #print(stringSyn)
     return stringSyn
 
 
@@ -45,6 +51,7 @@ def get_ids_all_pubmed(metabolites,firstround):
         if firstround:
             # This is done to keep count of the metabolites
             metab += 1
+            print(f"metaboliet: {metab}")
             search_w = get_synonyms(item)
         else:
             search_w = item
@@ -54,7 +61,7 @@ def get_ids_all_pubmed(metabolites,firstround):
         record = Entrez.read(handle)
         handle.close()
         idlist = record["IdList"]
-        print(f">>>{item}<<<<<")
+        #print(f">>>{item}<<<<<")
         # To obtain information from the articles
         get_title_diseases(idlist,firstround)
 
@@ -254,60 +261,137 @@ def diseases_freq_article(diseases, mushs,firstround):
 def fill_pub_disease(diseases_counts, mushs,firstround):
     global pub_disease
     global pub_gene
+    global FK_pub_disease
+    global FK_pub_disease2
     for key, value in diseases_counts.items():  # werkt dan niet met een primary key??!! of zo lijkt het
         pub_disease += 1
         if firstround:
-             print(
-                 f"pubOm: {pub_Om}, disease:{key}, count:{value}, MESH_code: {mushs.get(key)},Gene_id:NULL, pub_disea:{pub_disease}")
+             #print(
+              #   f"pubOm: {pub_Om}, disease:{key}, count:{value}, MESH_code: {mushs.get(key)},Gene_id:NULL, pub_disea:{pub_disease}")
+             cursor.execute("insert into pub_disease(id_article, disease, count, MESH_code) "
+                            "values ('{}', '{}', '{}', '{}')".format(pub_disease, key.replace("'", ""), value, mushs.get(key)))
+             conn.commit()
+             FK_pub_disease.append([pub_Om, pub_disease])
         else:
-            print(
-                f"pubOm: {pub_Om}, disease:{key}, count:{value}, MESH_code: {mushs.get(key)},Gene_id:{pub_gene}, pub_disea:{pub_disease}")
+            #print(
+             #   f"pubOm: {pub_Om}, disease:{key}, count:{value}, MESH_code: {mushs.get(key)},Gene_id:{pub_gene}, pub_disea:{pub_disease}")
+            cursor.execute("insert into pub_disease(id_article, disease, count, MESH_code) "
+                           "values ('{}', '{}', '{}', '{}')".format(pub_disease, key.replace("'",""), value, mushs.get(key)))
+            conn.commit()
+            FK_pub_disease2.append([pub_gene, pub_disease])
+    print("tabel pub_diseases gevuld")
 
 
 def fill_pub_gene(gene_count):
     global pub_gene
     keys_del = []
+    global FK_pub_gene
     for key, value in gene_count.items():  # werkt dan niet met een primary key??!! of zo lijkt het
         if value < 3:
             keys_del.append(key)
         else:
             pub_gene += 1
-            print(f"{key}")
-            print(
-                f"pubOm: {pub_Om}, gene:{key}, count:{value}, gene:{pub_gene}")
+            #print(f"{key}")
+            #print(
+            #    f"pubOm: {pub_Om}, gene:{key}, count:{value}, gene:{pub_gene}")
+            cursor.execute("insert into pub_genes(id_artikel, genes, count) "
+                           "values ('{}', '{}', '{}')".format(pub_gene, key.replace("'", ""), value))
+            conn.commit()
+            FK_pub_gene.append([pub_Om, pub_gene])
+
     for item in keys_del:
         del gene_count[item]
     if gene_count:
         get_ids_all_pubmed(list(gene_count.keys()), False)
 
+    print("tabel pub_om genes gevuld")
 
-def fill_pub_gene_V(gene_count):
-    global pub_gene
-    for key, value in gene_count.items():  # werkt dan niet met een primary key??!! of zo lijkt het
-        print(f"{key}")
-        print(
-            f"pubOm: {pub_Om}, gene:{key}, count:{value}, gene:{pub_gene + 1}")
-    get_ids_all_pubmed(list(gene_count.keys()), False)
+
+
+
+# def fill_pub_gene_V(gene_count):
+#     global pub_gene
+#     for key, value in gene_count.items():  # werkt dan niet met een primary key??!! of zo lijkt het
+#         print(f"{key}")
+#         print(
+#             f"pubOm: {pub_Om}, gene:{key}, count:{value}, gene:{pub_gene + 1}")
+#     get_ids_all_pubmed(list(gene_count.keys()), False)
+
 
 def fill_PubOM(id_pum_om, PMID, article_name):
-    print(f"Voor de metabolieten met artikel")
-    print(f"id={id_pum_om} PMID={PMID} Metab:{metab} article={article_name}")
+    #print(f"Voor de metabolieten met artikel")
+    #print(f"id={id_pum_om} PMID={PMID} Metab:{metab} article={article_name}")
+    global FK_metaboliet
+    cursor.execute("insert into PubOm(id_pum_om, PMID, article_name) "
+                   "values ('{}', '{}', '{}')".format(id_pum_om, PMID, article_name.replace("'", "")))
+    conn.commit()
+    FK_metaboliet.append([metab, id_pum_om])
+    print("tabel pubOM is gevuld")
+
 
 def fill_PubOM_Gene(id_pum_om, PMID, article_name):
-    print(f"Voor de genen met artikel")
-    print(f"id={id_pum_om} PMID={PMID} Metab:{metab} article={article_name}")
+    #print(f"Voor de genen met artikel")
+    #print(f"id={id_pum_om} PMID={PMID} Metab:{metab} article={article_name}")
+    cursor.execute("insert into pubom(id_pum_om, pmid, article_name) "
+                   "values ('{}', '{}', '{}')".format(id_pum_om, PMID, article_name.replace("'", "")))
+    conn.commit()
+    print("tabel pubOM2 is gevuld")
 
 def start_textmining(metabolieten):
     get_ids_all_pubmed(metabolieten, True)
     print("klaar")
 
 
+def fill_pubOM_pub_genes():
+    global FK_pub_gene
+    for pub in FK_pub_gene:
+        cursor.execute("insert into Pubom_pub_genes(pubom_id_pum_om, pub_genes_id_artikel) "
+                       "values ('{}', '{}')".format(pub[0], pub[1]))
+        conn.commit()
+    print("tussen tabel pubom pub genes gevuld")
+
+
+def fill_pub_disease_pubom():
+    global FK_pub_disease
+    for pub in FK_pub_disease:
+        cursor.execute("insert into pub_disease_pubom(pub_disease_id_article, pubom_id_pum_om) "
+                       "values ('{}', '{}')".format(pub[1], pub[0]))
+        conn.commit()
+    print("tussen tabel pubom pub disease gevuld")
+
+
+def fill_pub_disease_pub_genes():
+    global FK_pub_disease2
+    for pub in FK_pub_disease2:
+        cursor.execute("insert into pub_disease_pub_genes(pub_disease_id_article, pub_genes_id_artikel) "
+                       "values ('{}', '{}')".format(pub[1], pub[0]))
+        conn.commit()
+    print("tussen tabel pub genes pub disease gevuld")
+
+
+def fill_pubom_metabolieten():
+    global FK_metaboliet
+    for pub in FK_metaboliet:
+        cursor.execute("insert into metabolieten_pubom(metabolieten_id_metaboliet, pubom_id_pum_om) "
+                       "values ('{}', '{}')".format(pub[0], pub[1]))
+        conn.commit()
+    print("tussen tabel metabolieten pubom gevuld")
+
+
+def fill_tussentabellen():
+    fill_pubOM_pub_genes()
+    fill_pub_disease_pubom()
+    fill_pub_disease_pub_genes()
+    fill_pubom_metabolieten()
+
+
 if __name__ == '__main__':
+    # connect aan de database
+    conn = psycopg2.connect(host="postgres.biocentre.nl", user="BI2_PG1", password="blaat1234",
+                            database="bio_jaar_2_pg_1")
+    # open een cursor
+    cursor = conn.cursor()
     from time import gmtime, strftime
-
-
-
-
     file = "Dataset/Untargeted_metabolomics.xlsx"
     data = fileReader.readFile(file)
     print(strftime("%Y-%m-%d %H:%M:%S", gmtime()))
@@ -317,6 +401,8 @@ if __name__ == '__main__':
     # metabolieten = [ "Palmitoyl Serinol","Ethyl 2-hydroxyisovalerate", "8-oxo-dGDP"]
     #metabolieten = ["2-Ketobutyric acid"]
 
-    get_ids_all_pubmed(metabolieten,True)
+    get_ids_all_pubmed(metabolieten, True)
     print(strftime("%Y-%m-%d %H:%M:%S", gmtime()))
+
+    fill_tussentabellen()
 
