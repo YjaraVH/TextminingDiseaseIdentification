@@ -4,8 +4,12 @@ import psycopg2
 from mysql.connector import cursor
 from fileReader import main
 
+conn = psycopg2.connect(host="postgres.biocentre.nl",
+                        user="BI2_PG1", password="blaat1234",
+                        database="bio_jaar_2_pg_1", port=5900)
 
 def visualisatie():
+    cursor = conn.cursor()
     value = -100
     value2 = 100
     global result
@@ -23,11 +27,21 @@ def visualisatie():
     return result
 
 def grafiek_maken():
-    postgre = ("""SELECT disease, count FROM pub_disease;""")
+    cursor = conn.cursor()
+    postgre = ("""SELECT disease, count FROM pub_disease limit 10;""")
     cursor.execute(postgre)
     result = cursor.fetchall()
-    print(result)
-    print(postgre.split())
+
+    diseases = []
+    counts = []
+    for item in result:
+        diseases.append(item[0])
+        counts.append(item[1])
+
+    print(diseases)
+    print(counts)
+    print(len(counts))
+    print(len(diseases))
     labels = postgre.split(",")
     sizes = [15, 30, 45, 10]
     explode = (0, 0.1, 0, 0)  # only "explode" the 2nd slice (i.e. 'Hogs')
@@ -43,12 +57,10 @@ def grafiek_maken():
 
 if __name__ == '__main__':
     # connect aan de database
-    conn = psycopg2.connect(host="postgres.biocentre.nl",
-                            user="BI2_PG1", password="blaat1234",
-                            database="bio_jaar_2_pg_1")
+
 
     # open een cursor
-    cursor = conn.cursor()
+
     person_ids = main()
     # result = visualisatie()
     grafiek_maken()
