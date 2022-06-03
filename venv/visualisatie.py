@@ -23,8 +23,14 @@ def info_patient_ophalen(conn, cursor):
     cursor.execute(postgre)
     result = cursor.fetchall()
 
+    info_pat = []
     for i in result:
-        print(i)
+        row = []
+        name = i[0]
+        z_score = i[1]
+        row.append(name)
+        row.append(z_score)
+        info_pat.append(info_pat)
 
 
 def info_meta_ophalen(conn, cursor):
@@ -41,6 +47,7 @@ def info_meta_ophalen(conn, cursor):
     cursor.execute(postgre)
     result = cursor.fetchall()
 
+    info_met = []
     for a in result:
         row = []
         name = a[0]
@@ -64,7 +71,7 @@ def info_meta_ophalen(conn, cursor):
         row.append(descr)
         row.append(code)
         row.append(rel)
-    print(row)
+        info_met.append(row)
 
 
 
