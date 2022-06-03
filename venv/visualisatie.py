@@ -23,6 +23,16 @@ def info_patient_ophalen(conn, cursor):
     cursor.execute(postgre)
     result = cursor.fetchall()
 
+# "SELECT id_patient, name, disease, z_score FROM metabolieten
+#      JOIN z_scores ON metabolieten.id_metaboliet=z_scores.metabolieten_id_metaboliet
+#      JOIN patients ON z_scores.patients_id_patient=patients.id_patient
+#      JOIN metabolieten_pubom mp ON metabolieten.id_metaboliet = mp.metabolieten_id_metaboliet
+#      JOIN pubom ON mp.pubom_id_pum_om = pubom.id_pum_om
+#      JOIN pub_disease_pubom pdp ON pubom.id_pum_om = pdp.pubom_id_pum_om
+#      JOIN pub_disease ON pdp.pub_disease_id_article = pub_disease.id_article
+#      WHERE id_patient='P1002.1_Zscore' AND (z_score < -5 OR z_score > 5
+#      ORDER BY z_score desc;
+# "
     info_pat = []
     for i in result:
         row = []
