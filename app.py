@@ -1,17 +1,22 @@
 import io
 import time
 
+import psycopg2
 from flask import Flask,request,render_template
 from Bio import Entrez
 import mysql.connector
 import fileReader
 import textmining2
 
-conn = mysql.connector.connect(
+
+conns = mysql.connector.connect(
     host="ensembldb.ensembl.org",
     user="anonymous",
     database="homo_sapiens_core_95_38"
 )
+
+conn = psycopg2.connect(host="postgres.biocentre.nl", user="BI2_PG1", password="blaat1234",
+                            database="bio_jaar_2_pg_1")
 
 app = Flask(__name__)
 
@@ -34,6 +39,7 @@ def hello_world():
             print("no email is needed")
         else:
             print(email)
+            get_email(email)
         if filename == '':
             error = "Filename is empty"
             return render_template("Homepage.html", error=error)
@@ -60,7 +66,8 @@ def info():
 
 @app.route('/Resultspatient',methods=["POST", "GET"])
 def resultspatient():
-    patients = ["piet","jan","iphone"]                                         #Needs query to get all the patient ID's
+    #patients = ["piet","jan","iphone"]                                         #Needs query to get all the patient ID's
+    patients = get_patients()
     if request.method == "POST":
         patient = request.form.get('patientC')
         zscoreP = request.form.getlist('zscorePos')
@@ -94,13 +101,16 @@ def results():
             z_score_pos = request.form['zscorePos']
                                                                                 # functie oproepen queri met alle nodige informatie, zie header tabel, onderstaande is een functie voor mezelf om te checken of alles werkt
             print(f"main otion:{mainOption}, zscoreNeg:{z_score_neg}, zscorePos:{z_score_pos}, id_patient:{search}, order:{order_desc_asc}")
-            output = search_queri(mainOption,z_score_neg, z_score_pos,6)
+            ############output = search_queri(mainOption,z_score_neg, z_score_pos,6)
+            output = info_patient_ophalen(z_score_neg,z_score_pos,order_desc_asc,search)
             headers = ["Metabolite","Z-score","Disease(s)"]                     # Zou nice zijn als er per disease een top 3 gevonden ziektes kan woorden, nog beter ook met score, kan ik nog een colomn voor bij maken. Laat maar weten
         else:
             order_by = request.form['order_type']
             print(f"mainOption:{mainOption}, order_by:{order_by}, metaboliteName:{search}, order:{order_desc_asc}")
                                                                                 # functie oproepen queri met alle nodige informatie, zie header tabel, onderstaande is een functie voor mezelf om te checken of alles werkt
             output = search_queri(mainOption,2,3,9)
+
+            output = info_meta_ophalen(order_by,order_desc_asc,search)
             headers = ["Name","Origin","Description","HMBD_code","Relevance"]
 
         return render_template("Results.html", output=output, headers=headers)
@@ -134,15 +144,87 @@ def search_queri(mainOpt,keuzes,neg,pos):
     print(regels)
     return regels
 
+
+def get_patients():   #moet conn and cursor meekrijgen
+    cursor = conn.cursor()
+    postgre = ("""SELECT id_patient FROM patients;""")
+    cursor.execute(postgre)
+    result = cursor.fetchall()
+    patients = []
+    for i in result:
+        patients.append(i)
+    return patients
+
+def info_meta_ophalen(order_by,order_desc_asc,search):
+    cursor = conn.cursor()
+    postgre = ("""SELECT name, origin_name, description, hmbd_code, relevance FROM metabolieten
+     JOIN origins_metabolieten ON metabolieten.id_metaboliet=origins_metabolieten.metabolieten_id_metaboliet
+     JOIN origins ON origins_metabolieten.origins_id_orgins= origins.id_orgins
+     JOIN relevance ON metabolieten.relevance_id_relevance=relevance.id_relevance
+     JOIN z_scores ON metabolieten.id_metaboliet=z_scores.metabolieten_id_metaboliet
+     WHERE name='{}')
+     ORDER BY {} {};""").format(search, order_by, order_desc_asc)
+    cursor.execute(postgre)
+    result = cursor.fetchall()
+
+    info_met = []
+    for a in result:
+        row = []
+        name = a[0]
+        origin = a[1]
+        if origin == "; \n    ":
+            origin = "ONBEKEND"
+        else:
+            origin = origin
+        descr = a[2]
+        code = a[3]
+        rel = ""
+        relevance = a[4].split(",")
+        if relevance[3] == "f)":
+            rel = "FALSE"
+        elif relevance[3] == "t)":
+            rel = "TRUE"
+        elif relevance[3] == ")":
+            rel = "ONBEKEND"
+        row.append(name)
+        row.append(origin)
+        row.append(descr)
+        row.append(code)
+        row.append(rel)
+        info_met.append(row)
+
+def info_patient_ophalen(z_score_neg,z_score_pos,order_desc_asc,search):
+    cursor = conn.cursor()
+    postgre = ("""SELECT name, z_score FROM metabolieten
+         JOIN z_scores ON metabolieten.id_metaboliet=z_scores.metabolieten_id_metaboliet
+         JOIN patients ON z_scores.patients_id_patient=patients.id_patient
+         WHERE id_patient='{}' AND (z_score < {} OR z_score > {})
+         ORDER BY z_score {};""").format(search,z_score_neg,z_score_pos,order_desc_asc)
+    cursor.execute(postgre)
+    result = cursor.fetchall()
+
+    info_pat = []
+    for i in result:
+        row = []
+        name = i[0]
+        z_score = i[1]
+        row.append(name)
+        row.append(z_score)
+        info_pat.append(info_pat)
+    return info_pat
+
 def get_email(reciever):
     import smtplib
-    # SERVER = "localhost"
-    FROM = 'monty@python.com'
-    msg = "lets test this"
-    # Send the mail
-    smtp = smtplib.SMTP('localhost')
-    smtp.sendmail(FROM, reciever, msg)
-    smtp.quit()
+
+    host = "postgres.biocentre.nl"
+    server = smtplib.SMTP(host)
+    FROM = "Y.Hopmans@student.han.nl"
+    TO = reciever
+    MSG = "Subject: Test email python\n\nBody of your message!"
+    server.sendmail(FROM, TO, MSG)
+
+    server.quit()
+    print("Email Send")
 
 def opbouw_keuzes(keus):
     search = ""

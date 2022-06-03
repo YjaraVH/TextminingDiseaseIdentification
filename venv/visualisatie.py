@@ -9,7 +9,7 @@ import psycopg2
 #     cursor = conn.cursor()
 result = []
 
-def info_ophalen(conn, cursor):
+def info_patient_ophalen(conn, cursor):
     value = -100
     value2 = 100
     global result
@@ -24,12 +24,74 @@ def info_ophalen(conn, cursor):
     cursor.execute(postgre)
     result = cursor.fetchall()
 
+# "SELECT id_patient, name, disease, z_score FROM metabolieten
+#      JOIN z_scores ON metabolieten.id_metaboliet=z_scores.metabolieten_id_metaboliet
+#      JOIN patients ON z_scores.patients_id_patient=patients.id_patient
+#      JOIN metabolieten_pubom mp ON metabolieten.id_metaboliet = mp.metabolieten_id_metaboliet
+#      JOIN pubom ON mp.pubom_id_pum_om = pubom.id_pum_om
+#      JOIN pub_disease_pubom pdp ON pubom.id_pum_om = pdp.pubom_id_pum_om
+#      JOIN pub_disease ON pdp.pub_disease_id_article = pub_disease.id_article
+#      WHERE id_patient='P1002.1_Zscore' AND (z_score < -5 OR z_score > 5
+#      ORDER BY z_score desc;
+# "
+    info_pat = []
+    for i in result:
+        row = []
+        name = i[0]
+        z_score = i[1]
+        row.append(name)
+        row.append(z_score)
+        info_pat.append(info_pat)
+
+
+def info_meta_ophalen(conn, cursor):
+    value = -100
+    value2 = 100
+    filter = "desc"
+    postgre = ("""SELECT name, origin_name, description, hmbd_code, relevance FROM metabolieten
+     JOIN origins_metabolieten ON metabolieten.id_metaboliet=origins_metabolieten.metabolieten_id_metaboliet
+     JOIN origins ON origins_metabolieten.origins_id_orgins= origins.id_orgins
+     JOIN relevance ON metabolieten.relevance_id_relevance=relevance.id_relevance
+     JOIN z_scores ON metabolieten.id_metaboliet=z_scores.metabolieten_id_metaboliet
+     WHERE (z_score < {} OR z_score > {})
+     ORDER BY z_score {};""").format(value, value2, filter)
+    cursor.execute(postgre)
+    result = cursor.fetchall()
+
+    info_met = []
+    for a in result:
+        row = []
+        name = a[0]
+        origin = a[1]
+        if origin == "; \n    ":
+            origin = "ONBEKEND"
+        else:
+            origin = origin
+        descr = a[2]
+        code = a[3]
+        rel = ""
+        relevance = a[4].split(",")
+        if relevance[3] == "f)":
+            rel = "FALSE"
+        elif relevance[3] == "t)":
+            rel = "TRUE"
+        elif relevance[3] == ")":
+            rel = "ONBEKEND"
+        row.append(name)
+        row.append(origin)
+        row.append(descr)
+        row.append(code)
+        row.append(rel)
+        info_met.append(row)
+
+
+def get_patients(conn, cursor):
+    postgre = ("""SELECT id_patient FROM patients;""")
+    cursor.execute(postgre)
+    result = cursor.fetchall()
+
     for i in result:
         print(i)
-
-
-
-
 
 if __name__ == '__main__':
     # connect aan de database
@@ -38,4 +100,6 @@ if __name__ == '__main__':
 
     # open een cursor
     cursor = conn.cursor()
-    info_ophalen(conn, cursor)
+    #info_patient_ophalen(conn, cursor)
+    #info_meta_ophalen(conn, cursor)
+    get_patients(conn, cursor)

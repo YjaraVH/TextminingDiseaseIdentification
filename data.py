@@ -142,6 +142,13 @@ def update_link_meta_path(getal):
     conn.commit()
 
 
+def update_link_meta_pubom(getal):
+    cursor.execute("insert into metabolieten_pubom(pathways_id_path, metabolieten_id_metaboliet) "
+                   "values ('{}', '{}')".format(getal, getal))
+    conn.commit()
+
+
+
 if __name__ == '__main__':
     # connect aan de database
     conn = psycopg2.connect(host="postgres.biocentre.nl", user="BI2_PG1", password="blaat1234",
