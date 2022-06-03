@@ -74,7 +74,13 @@ def info_meta_ophalen(conn, cursor):
         info_met.append(row)
 
 
+def get_patients(conn, cursor):
+    postgre = ("""SELECT id_patient FROM patients;""")
+    cursor.execute(postgre)
+    result = cursor.fetchall()
 
+    for i in result:
+        print(i)
 
 if __name__ == '__main__':
     # connect aan de database
@@ -84,4 +90,5 @@ if __name__ == '__main__':
     # open een cursor
     cursor = conn.cursor()
     #info_patient_ophalen(conn, cursor)
-    info_meta_ophalen(conn, cursor)
+    #info_meta_ophalen(conn, cursor)
+    get_patients(conn, cursor)
