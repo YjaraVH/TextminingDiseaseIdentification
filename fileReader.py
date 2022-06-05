@@ -349,6 +349,13 @@ def getPatient31(data):
     patient31.insert(0, "P2021M02101.1_Zscore")
     return patient31
 
+def get_Patient_Z_score(person_ids, data):
+    dict_patient_zscore = {}
+    for item in person_ids:
+        dict_patient_zscore[item] = list(data[item])
+    for i in dict_patient_zscore:
+        print(f"patient: {i}, {dict_patient_zscore[i]}")
+    return dict_patient_zscore
 
 def main():
     #File name
@@ -357,7 +364,11 @@ def main():
 
     metabolites = getMetabolites(data)
     person_ids, start, stop = getPatientsId(data)
+
     dict = getDicMetbZscore(data, metabolites, start, stop)
+
+    # dictionary met als key patient id en als value lijst met z-scores
+    dict_P = get_Patient_Z_score(person_ids,data)
     #print best wel veel uit, maar dan kun je even kijken hoe het eruit ziet:)
     # printDictionary(dict)
 

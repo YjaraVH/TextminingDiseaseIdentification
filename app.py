@@ -112,6 +112,7 @@ def results():
             print(f"main otion:{mainOption}, zscoreNeg:{z_score_neg}, zscorePos:{z_score_pos}, id_patient:{search}, order:{order_desc_asc}")
             ############output = search_queri(mainOption,z_score_neg, z_score_pos,6)
             output = info_patient_ophalen(z_score_neg,z_score_pos,order_desc_asc,search)
+            print(f">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>{output}")
             headers = ["Metabolite","Z-score","Disease(s)"]                     # Zou nice zijn als er per disease een top 3 gevonden ziektes kan woorden, nog beter ook met score, kan ik nog een colomn voor bij maken. Laat maar weten
 
         else:
@@ -121,7 +122,7 @@ def results():
             ###############################output = search_queri(mainOption,2,3,9)
 
             output = info_meta_ophalen(order_by,order_desc_asc,search)
-            headers = ["Name","Origin","Description","HMBD_code","Relevance"]
+            headers = ["name","origin_name","hmbd_code","fluids_name","relevance"]
 
         return render_template("Results.html", output=output, headers=headers)
     else:
@@ -181,13 +182,14 @@ def info_meta_ophalen(order_by,order_desc_asc,search):  #name weghalen, overweeg
     print(
         f"order by:{order_by}, order:{order_desc_asc},meatbo:{search}")
     cursor = conn.cursor()
-    postgre = ("""SELECT name, origin_name, description, hmbd_code, relevance FROM metabolieten
+    postgre = ("""SELECT name,origin_name,hmbd_code,fluids_name, relevance  FROM metabolieten
      JOIN origins_metabolieten ON metabolieten.id_metaboliet=origins_metabolieten.metabolieten_id_metaboliet
      JOIN origins ON origins_metabolieten.origins_id_orgins= origins.id_orgins
      JOIN relevance ON metabolieten.relevance_id_relevance=relevance.id_relevance
      JOIN z_scores ON metabolieten.id_metaboliet=z_scores.metabolieten_id_metaboliet
-     WHERE name='{}'
-     ORDER BY {} {};""").format(search, order_by, order_desc_asc)
+     join fluids f on metabolieten.id_fluids = f.id_fluids
+    order by {} {}
+    limit 20;""").format(order_by, order_desc_asc)
 
     cursor.execute(postgre)
     result = cursor.fetchall()
@@ -231,7 +233,9 @@ def info_patient_ophalen(z_score_neg,z_score_pos,order_desc_asc,search):
     result = cursor.fetchall()
     info_pat = []
     for i in result:                                                            #Wat aangepast nu doet deze het ook
-        info_pat.append(i)                                                      #z-score is nog steeds heel vreemd, denk bijna dat er echt iets niet moet kloppen!!!
+        info_pat.append(i)
+    #z-score is nog steeds heel vreemd, denk bijna dat er echt iets niet moet kloppen!!!
+    print(info_pat)
     return info_pat
 
 def get_email(reciever):
