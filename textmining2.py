@@ -287,7 +287,7 @@ def fill_pub_gene(gene_count):
     keys_del = []
     global FK_pub_gene
     for key, value in gene_count.items():  # werkt dan niet met een primary key??!! of zo lijkt het
-        if value < 3:
+        if value < 10:
             keys_del.append(key)
         else:
             pub_gene += 1
@@ -405,4 +405,6 @@ if __name__ == '__main__':
     print(strftime("%Y-%m-%d %H:%M:%S", gmtime()))
 
     fill_tussentabellen()
+
+    print("Klaar met textminen!!!")
 
