@@ -83,7 +83,7 @@ def make_figure():
         data,
         names='character',
         parents='parent',
-        values='value' )
+        values='value', width=800, height=800)
     fig.show()
 
 
