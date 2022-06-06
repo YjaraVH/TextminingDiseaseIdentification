@@ -218,11 +218,11 @@ form input, form select{
           <option value="1.4" selected>1.4</option>
           <option value="1.8">1.8</option>
           <option value="2">2</option>
-          <option value="3">-2</option>
-          <option value="4">-2</option>
-          <option value="5">-5</option>
-          <option value="10">-10</option>
-          <option value="20">-20</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
         </select></p>
 
 
@@ -245,27 +245,7 @@ form input, form select{
     </ul>
     </nav>
     <article>
-        <p>Search word: {{answer}}</p>
-    <div id="patientsR">
 
-        <table style="width:100%">
-        <tr>
-            {% for keus in keuze %}
-            <th>{{keus}}</th>
-            {% endfor %}
-        </tr>
-             {% for x in output %}
-                 <tr>
-                     <td>{{ x[0] }}</td>
-                    <td>{{ x[1] }}</td>
-                    <td>{{ x[2] }}</td>
-                    <td>{{ x[3] }}</td>
-                 <td>{{ x[4] }}</td>
-
-                 </tr>
-             {% endfor %}
-
-          </table></div>
     </article>
 </section>
 <script>

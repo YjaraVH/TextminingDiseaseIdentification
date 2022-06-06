@@ -53,12 +53,11 @@ def hello_world():
             return render_template("Homepage.html", error=error)
         else:
             #file request.form['org_pro']
-
             #to obtain all information in file
-           ##### data = fileReader.readFile(file)
-            # to obtain metabolieten for textmining
-            ######metabolieten = fileReader.getMetabolites(data)
-            ######textmining2.get_ids_all_pubmed(metabolieten,True)
+            #data = fileReader.readFile(file)
+            #to obtain metabolieten for textmining
+            #metabolieten = fileReader.getMetabolites(data)
+            #textmining2.get_ids_all_pubmed(metabolieten,True)
             return render_template("Homepage.html", error="")
     else:
         return render_template("Homepage.html")

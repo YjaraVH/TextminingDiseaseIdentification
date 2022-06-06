@@ -196,7 +196,7 @@ th:nth-child(even),td:nth-child(even) {
     <div class="dropdown-content">
       <a href="/Results" class="active">Excel</a>
       <a href="/Resultspatient">Patients</a>
-      <a href="/ResultsGlobal">Diseases</a>
+      <a href="/ResultsGlobal">Metabolite</a>
     </div>
   </div>
   <a href="/About">About</a>
@@ -237,19 +237,19 @@ th:nth-child(even),td:nth-child(even) {
 
         <!--  Checkbox for the parameters  -->
             <p>Order by z-score:</p>
-            <input type="radio" name="order" value="desc">Descending order</input><br>
+            <input type="radio" name="order" value="desc" checked>Descending order</input><br>
             <input type="radio" name="order" value="asc">Ascending order</input><br>
          <p>Type patient ID:</p>
         <input type="text" name="answer">
         <input type="submit" value="Submit">
-    </form>
+
         <h2>Options after submit</h2>
-        <p>Choose your view/table option:</p>
+        <p>Choose your search option:</p>
 
         <div id="wrapper">
-            <input onclick="hidAndShow2('patients','patientsR')" type="radio" name="org_pro" value="metabolite" checked>Metabolite</input><br>
-            <input onclick="hidAndShow2('patientsR','patients')" type="radio" name="org_pro" value="patient">Patient</input><br>
-        </div>
+            <input onclick="hidAndShow2('patients','patientsR')" type="radio" name="org_pro" value="patient" checked>Metabolite and z-score</input><br>
+            <input onclick="hidAndShow2('patientsR','patients')" type="radio" name="org_pro" value="patientE">Metabolite, z-score and disease(s)</input><br>
+        </div></form>
     </ul>
     </nav>
     <article>
