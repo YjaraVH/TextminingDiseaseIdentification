@@ -222,17 +222,18 @@ def info_meta_ophalen(order_by,order_desc_asc,search):  #name weghalen, overweeg
     return info_met
 
 def info_patient_ophalen(z_score_neg,z_score_pos,order_desc_asc,search):
+    print(search)
     print(f"zscoreN:{z_score_neg}, zscoreP:{z_score_pos}, order:{order_desc_asc}, patient:{search}")
     cursor = conn.cursor()
     postgre = ("""SELECT name, z_score FROM metabolieten
          JOIN z_scores ON metabolieten.id_metaboliet=z_scores.metabolieten_id_metaboliet
          JOIN patients ON z_scores.patients_id_patient=patients.id_patient
-         WHERE id_patient='{}' AND (z_score < {} OR z_score > {})
-         ORDER BY z_score {} limit 4;""").format(search,z_score_neg,z_score_pos,order_desc_asc)        #heeft voor nu even een limit anders duurt het erg lang
+         WHERE id_patient like'{}%' AND (z_score < {} OR z_score > {})
+         ORDER BY z_score {} limit 5;""").format(search,z_score_neg,z_score_pos,order_desc_asc)        #heeft voor nu even een limit anders duurt het erg lang
     cursor.execute(postgre)
     result = cursor.fetchall()
     info_pat = []
-    for i in result:                                                            #Wat aangepast nu doet deze het ook
+    for i in result:  #Wat aangepast nu doet deze het ook
         info_pat.append(i)
     #z-score is nog steeds heel vreemd, denk bijna dat er echt iets niet moet kloppen!!!
     print(info_pat)
