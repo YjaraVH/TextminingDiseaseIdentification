@@ -62,6 +62,9 @@ article {
   }
 }
 
+form input, form select{
+    width:100%;
+}
 
 
 
@@ -195,12 +198,12 @@ article {
         <form method="post">
         <p>Select metabolite or type name of metabolite below:
         <p>Enter name metabolite:</p>
-        <input type="text" name="answer">
+        <input id="search" type="text" name="answer">
        <p>Metabolites:
         </select>
          <select id="Metabolites" name="Metabolites">
              {% for Metabolite in Metabolites %}
-          <option value="{{ Metabolite }}">{{ Metabolite }}</option>
+          <option size="30" value="{{ Metabolite }}">{{ Metabolite }}</option>
              {% endfor %}
         </select></p>
         <input type="submit" value="Submit">

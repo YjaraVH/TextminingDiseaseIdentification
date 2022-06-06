@@ -69,20 +69,29 @@ def resultspatient():
     #patients = ["piet","jan","iphone"]                                         #Needs query to get all the patient ID's
     patients = get_patients()
     if request.method == "POST":
-        patient = request.form.get('patientC')
+        patient = ""
         zscoreP = request.form.getlist('zscorePos')
         zscoreN = request.form.getlist('zscoreNeg')
-        print(f"patient:{patient}, z-scorep:{zscoreP}, z-scoren:{zscoreN}")
+
+        selected_patient = request.form.get('patientC')
+        answer_patient = request.form.get('answer')
+        print(f"patient:{selected_patient}, z-scorep:{zscoreP}, z-scoren:{zscoreN}")
+        if selected_patient == "":
+            patient = answer_patient
+        else:
+            patient = selected_patient
+        print(patient)
         return render_template("Resultspatient.html",patients=patients)
     else:
         return render_template("Resultspatient.html", patients=patients)
 
 @app.route('/ResultsGlobal',methods=["POST", "GET"])
 def resultsGlobal():
-    metabolieten = ["dirk","jan","iphone"]                                         #Needs query to get all the metabolietes names
+    metabolieten = get_metabolieten()
     if request.method == "POST":
         metaboliet = request.form.get('Metabolites')
         print(f"patient:{metaboliet}")
+        print(request.form.get('answer'))
         return render_template("ResultsGlobal.html",Metabolites=metabolieten)
     else:
         return render_template("ResultsGlobal.html",Metabolites=metabolieten)
@@ -103,7 +112,9 @@ def results():
             print(f"main otion:{mainOption}, zscoreNeg:{z_score_neg}, zscorePos:{z_score_pos}, id_patient:{search}, order:{order_desc_asc}")
             ############output = search_queri(mainOption,z_score_neg, z_score_pos,6)
             output = info_patient_ophalen(z_score_neg,z_score_pos,order_desc_asc,search)
+            print(f">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>{output}")
             headers = ["Metabolite","Z-score","Disease(s)"]                     # Zou nice zijn als er per disease een top 3 gevonden ziektes kan woorden, nog beter ook met score, kan ik nog een colomn voor bij maken. Laat maar weten
+
         else:
             order_by = request.form['order_type']
             print(f"mainOption:{mainOption}, order_by:{order_by}, metaboliteName:{search}, order:{order_desc_asc}")
@@ -111,7 +122,7 @@ def results():
             ###############################output = search_queri(mainOption,2,3,9)
 
             output = info_meta_ophalen(order_by,order_desc_asc,search)
-            headers = ["Name","Origin","Description","HMBD_code","Relevance"]
+            headers = ["name","origin_name","hmbd_code","fluids_name","relevance"]
 
         return render_template("Results.html", output=output, headers=headers)
     else:
@@ -141,9 +152,19 @@ def search_queri(mainOpt,keuzes,neg,pos):
         # regels.append(regel[0:len(regel)])
         regels.append(item)
     conn.commit()
-    print(regels)
     return regels
 
+def get_metabolieten():   #moet conn and cursor meekrijgen
+    cursor = conn.cursor()
+    postgre = ("""SELECT name FROM metabolieten;""")
+    cursor.execute(postgre)
+    result = cursor.fetchall()
+    patients = []
+    patients.append("")
+    for i in result:
+        meta = str(i)
+        patients.append(meta[2:len(meta)-3])
+    return patients
 
 def get_patients():   #moet conn and cursor meekrijgen
     cursor = conn.cursor()
@@ -151,27 +172,29 @@ def get_patients():   #moet conn and cursor meekrijgen
     cursor.execute(postgre)
     result = cursor.fetchall()
     patients = []
+    patients.append("")
     for i in result:
-        patients.append(i)
+        patient = str(i)
+        patients.append(patient[2:len(patient)-3])
     return patients
 
-def info_meta_ophalen(order_by,order_desc_asc,search):
+def info_meta_ophalen(order_by,order_desc_asc,search):  #name weghalen, overweeg discription weg te halen want dat ziet er niet goed, misschien iets ander toevoegen?
     print(
         f"order by:{order_by}, order:{order_desc_asc},meatbo:{search}")
     cursor = conn.cursor()
-    postgre = ("""SELECT name, origin_name, description, hmbd_code, relevance FROM metabolieten
+    postgre = ("""SELECT name,origin_name,hmbd_code,fluids_name, relevance  FROM metabolieten
      JOIN origins_metabolieten ON metabolieten.id_metaboliet=origins_metabolieten.metabolieten_id_metaboliet
      JOIN origins ON origins_metabolieten.origins_id_orgins= origins.id_orgins
      JOIN relevance ON metabolieten.relevance_id_relevance=relevance.id_relevance
      JOIN z_scores ON metabolieten.id_metaboliet=z_scores.metabolieten_id_metaboliet
-     WHERE name='{}'
-     ORDER BY {} {};""").format(search, order_by, order_desc_asc)
+     join fluids f on metabolieten.id_fluids = f.id_fluids
+    order by {} {}
+    limit 20;""").format(order_by, order_desc_asc)
 
     cursor.execute(postgre)
     result = cursor.fetchall()
 
     info_met = []
-    test_info = []
     for a in result:
         row = []
         name = a[0]
@@ -196,22 +219,24 @@ def info_meta_ophalen(order_by,order_desc_asc,search):
         row.append(code)
         row.append(rel)
         info_met.append(row)
-        test_info.append(a)
-    return test_info
+    return info_met
 
 def info_patient_ophalen(z_score_neg,z_score_pos,order_desc_asc,search):
+    print(search)
     print(f"zscoreN:{z_score_neg}, zscoreP:{z_score_pos}, order:{order_desc_asc}, patient:{search}")
     cursor = conn.cursor()
     postgre = ("""SELECT name, z_score FROM metabolieten
          JOIN z_scores ON metabolieten.id_metaboliet=z_scores.metabolieten_id_metaboliet
          JOIN patients ON z_scores.patients_id_patient=patients.id_patient
-         WHERE id_patient='{}' AND (z_score < {} OR z_score > {})
-         ORDER BY z_score {} limit 4;""").format(search,z_score_neg,z_score_pos,order_desc_asc)        #heeft voor nu even een limit anders duurt het erg lang
+         WHERE id_patient like'{}%' AND (z_score < {} OR z_score > {})
+         ORDER BY z_score {} limit 5;""").format(search,z_score_neg,z_score_pos,order_desc_asc)        #heeft voor nu even een limit anders duurt het erg lang
     cursor.execute(postgre)
     result = cursor.fetchall()
     info_pat = []
-    for i in result:                                                            #Wat aangepast nu doet deze het ook
-        info_pat.append(i)                                                      #z-score is nog steeds heel vreemd, denk bijna dat er echt iets niet moet kloppen!!!
+    for i in result:  #Wat aangepast nu doet deze het ook
+        info_pat.append(i)
+    #z-score is nog steeds heel vreemd, denk bijna dat er echt iets niet moet kloppen!!!
+    print(info_pat)
     return info_pat
 
 def get_email(reciever):
