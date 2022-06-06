@@ -1,22 +1,15 @@
-import io
-import time
-
-import psycopg2
 from flask import Flask,request,render_template
-from Bio import Entrez
 import mysql.connector
 import plotly.express as px
 import psycopg2
 import sunburstplot
 import fileReader
 import textmining2
-
-
-conns = mysql.connector.connect(
-    host="ensembldb.ensembl.org",
-    user="anonymous",
-    database="homo_sapiens_core_95_38"
-)
+'''
+    File name: app.py
+    Author: Yjara Verhagen
+    Date created: 6/06/2022
+'''
 
 conn = psycopg2.connect(host="postgres.biocentre.nl", user="BI2_PG1", password="blaat1234",
                             database="bio_jaar_2_pg_1", port="5900")

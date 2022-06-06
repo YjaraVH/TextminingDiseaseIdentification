@@ -209,6 +209,7 @@ th:nth-child(even),td:nth-child(even) {
     <form method="post">
         <div id="filter">
         <h2>Filter options</h2>
+        <!-- negative and positive z-score threshold-->
         <p>Select your negative z-score threshold:
         <select id="zscoreNeg" name="zscoreNeg">
           <option value="-1">-1</option>
@@ -219,8 +220,6 @@ th:nth-child(even),td:nth-child(even) {
           <option value="-5">-5</option>
           <option value="-10">-10</option>
           <option value="-20">-20</option>
-
-
 
         </select></p>
         <p>Select your positive z-score threshold:
@@ -235,26 +234,29 @@ th:nth-child(even),td:nth-child(even) {
           <option value="20">20</option>
          </select></p> </div>
 
-        <!--  Checkbox for the parameters  -->
-            <p>Order by z-score:</p>
-            <input type="radio" name="order" value="desc" checked>Descending order</input><br>
-            <input type="radio" name="order" value="asc">Ascending order</input><br>
-         <p>Type patient ID:</p>
+        <!--  Descending or ascending  -->
+        <p>Order by z-score:</p>
+        <input type="radio" name="order" value="desc" checked>Descending order</input><br>
+        <input type="radio" name="order" value="asc">Ascending order</input><br>
+
+        <!-- Patient ID -->
+        <p>Type patient ID:</p>
         <input type="text" name="answer">
         <input type="submit" value="Submit">
 
+        <!-- Additional information (results) or only metabolites and z-scores -->
         <h2>Options after submit</h2>
         <p>Choose your search option:</p>
-
         <div id="wrapper">
             <input onclick="hidAndShow2('patients','patientsR')" type="radio" name="org_pro" value="patient" checked>Metabolite and z-score</input><br>
             <input onclick="hidAndShow2('patientsR','patients')" type="radio" name="org_pro" value="patientE">Metabolite, z-score and disease(s)</input><br>
         </div></form>
+
     </ul>
     </nav>
+    <!-- Display of the results in a table if chosen for additonal information (see above id=wrapper)-->
     <article>
     <div id="patientsR" style="display:none;">
-
     <table style="width:100%">
     <tr>
         <th>Metabolite</th>
@@ -274,15 +276,16 @@ th:nth-child(even),td:nth-child(even) {
                 <tr>
                 <td>{{ item[0] }}</td>
                 <td>{{ item[1] }}</td>
-                    <td><a href="https://www.ncbi.nlm.nih.gov/mesh/?term={{ item[2] }}" target="_blank">{{ item[2] }}</a></td>
+                <td><a href="https://www.ncbi.nlm.nih.gov/mesh/?term={{ item[2] }}" target="_blank">{{ item[2] }}</a></td>
             </tr>
-                {% endfor %}
+            {% endfor %}
         </table></td>
      </tr>
-     {% endfor %}
-</table></div>
-        <div id="patients">
+        {% endfor %}
+    </table></div>
 
+    <!-- Display of the results in a table if chosen for only metabolites and z-scores-->
+    <div id="patients">
     <table style="width:100%">
     <tr>
         <th>Metabolite</th>
@@ -294,7 +297,7 @@ th:nth-child(even),td:nth-child(even) {
         <td>{{ output[x][0] }}</td>
      </tr>
      {% endfor %}
-</table></div>
+    </table></div>
     </article>
 </section>
   <script>
@@ -305,17 +308,15 @@ th:nth-child(even),td:nth-child(even) {
             y.style.display = "none"
         }
     </script>
-
-
-<script>
-function myFunction() {
-  var x = document.getElementById("myTopnav");
-  if (x.className === "topnav") {
-    x.className += " responsive";
-  } else {
-    x.className = "topnav";
-  }
-}
-</script>
+    <script>
+  function myFunction() {
+        var x = document.getElementById("myTopnav");
+        if (x.className === "topnav") {
+            x.className += " responsive";
+        } else {
+            x.className = "topnav";
+                }
+        }
+    </script>
 </body>
 </html>

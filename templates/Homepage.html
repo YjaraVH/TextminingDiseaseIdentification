@@ -32,14 +32,6 @@ body {
   font-family: Arial, Helvetica, sans-serif;
     background-color: lightblue;
 }
-/* Style of the header
-header {
-  background-color: darksalmon;
-  padding: 6px;
-  text-align: center;
-  font-size: 20px;
-  color: white;
-}*/
 
 pre {
     white-space: pre-wrap;
@@ -72,7 +64,7 @@ pre {
 
 }
 
-/*Topnav*/
+/* Topnav */
 .topnav {
   overflow: hidden;
   background-color: darksalmon;
@@ -178,8 +170,8 @@ pre {
 </style>
 </head>
 <body>
-
-    <div class="topnav" id="myTopnav">
+<!-- Topnav to navigate to other pages/links -->
+  <div class="topnav" id="myTopnav">
   <a href="/Homepage" class="active">Home</a>
   <div class="dropdown">
     <button class="dropbtn">Results
@@ -195,6 +187,7 @@ pre {
   <a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="myFunction()">&#9776;</a>
 </div>
 
+<!-- First article with some information about the application-->
 <section>
     <article class="all-browsers">
     <article class="browser">
@@ -212,7 +205,7 @@ Here are a few tips for using this application:
 * Previous obtained information can always be viewed at the results pages.
    </pre>
   </article>
-
+<!-- Second article, to upload file -->
   <article class="browser">
     <h2>Choose and upload file</h2>
   <form action="/Homepage" method="post" enctype="multipart/form-data">
@@ -236,20 +229,13 @@ Please enter an e-mail adress, an e-mail while be send when all information is o
 </div>
 </pre>
 </form>
-<!--
-<strong>Email</strong>
-<input type="text" name="email">
--->
-
+<!-- Shows if file is accepted or not -->
       {% if error == '' %}
 <pre style="color: lime" onclick="hidAndShow('hid1')">Check: First step completed</pre>
       {% endif %}
       {% if error %}
 <pre style="color: brown" >{{ error }}</pre>
       {%  endif %}
-
-
-
    <script>
     function Show(id) {
             var x = document.getElementById(id);
@@ -270,6 +256,7 @@ Please enter an e-mail adress, an e-mail while be send when all information is o
     </script>
 
   </article>
+<!-- Last article with some explanation about the results-->
   <article class="browser">
     <h2>Results</h2>
     <pre>
@@ -296,8 +283,6 @@ On the page Patient you can choose the filtering options:
   </article>
 </article>
 </section>
-
-
 <script>
 function myFunction() {
   var x = document.getElementById("myTopnav");
@@ -308,7 +293,5 @@ function myFunction() {
   }
 }
 </script>
-
-
 </body>
 </html>

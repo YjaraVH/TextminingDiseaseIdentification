@@ -53,7 +53,6 @@ article {
   background-color: powderblue;
 }
 
-
 /*places columns/box on top of each other for a small screen */
 @media (max-width: 600px) {
   nav, article {
@@ -61,8 +60,6 @@ article {
     height: auto;
   }
 }
-
-
 
 form input, form select{
     width:100%;
@@ -174,7 +171,6 @@ form input, form select{
 </style>
 </head>
 <body>
-
 <div class="topnav" id="myTopnav">
   <a href="/Homepage">Home</a>
   <div class="dropdown">
@@ -190,12 +186,12 @@ form input, form select{
   <a href="/About">About</a>
   <a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="myFunction()">&#9776;</a>
 </div>
-
 <section>
     <nav>
     <ul>
         <h2>Filter options</h2>
         <form method="post">
+        <!-- Negative and positive z-score thresholds -->
         <p>Select your negative z-score threshold:
         <select id="zscoreNeg" name="zscoreNeg">
           <option value="-1">-1</option>
@@ -204,11 +200,10 @@ form input, form select{
           <option value="-1.7">-1.7</option>
           <option value="-2">-2</option>
           <option value="-3">-3</option>
-          <option value="-4">-2</option>
+          <option value="-4">-4</option>
           <option value="-5">-5</option>
           <option value="-10">-10</option>
           <option value="-20">-20</option>
-
 
         </select></p>
         <p>Select your positive z-score threshold:
@@ -225,15 +220,13 @@ form input, form select{
           <option value="20">20</option>
         </select></p>
 
-
-
+        <!-- Give/type patient ID -->
         <h2>Patient</h2>
         <p>Select metabolite or type name of metabolite below:
         <p>Enter patient ID:</p>
         <input type="text" name="answer">
 
-
-
+        <!-- Selected patient ID -->
         <p>Patients:
         </select>
          <select id="patientC" name="patientC">

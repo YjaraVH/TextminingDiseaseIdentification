@@ -1,5 +1,9 @@
 import plotly.express as px
 import psycopg2
+'''
+    Authors: Nienke Gertsen
+    Date created: 6/06/2022
+'''
 
 char = []
 par = []

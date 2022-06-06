@@ -6,6 +6,12 @@ from nltk.corpus import wordnet
 from Bio import Entrez
 import requests
 import fileReader
+'''
+    File name: textmining2.py
+    Author: Yjara Verhagen
+    Authors SQL: Nienke Gertsen & Yjara Verhagen
+    Date created: 6/06/2022
+'''
 
 # Connect aan de database
 conn = psycopg2.connect(host="postgres.biocentre.nl", user="BI2_PG1",

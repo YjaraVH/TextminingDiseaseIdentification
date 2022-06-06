@@ -198,7 +198,7 @@ form input, form select{
 </div>
 
 <section>
-
+    <!-- Choose/enter metabolite of interest -->
     <nav>
     <ul>
     <form method="post">
@@ -218,8 +218,8 @@ form input, form select{
     </ul>
     </nav>
     <article>
+    <!-- Information (name, origin_name, hmbd_code & fluids_name) about the selected/chosen metabolite -->
     <div id="MetabolitesR">
-
     <table style="width:100%">
     <tr>
         {% for items in headers %}
@@ -232,11 +232,11 @@ form input, form select{
         <td>{{ x[1] }}</td>
         <td>{{ x[2] }}</td>
         <td>{{ x[3] }}</td>
-
      </tr>
-
+    <!-- Description from chosen/selected metabolite -->
 </table><p><b>Description:</b>{{ x[4] }}</p>   {% endfor %}</div> <br>Genes and frequenty (textmining)
         <br>
+    <!-- Gene(s) related to chosen/selected metabolite -->
     <table style="width:100%">
     <tr>
         <th>Name</th>
@@ -249,6 +249,7 @@ form input, form select{
        {% endfor %}
      </tr>
      {% endfor %}
+    <!-- Disease(s) related to chosen/selected metabolite -->
 </table><br><p>Diseases and frequenty (textmining)</p>
     <table style="width:100%">
     <tr>
@@ -264,8 +265,7 @@ form input, form select{
      </tr>
      {% endfor %}
 </table>
-
-    </article>
+</article>
 </section>
 <script>
 function myFunction() {

@@ -1,5 +1,10 @@
 import pandas as pd
 import psycopg2
+'''
+    Authors: Yjara Verhagen & Tosca Frederiks
+    Authors SQL: Nienke Gertsen & Yjara Verhagen & Tosca Frederiks
+    Date created: 6/06/2022
+'''
 
 def readFile(file):
     data = pd.read_excel(file)
