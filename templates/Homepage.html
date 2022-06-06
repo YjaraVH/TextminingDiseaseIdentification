@@ -195,15 +195,6 @@ pre {
   <a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="myFunction()">&#9776;</a>
 </div>
 
-
-
-
-
-
-
-
-
-
 <section>
     <article class="all-browsers">
     <article class="browser">
@@ -220,49 +211,58 @@ Previous obtained information can always be viewed at the results pages.
 
   <article class="browser">
     <h2>Choose and upload file</h2>
+  <form action="/Homepage" method="post" enctype="multipart/form-data">
     <pre>
 Only excel files are accepted
 Please select one of the following by clicking on them:
-<div id="wrapper">
-<input onclick="hidAndShow('hid2','hid1')" type="radio" name="file" value="longTime">All metabolites in this file have not been present in a file submitted in a previous session</input>
-<input onclick="hidAndShow('hid1','hid2')" type="radio" name="file" value="shortTime">File contains only new patients</input>
-</div>
-</pre>
+
+    <div id="wrapper">
+    <input onclick="Show('hid2');hidAndShow2('upload')" type="radio" name="fileT" value="longTime">All metabolites in this file have not been present in a file submitted in a previous session</input>
+    <input onclick="Hid('hid2');hidAndShow2('upload')" type="radio" name="fileT" value="shortTime">File contains only new patients</input>
+    </div>
+    </pre>
 <div id="hid2" style="display:none;">
 <pre style="color: hotpink">WARNING!</pre>
 <pre>This process can take a while depending on the number of metabolites.
 If there are more than ?2000 metabolites we advice you to upload your file, complete the following step and wait a full day for the results.
-Please enter an email adres, an email while be send when all information is obtained.</pre>
-<form action="/Homepage" method="post" enctype="multipart/form-data">
+Please enter an email adres, an email while be send when all information is obtained.</pre></div>
 <pre>
-<strong>Email</strong>
-<input type="text" name="email">
-<input type="file" name="file">
+<div id="upload" style="display:none;">
+<input type="file" name="file"><br /><br/>
 <button class="btn" style="padding: 10px 14px;font-size: 14px" type="submit"><i class="fa fa-upload"></i> upload</button>
+</div>
 </pre>
 </form>
-</div>
+<!--
+<strong>Email</strong>
+<input type="text" name="email">
+-->
 
-     <div id="hid1" style="display:none;">
-           <form action="/Homepage" method="post" enctype="multipart/form-data">
-               <input type="file" name="file"><br /><br/>
-               <button class="btn" style="padding: 10px 14px;font-size: 14px" type="submit"><i class="fa fa-upload"></i> upload</button>
-
-           </form>
-     </div>
       {% if error == '' %}
 <pre style="color: lime" onclick="hidAndShow('hid1')">Check: First step completed</pre>
       {% endif %}
       {% if error %}
 <pre style="color: brown" >{{ error }}</pre>
       {%  endif %}
-         <script>
 
-    function hidAndShow(id,id2) {
+
+
+   <script>
+    function Show(id) {
             var x = document.getElementById(id);
-            var y = document.getElementById(id2);
             x.style.display = "block"
-            y.style.display = "none"
+        }
+    </script>
+  <script>
+    function Hid(id) {
+            var x = document.getElementById(id);
+            x.style.display = "none"
+        }
+    </script>
+  <script>
+    function hidAndShow2(id) {
+            var x = document.getElementById(id);
+            x.style.display = "block"
         }
     </script>
 

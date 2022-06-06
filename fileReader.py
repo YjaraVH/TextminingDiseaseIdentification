@@ -1,380 +1,238 @@
 import pandas as pd
 
+
 def readFile(file):
+    """ Opent het aangeleverde bestand en zet alle inhoud in
+    een variabele
+
+    :param
+    file - xlsx file - Excel file met patient gegevens
+    :return:
+    data - String - String met alle informatie uit het ingelezen bestand
+    """
+    # Inlezen van de file
     data = pd.read_excel(file)
     return data
 
 
 def getPatientsId(data):
+    """ Inlezen van alle patient namen naar een lijst
+
+    :param:
+    data - String - String met alle informatie uit het ingelezen bestand
+    :return:
+    patient_ids - List - lijst met alle patient namen
+    first_count - Int - ?
+    count - Int - ?
+    """
     columns = data.columns
     person_ids = []
     count = 0
-    firstCount = 0
+    first_count = 0
     for i in columns:
-        if firstCount == 0:
+        if first_count == 0:
             count = count + 1
         string_i = str(i)
+        # Controleren van de informatie in de eerste rij van de file
         if string_i.startswith("P") and string_i.endswith("Zscore"):
-            if firstCount == 0:
-                firstCount = count - 1
+            if first_count == 0:
+                first_count = count - 1
             count = count + 1
+            # Wanneer het element begint met P (patient) en eindigende
+            # op Zscore dan wordt het toegevoegd aan de lijst
             person_ids.append(string_i)
-    return person_ids, firstCount, count
+    return person_ids, first_count, count
 
 
 def getMetabolites(data):
+    """ Inlezen van alle namen van metabolieten
+
+    :param:
+    data - String - String met alle informatie uit het ingelezen bestand
+    :return:
+    metabolites - List - Lijst met met alle metaboliet namen
+    """
+    # Zoeken naar de kolom met als "header" name
     metabolites = data["name"]
     return list(metabolites)
 
 
 def getDicMetbZscore(data, metabolites, start, stop):
-    dict = {}
+    """ Inlezen van alle z-scores van alle metabolieten voor alle
+    patienten
+
+    :param:
+    data - String - String met alle informatie uit het ingelezen bestand
+    metabolites - List - Lijst met alle metaboliet namen
+    start - Int - ?
+    stop - Int - ?
+    :return:
+    dict - Dictonary - Dictionary met alle metaboliet namen en z-scores
+    """
+    met_dict = {}
+    # Zoeken naar de z-scores behorend bij de metabolieten
     for index in range(0, len(metabolites)):
-        dict[metabolites[index]] = list(data.loc[index])[start:stop]
-    return dict
-
-
-def printDictionary(dict):
-    for item in dict:
-        print("key: {}, Value {}".format(item, dict[item]))
-
-
-def getMetabolieten(data):
-    metabolieten = []
-    metabolites = data["name"]
-    metabolieten.append(list(metabolites))
-    return metabolieten
+        met_dict[metabolites[index]] = list(data.loc[index])[start:stop]
+    return met_dict
 
 
 def getRelevance(data):
+    """ Inlezen van alle gegevens uit de kolom "relevance"
+
+    :param:
+    data - String - String met alle informatie uit het ingelezen bestand
+    :return:
+    relevance - List - Lijst alle waarden uit de kolom "relevance"
+    """
     relevance = []
+    # Zoeken naar de kolom met als "header" relevance
     rele = data["relevance"]
     relevance.append(list(rele))
     return relevance
 
 
 def getDescription(data):
+    """ Inlezen van alle gegevens uit de kolom "descr" (description)
+
+    :param:
+    data - String - String met alle informatie uit het ingelezen bestand
+    :return:
+    description - List - Lijst met alle gegevens uit de kolom "descr"
+    """
     description = []
+    # Zoeken naar de kolom met als "header" descr
     desc = data["descr"]
     description.append(list(desc))
     return description
 
 
 def getOrigin(data):
+    """ Inlezen van alle gegevens uit de kolom "origin"
+
+    :param:
+    data - String - String met alle informatie uit het ingelezen bestand
+    :return:
+    origin - List - Lijst met alle gegevens uit de kolom "origin"
+    """
     origin = []
+    # Zoeken naar de kolom met als "header" origin
     ori = data["origin"]
     origin.append(list(ori))
     return origin
 
 
 def getFluids(data):
+    """ Inlezen van alle gegevens uit de kolom "fluids"
+
+    :param:
+    data - String - String met alle informatie uit het ingelezen bestand
+    :return:
+    fluids - List - Lijst met alle gegevens uit de kolom "fluids"
+    """
     fluids = []
+    # Zoeken naar de kolom met als "header" fluids
     fluid = data["fluids"]
     fluids.append(list(fluid))
     return fluids
 
 
 def getTissue(data):
+    """ Inlezen van alle gegevens uit de kolom "tissue"
+
+    :param:
+    data - String - String met alle informatie uit het ingelezen bestand
+    :return:
+    tissue - List - Lijst met alle gegevens uit de kolom "tissue"
+    """
     tissue = []
+    # Zoeken naar de kolom met als "header" tissue
     tiss = data["tissue"]
     tissue.append(list(tiss))
     return tissue
 
 
 def getDisease(data):
+    """ Inlezen van alle gegevens uit de kolom "disease"
+
+    :param:
+    data - String - String met alle informatie uit het ingelezen bestand
+    :return:
+    disease - List - Lijst met alle gegevens uit de kolom "disease"
+    """
     disease = []
+    # Zoeken naar de kolom met als "header" disease
     dis = data["disease"]
     disease.append(list(dis))
     return disease
 
 
 def getPathway(data):
+    """ Inlezen van alle gegevens uit de kolom "pathway"
+
+    :param:
+    data - String - String met alle informatie uit het ingelezen bestand
+    :return:
+    pathway - List - Lijst met alle gegevens uit de kolom "pathway"
+    """
     pathway = []
+    # Zoeken naar de kolom met als "header" pathway
     path = data["pathway"]
     pathway.append(list(path))
     return pathway
 
 
 def getHMDBcode(data):
+    """ Inlezen van alle gegevens uit de kolom "HMDB_code"
+
+    :param:
+    data - String - String met alle informatie uit het ingelezen bestand
+    :return:
+    hmdb_code - List - Lijst met alle gegevens uit de kolom "HMDB_code"
+    """
     hmdb_code = []
+    # Zoeken naar de kolom met als "header" HMDB_code
     code = data["HMDB_code"]
     hmdb_code.append(list(code))
     return hmdb_code
 
 
-def getPatient1(data):
-    patient1 = []
-    zscores = data["P1002.1_Zscore"]
-    patient1.append(list(zscores))
-    patient1.insert(0, "P1002.1_Zscore")
-    return patient1
-
-
-def getPatient2(data):
-    patient2 = []
-    zscores = data["P1003.1_Zscore"]
-    patient2.append(list(zscores))
-    patient2.insert(0, "P1003.1_Zscore")
-    return patient2
-
-
-def getPatient3(data):
-    patient3 = []
-    zscores = data["P1005.1_Zscore"]
-    patient3.append(list(zscores))
-    patient3.insert(0, "P1005.1_Zscore")
-    return patient3
-
-
-def getPatient4(data):
-    patient4 = []
-    zscores = data["P1005.2_Zscore"]
-    patient4.append(list(zscores))
-    patient4.insert(0, "P1005.2_Zscore")
-    return patient4
-
-
-def getPatient5(data):
-    patient5 = []
-    zscores = data["P2021M01703.1_Zscore"]
-    patient5.append(list(zscores))
-    patient5.insert(0, "P2021M01703.1_Zscore")
-    return patient5
-
-
-def getPatient6(data):
-    patient6 = []
-    zscores = data["P2021M01743.1_Zscore"]
-    patient6.append(list(zscores))
-    patient6.insert(0, "P2021M01743.1_Zscore")
-    return patient6
-
-
-def getPatient7(data):
-    patient7 = []
-    zscores = data["P2021M01865.1_Zscore"]
-    patient7.append(list(zscores))
-    patient7.insert(0, "P2021M01865.1_Zscore")
-    return patient7
-
-
-def getPatient8(data):
-    patient8 = []
-    zscores = data["P2021M01871.1_Zscore"]
-    patient8.append(list(zscores))
-    patient8.insert(0, "P2021M01871.1_Zscore")
-    return patient8
-
-
-def getPatient9(data):
-    patient9 = []
-    zscores = data["P2021M01896.1_Zscore"]
-    patient9.append(list(zscores))
-    patient9.insert(0, "P2021M01896.1_Zscore")
-    return patient9
-
-
-def getPatient10(data):
-    patient10 = []
-    zscores = data["P2021M01902.1_Zscore"]
-    patient10.append(list(zscores))
-    patient10.insert(0, "P2021M01902.1_Zscore")
-    return patient10
-
-
-def getPatient11(data):
-    patient11 = []
-    zscores = data["P2021M01906.1_Zscore"]
-    patient11.append(list(zscores))
-    patient11.insert(0, "P2021M01906.1_Zscore")
-    return patient11
-
-
-def getPatient12(data):
-    patient12 = []
-    zscores = data["P2021M01908.1_Zscore"]
-    patient12.append(list(zscores))
-    patient12.insert(0, "P2021M01908.1_Zscore")
-    return patient12
-
-
-def getPatient13(data):
-    patient13 = []
-    zscores = data["P2021M01912.1_Zscore"]
-    patient13.append(list(zscores))
-    patient13.insert(0, "P2021M01912.1_Zscore")
-    return patient13
-
-
-def getPatient14(data):
-    patient14 = []
-    zscores = data["P2021M01918.1_Zscore"]
-    patient14.append(list(zscores))
-    patient14.insert(0, "P2021M01918.1_Zscore")
-    return patient14
-
-
-def getPatient15(data):
-    patient15 = []
-    zscores = data["P2021M01932.1_Zscore"]
-    patient15.append(list(zscores))
-    patient15.insert(0, "P2021M01932.1_Zscore")
-    return patient15
-
-
-def getPatient16(data):
-    patient16 = []
-    zscores = data["P2021M01951.1_Zscore"]
-    patient16.append(list(zscores))
-    patient16.insert(0, "P2021M01951.1_Zscore")
-    return patient16
-
-
-def getPatient17(data):
-    patient17 = []
-    zscores = data["P2021M01956.1_Zscore"]
-    patient17.append(list(zscores))
-    patient17.insert(0, "P2021M01956.1_Zscore")
-    return patient17
-
-
-def getPatient18(data):
-    patient18 = []
-    zscores = data["P2021M01958.1_Zscore"]
-    patient18.append(list(zscores))
-    patient18.insert(0, "P2021M01958.1_Zscore")
-    return patient18
-
-
-def getPatient19(data):
-    patient19 = []
-    zscores = data["P2021M01962.1_Zscore"]
-    patient19.append(list(zscores))
-    patient19.insert(0, "P2021M01962.1_Zscore")
-    return patient19
-
-
-def getPatient20(data):
-    patient20 = []
-    zscores = data["P2021M01971.1_Zscore"]
-    patient20.append(list(zscores))
-    patient20.insert(0, "P2021M01971.1_Zscore")
-    return patient20
-
-
-def getPatient21(data):
-    patient21 = []
-    zscores = data["P2021M01973.1_Zscore"]
-    patient21.append(list(zscores))
-    patient21.insert(0, "P2021M01973.1_Zscore")
-    return patient21
-
-
-def getPatient22(data):
-    patient22 = []
-    zscores = data["P2021M01981.1_Zscore"]
-    patient22.append(list(zscores))
-    patient22.insert(0, "P2021M01981.1_Zscore")
-    return patient22
-
-
-def getPatient23(data):
-    patient23 = []
-    zscores = data["P2021M01984.1_Zscore"]
-    patient23.append(list(zscores))
-    patient23.insert(0, "P2021M01984.1_Zscore")
-    return patient23
-
-
-def getPatient24(data):
-    patient24 = []
-    zscores = data["P2021M01990.1_Zscore"]
-    patient24.append(list(zscores))
-    patient24.insert(0, "P2021M01990.1_Zscore")
-    return patient24
-
-
-def getPatient25(data):
-    patient25 = []
-    zscores = data["P2021M02023.1_Zscore"]
-    patient25.append(list(zscores))
-    patient25.insert(0, "P2021M02023.1_Zscore")
-    return patient25
-
-
-def getPatient26(data):
-    patient26 = []
-    zscores = data["P2021M02031.1_Zscore"]
-    patient26.append(list(zscores))
-    patient26.insert(0, "P2021M02031.1_Zscore")
-    return patient26
-
-
-def getPatient27(data):
-    patient27 = []
-    zscores = data["P2021M02035.1_Zscore"]
-    patient27.append(list(zscores))
-    patient27.insert(0, "P2021M02035.1_Zscore")
-    return patient27
-
-
-def getPatient28(data):
-    patient28 = []
-    zscores = data["P2021M02040.1_Zscore"]
-    patient28.append(list(zscores))
-    patient28.insert(0, "P2021M02040.1_Zscore")
-    return patient28
-
-
-def getPatient29(data):
-    patient29 = []
-    zscores = data["P2021M02052.1_Zscore"]
-    patient29.append(list(zscores))
-    patient29.insert(0, "P2021M02052.1_Zscore")
-    return patient29
-
-
-def getPatient30(data):
-    patient30 = []
-    zscores = data["P2021M02098.1_Zscore"]
-    patient30.append(list(zscores))
-    patient30.insert(0, "P2021M02098.1_Zscore")
-    return patient30
-
-
-def getPatient31(data):
-    patient31 = []
-    zscores = data["P2021M02101.1_Zscore"]
-    patient31.append(list(zscores))
-    patient31.insert(0, "P2021M02101.1_Zscore")
-    return patient31
-
 def get_Patient_Z_score(person_ids, data):
+    """ Inlezen van alle z-scores per patient
+
+    :param:
+    data - String - String met alle informatie uit het ingelezen bestand
+    person_ids - List - Lijst met patient namen
+    :return:
+    dict_patient_zscore - Dictionary - Dictionary met patient namen
+     en zscores
+    """
     dict_patient_zscore = {}
+    # Zoeken naar de patient naam in de data en de bijbehorende
+    # z-scores worden toegevoegd aan de dictionary
     for item in person_ids:
         dict_patient_zscore[item] = list(data[item])
     for i in dict_patient_zscore:
         print(f"patient: {i}, {dict_patient_zscore[i]}")
     return dict_patient_zscore
 
+
 def main():
-    #File name
+    # File name
     file = "Dataset/metabolomics.xlsx"
+    # Aanroepen van de functie om de file in te lezen
     data = readFile(file)
-
+    # print(data)
+    # Aanroepen van de functie, met het meegeven van de ingelezen data
     metabolites = getMetabolites(data)
-    person_ids, start, stop = getPatientsId(data)
+    # print(metabolites)
 
-    dict = getDicMetbZscore(data, metabolites, start, stop)
+    # Aanroepen van de functie, met het meegeven van de ingelezen data
+    person_ids, start, stop = getPatientsId(data)
+    met_dict = getDicMetbZscore(data, metabolites, start, stop)
 
     # dictionary met als key patient id en als value lijst met z-scores
-    dict_P = get_Patient_Z_score(person_ids,data)
-    #print best wel veel uit, maar dan kun je even kijken hoe het eruit ziet:)
-    # printDictionary(dict)
-
+    dict_p = get_Patient_Z_score(person_ids, data)
     # print(person_ids)
-    metabolieten = getMetabolieten(data)
-    # print(metabolieten)
     relevance = getRelevance(data)
     # print(relevance)
     description = getDescription(data)
@@ -382,88 +240,18 @@ def main():
     origin = getOrigin(data)
     # print(origin)
     fluids = getFluids(data)
-
     # print(fluids)
     disease = getDisease(data)
-
     # print(disease)
     pathway = getPathway(data)
     # print(pathway)
-
     hmdb_code = getHMDBcode(data)
     # print(hmdb_code)
     tissue = getTissue(data)
-    patient1 = getPatient1(data)
-    # print(patient1)
-    patient2 = getPatient2(data)
-    # print(patient2)
-    patient3 = getPatient3(data)
-    # print(patient3)
-    patient4 = getPatient4(data)
-    # print(patient4)
-    patient5 = getPatient5(data)
-    # print(patient5)
-    patient6 = getPatient6(data)
-    # print(patient6)
-    patient7 = getPatient7(data)
-    # print(patient7)
-    patient8 = getPatient8(data)
-    # print(patient8)
-    patient9 = getPatient9(data)
-    # print(patient9)
-    patient10 = getPatient10(data)
-    # print(patient10)
-    patient11 = getPatient11(data)
-    # print(patient11)
-    patient12 = getPatient12(data)
-    # print(patient12)
-    patient13 = getPatient13(data)
-    # print(patient13)
-    patient14 = getPatient14(data)
-    # print(patient14)
-    patient15 = getPatient15(data)
-    # print(patient15)
-    patient16 = getPatient16(data)
-    # print(patient16)
-    patient17 = getPatient17(data)
-    # print(patient17)
-    patient18 = getPatient18(data)
-    # print(patient18)
-    patient19 = getPatient19(data)
-    # print(patient19)
-    patient20 = getPatient20(data)
-    # print(patient20)
-    patient21 = getPatient21(data)
-    # print(patient21)
-    patient22 = getPatient22(data)
-    # print(patient22)
-    patient23 = getPatient23(data)
-    # print(patient23)
-    patient24 = getPatient24(data)
-    # print(patient24)
-    patient25 = getPatient25(data)
-    # print(patient25)
-    patient26 = getPatient26(data)
-    # print(patient26)
-    patient27 = getPatient27(data)
-    # print(patient27)
-    patient28 = getPatient28(data)
-    # print(patient28)
-    patient29 = getPatient29(data)
-    # print(patient29)
-    patient30 = getPatient30(data)
-    # print(patient30)
-    patient31 = getPatient31(data)
-    # print(patient31)
+    dict_patient_zscore = get_Patient_Z_score(person_ids, data)
 
-    lijst_patienten_lijsten = [patient1, patient2, patient3, patient4,
-                               patient5, patient6, patient7, patient8,
-                               patient9, patient10, patient11, patient12,
-                               patient13, patient14, patient15, patient16,
-                               patient17, patient18, patient19, patient20,
-                               patient21, patient22, patient23, patient24,
-                               patient25, patient26, patient27, patient28,
-                               patient29, patient30, patient31]
-
-    return fluids, tissue, person_ids, relevance, pathway, origin, disease, metabolieten, description,\
-           hmdb_code, lijst_patienten_lijsten
+    # Returnen van alle lijsten en dictionary's voor gebruik in
+    # andere scripts
+    return fluids, tissue, person_ids, relevance, pathway,\
+        origin, disease, description, hmdb_code,\
+        dict_patient_zscore, met_dict, dict_p
