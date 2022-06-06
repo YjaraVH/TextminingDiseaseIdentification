@@ -200,12 +200,17 @@ pre {
     <article class="browser">
     <h2>Introduction</h2>
    <pre>
-Dear user. This applicatio works as follows:
-Start with uploaden an excel file with the following format:
-Colomn name patiens start with P, colomn name of control groups with C.....,
-If the file contains a lot of metabolites not been analyzed in earlier sessions the whole process can take some hours.
-We advice you to submit your email adress so we can send you a mail when the results are ready.
-Previous obtained information can always be viewed at the results pages.
+Dear user.
+
+This application works as follows:
+Start with uploaden an Excel file with the following format:
+* Colomn name patiens start with P, colomn name of control groups with C
+* All the Coloms with patients end with Zscore
+
+Here are a few tips for using this application:
+* If the file contains a lot of metabolites that haven't been analyzed in earlier sessions before, the whole process can take some hours.
+* We advice you to submit your e-mail adress so we can send you an e-mail when the results are ready.
+* Previous obtained information can always be viewed at the results pages.
    </pre>
   </article>
 
@@ -213,9 +218,8 @@ Previous obtained information can always be viewed at the results pages.
     <h2>Choose and upload file</h2>
   <form action="/Homepage" method="post" enctype="multipart/form-data">
     <pre>
-Only excel files are accepted
-Please select one of the following by clicking on them:
-
+Only Excel files are allowed
+Please select one of the following options:
     <div id="wrapper">
     <input onclick="Show('hid2');hidAndShow2('upload')" type="radio" name="fileT" value="longTime">All metabolites in this file have not been present in a file submitted in a previous session</input>
     <input onclick="Hid('hid2');hidAndShow2('upload')" type="radio" name="fileT" value="shortTime">File contains only new patients</input>
@@ -224,8 +228,8 @@ Please select one of the following by clicking on them:
 <div id="hid2" style="display:none;">
 <pre style="color: hotpink">WARNING!</pre>
 <pre>This process can take a while depending on the number of metabolites.
-If there are more than ?2000 metabolites we advice you to upload your file, complete the following step and wait a full day for the results.
-Please enter an email adres, an email while be send when all information is obtained.</pre></div>
+If there are more than 2000 metabolites we advice you to upload your file, complete the following step and wait a full day for the results.
+Please enter an e-mail adress, an e-mail while be send when all information is obtained.</pre></div>
 <pre>
 <div id="upload" style="display:none;">
 <input type="file" name="file"><br /><br/>
