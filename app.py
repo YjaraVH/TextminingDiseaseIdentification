@@ -5,6 +5,9 @@ import psycopg2
 from flask import Flask,request,render_template
 from Bio import Entrez
 import mysql.connector
+import plotly.express as px
+import psycopg2
+import sunburstplot
 import fileReader
 import textmining2
 
@@ -72,8 +75,8 @@ def resultspatient():
     patients = get_patients()
     if request.method == "POST":
         patient = ""
-        zscoreP = request.form.getlist('zscorePos')
-        zscoreN = request.form.getlist('zscoreNeg')
+        zscoreP = str(request.form.getlist('zscorePos')).replace("[","").replace("]","").replace("'","")
+        zscoreN = str(request.form.getlist('zscoreNeg')).replace("[","").replace("]","").replace("'","")
 
         selected_patient = request.form.get('patientC')
         answer_patient = request.form.get('answer')
@@ -83,9 +86,12 @@ def resultspatient():
         else:
             patient = selected_patient
         print(patient)
-        return render_template("Resultspatient.html",patients=patients)
+        print("tot hier werkt het wel")
+
+        graph = sunburstplot.get_figure(patient,zscoreN,zscoreP)
+        return render_template("Resultspatient.html",patients=patients,grah=graph)
     else:
-        return render_template("Resultspatient.html", patients=patients)
+        return render_template("Resultspatient.html", patients=patients,grah="")
 
 @app.route('/ResultsGlobal',methods=["POST", "GET"])
 def resultsGlobal():
