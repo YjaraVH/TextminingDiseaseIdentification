@@ -13,6 +13,12 @@
   cursor: pointer;
 }
 
+/*table layout*/
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
 /* Darker background on mouse-over */
 .btn:hover {
   background-color: RoyalBlue;
@@ -192,10 +198,11 @@ form input, form select{
 </div>
 
 <section>
+
     <nav>
     <ul>
+    <form method="post">
         <h2>Metabolite</h2>
-        <form method="post">
         <p>Select metabolite or type name of metabolite below:
         <p>Enter name metabolite:</p>
         <input id="search" type="text" name="answer">
@@ -211,27 +218,53 @@ form input, form select{
     </ul>
     </nav>
     <article>
-        <p>Search word: {{answer}}</p>
-    <div id="patientsR">
+    <div id="MetabolitesR">
 
-        <table style="width:100%">
-        <tr>
-            {% for keus in keuze %}
-            <th>{{keus}}</th>
-            {% endfor %}
-        </tr>
-             {% for x in output %}
-                 <tr>
-                     <td>{{ x[0] }}</td>
-                    <td>{{ x[1] }}</td>
-                    <td>{{ x[2] }}</td>
-                    <td>{{ x[3] }}</td>
-                 <td>{{ x[4] }}</td>
+    <table style="width:100%">
+    <tr>
+        {% for items in headers %}
+        <th>{{ items }}</th>
+        {% endfor %}
+    </tr>
+     {% for x in output %}
+    <tr>
+        <td>{{ x[0] }}</td>
+        <td>{{ x[1] }}</td>
+        <td>{{ x[2] }}</td>
+        <td>{{ x[3] }}</td>
 
-                 </tr>
-             {% endfor %}
+     </tr>
 
-          </table></div>
+</table><p><b>Description:</b>{{ x[4] }}</p>   {% endfor %}</div> <br>Genes and frequenty (textmining)
+        <br>
+    <table style="width:100%">
+    <tr>
+        <th>Name</th>
+        <th>Count</th>
+    </tr>
+     {% for x in genes %}
+    <tr>
+      {% for item in x%}
+     <td>{{ item }}</td>
+       {% endfor %}
+     </tr>
+     {% endfor %}
+</table><br><p>Diseases and frequenty (textmining)</p>
+    <table style="width:100%">
+    <tr>
+        <th>Name</th>
+        <th>Count</th>
+        <th>Mesh</th>
+    </tr>
+     {% for x in ziektes %}
+    <tr>
+        <td>{{ x[0] }}</td>
+        <td>{{ x[1] }}</td>
+        <td><a href="https://www.ncbi.nlm.nih.gov/mesh/?term={{ x[2] }}" target="_blank">{{ x[2] }}</a></td>
+     </tr>
+     {% endfor %}
+</table>
+
     </article>
 </section>
 <script>
