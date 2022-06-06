@@ -287,7 +287,7 @@ def fill_pub_gene(gene_count):
     keys_del = []
     global FK_pub_gene
     for key, value in gene_count.items():  # werkt dan niet met een primary key??!! of zo lijkt het
-        if value < 10:
+        if value < 5:
             keys_del.append(key)
         else:
             pub_gene += 1
@@ -388,7 +388,7 @@ def fill_tussentabellen():
 if __name__ == '__main__':
     # connect aan de database
     conn = psycopg2.connect(host="postgres.biocentre.nl", user="BI2_PG1", password="blaat1234",
-                            database="bio_jaar_2_pg_1")
+                            database="bio_jaar_2_pg_1", port="5900")
     # open een cursor
     cursor = conn.cursor()
     from time import gmtime, strftime
@@ -407,4 +407,6 @@ if __name__ == '__main__':
     fill_tussentabellen()
 
     print("Klaar met textminen!!!")
+
+    conn.close()
 

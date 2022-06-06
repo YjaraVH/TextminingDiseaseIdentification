@@ -15,11 +15,15 @@ def info_patient_ophalen(conn, cursor):
     global result
     patient_name = "P1002.1_Zscore"
     filter = "desc"
-    postgre = ("""SELECT name, z_score FROM metabolieten
-     JOIN z_scores ON metabolieten.id_metaboliet=z_scores.metabolieten_id_metaboliet
-     JOIN patients ON z_scores.patients_id_patient=patients.id_patient
-     WHERE id_patient='{}' AND (z_score < {} OR z_score > {})
-     ORDER BY z_score {};""").format(patient_name,
+    postgre = ("""SELECT id_patient, name, disease, z_score FROM metabolieten
+      JOIN z_scores ON metabolieten.id_metaboliet=z_scores.metabolieten_id_metaboliet
+      JOIN patients ON z_scores.patients_id_patient=patients.id_patient
+      JOIN metabolieten_pubom mp ON metabolieten.id_metaboliet = mp.metabolieten_id_metaboliet
+      JOIN pubom ON mp.pubom_id_pum_om = pubom.id_pum_om
+      JOIN pub_disease_pubom pdp ON pubom.id_pum_om = pdp.pubom_id_pum_om
+      JOIN pub_disease ON pdp.pub_disease_id_article = pub_disease.id_article
+      WHERE id_patient='P1002.1_Zscore' AND (z_score < -5 OR z_score > 5)
+      ORDER BY z_score desc;""").format(patient_name,
         value, value2, filter)
     cursor.execute(postgre)
     result = cursor.fetchall()
@@ -31,15 +35,17 @@ def info_patient_ophalen(conn, cursor):
 #      JOIN pubom ON mp.pubom_id_pum_om = pubom.id_pum_om
 #      JOIN pub_disease_pubom pdp ON pubom.id_pum_om = pdp.pubom_id_pum_om
 #      JOIN pub_disease ON pdp.pub_disease_id_article = pub_disease.id_article
-#      WHERE id_patient='P1002.1_Zscore' AND (z_score < -5 OR z_score > 5
+#      WHERE id_patient='P1002.1_Zscore' AND (z_score < -5 OR z_score > 5)
 #      ORDER BY z_score desc;
 # "
     info_pat = []
     for i in result:
         row = []
-        name = i[0]
-        z_score = i[1]
+        name = i[1]
+        dis = i[2]
+        z_score = i[3]
         row.append(name)
+        row.append(dis)
         row.append(z_score)
         info_pat.append(info_pat)
 
@@ -96,10 +102,10 @@ def get_patients(conn, cursor):
 if __name__ == '__main__':
     # connect aan de database
     conn = psycopg2.connect(host="postgres.biocentre.nl", user="BI2_PG1", password="blaat1234",
-                            database="bio_jaar_2_pg_1")
+                            database="bio_jaar_2_pg_1", port="5900")
 
     # open een cursor
     cursor = conn.cursor()
-    #info_patient_ophalen(conn, cursor)
+    info_patient_ophalen(conn, cursor)
     #info_meta_ophalen(conn, cursor)
-    get_patients(conn, cursor)
+    #get_patients(conn, cursor)
