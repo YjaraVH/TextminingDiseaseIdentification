@@ -194,9 +194,9 @@ th:nth-child(even),td:nth-child(even) {
       <i class="fa fa-caret-down"></i>
     </button>
     <div class="dropdown-content">
-      <a href="/Results" class="active">excel</a>
-      <a href="/Resultspatient">patients</a>
-      <a href="/ResultsGlobal">diseases</a>
+      <a href="/Results" class="active">Excel</a>
+      <a href="/Resultspatient">Patients</a>
+      <a href="/ResultsGlobal">Diseases</a>
     </div>
   </div>
   <a href="/About">About</a>
@@ -208,16 +208,16 @@ th:nth-child(even),td:nth-child(even) {
     <ul>
     <form method="post">
         <h2>Options</h2>
-        <p>Chose on what you want to search</p>
+        <p>Choose your search option:</p>
 
         <div id="wrapper">
-            <input onclick="hidAndShow1('patient','metabolites')" type="radio" name="org_pro" value="patient">patient</input><br>
-            <input onclick="hidAndShow2('metabolite','patient')" type="radio" name="org_pro" value="metabolite">metabolite</input><br>
+            <input onclick="hidAndShow1('patient','metabolites')" type="radio" name="org_pro" value="patient">Patient</input><br>
+            <input onclick="hidAndShow2('metabolite','patient')" type="radio" name="org_pro" value="metabolite">Metabolite</input><br>
         </div>
 
         <div id="filter">
-        <h2>Filter</h2>
-        <p>Enter negative z-score threshold:
+        <h2>Filter options</h2>
+        <p>Select your negative z-score threshold:
         <select id="zscoreNeg" name="zscoreNeg">
           <option value="-1">-1</option>
           <option value="-1.2" selected>-1.2</option>
@@ -231,7 +231,7 @@ th:nth-child(even),td:nth-child(even) {
 
 
         </select></p>
-        <p>Enter positive z-score threshold:
+        <p>Select your positive z-score threshold:
          <select id="zscorePos" name="zscorePos">
           <option value="1">1</option>
           <option value="1.2">1.2</option>
@@ -247,23 +247,23 @@ th:nth-child(even),td:nth-child(even) {
 
         <div id="patient">
             <p>Order by z-score:</p>
-            <input type="radio" name="order" value="desc">descending order</input><br>
-            <input type="radio" name="order" value="asc">ascending order</input><br>
+            <input type="radio" name="order" value="desc">Descending order</input><br>
+            <input type="radio" name="order" value="asc">Ascending order</input><br>
          <p>Type patient ID:</p>
 
      </div>
             <div id="metabolite" style="display:none;">
             <p>Order by:</p>
-            <input type="radio" name="order_type" value="origin_name" checked>origin</input><br>
-            <input type="radio" name="order_type" value="fluids_name">fluids</input><br>
+            <input type="radio" name="order_type" value="origin_name" checked>Origin</input><br>
+            <input type="radio" name="order_type" value="fluids_name">Fluids</input><br>
             <input type="radio" name="order_type" value="hmbd_code">HMBD_name</input><br>
-            <input type="radio" name="order_type" value="description">description</input><br>
-            <input type="radio" name="order_type" value="relevance">relevance</input><br>
+            <input type="radio" name="order_type" value="description">Description</input><br>
+            <input type="radio" name="order_type" value="relevance">Relevance</input><br>
 
 
             <p>Order:</p>
-            <input type="radio" name="order" value="desc" checked>descending order</input><br>
-            <input type="radio" name="order" value="asc">ascending order</input><br>
+            <input type="radio" name="order" value="desc" checked>Descending order</input><br>
+            <input type="radio" name="order" value="asc">Ascending order</input><br>
 
          <p>Type name metabolite:</p>
   </div>
