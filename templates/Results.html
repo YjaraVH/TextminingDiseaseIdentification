@@ -311,9 +311,21 @@ th:nth-child(even),td:nth-child(even) {
     </tr>
      {% for x in output %}
     <tr>
-      {% for item in x%}
-     <td>{{ item }}</td>
-       {% endfor %}
+        <td>{{ x }}</td>
+        <td>{{ output[x][0] }}</td>
+        <td>
+        <table>
+            <th>disease</th>
+            <th>count</th>
+            <th>mesh code</th>
+            {% for item in output[x][1] %}
+                <tr>
+                <td>{{ item[0] }}</td>
+                <td>{{ item[1] }}</td>
+                    <td><a href="https://www.ncbi.nlm.nih.gov/mesh/?term={{ item[2] }}" target="_blank">{{ item[2] }}</a></td>
+            </tr>
+                {% endfor %}
+        </table></td>
      </tr>
      {% endfor %}
 </table></div>
