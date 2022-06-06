@@ -111,7 +111,8 @@ def results():
                                                                                 # functie oproepen queri met alle nodige informatie, zie header tabel, onderstaande is een functie voor mezelf om te checken of alles werkt
             print(f"main otion:{mainOption}, zscoreNeg:{z_score_neg}, zscorePos:{z_score_pos}, id_patient:{search}, order:{order_desc_asc}")
             ############output = search_queri(mainOption,z_score_neg, z_score_pos,6)
-            output = info_patient_ophalen(z_score_neg,z_score_pos,order_desc_asc,search)
+            #output = info_patient_ophalen(z_score_neg,z_score_pos,order_desc_asc,search)
+            output = test(z_score_neg,z_score_pos,order_desc_asc,search)
             print(f">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>{output}")
             headers = ["Metabolite","Z-score","Disease(s)"]                     # Zou nice zijn als er per disease een top 3 gevonden ziektes kan woorden, nog beter ook met score, kan ik nog een colomn voor bij maken. Laat maar weten
 
@@ -239,6 +240,36 @@ def info_patient_ophalen(z_score_neg,z_score_pos,order_desc_asc,search):
     #z-score is nog steeds heel vreemd, denk bijna dat er echt iets niet moet kloppen!!!
     print(info_pat)
     return info_pat
+
+def test(z_score_neg,z_score_pos,order_desc_asc,search):   #P1005.1_Zscore
+    cursor = conn.cursor()
+    postgre = ("""select name,z_score,disease,count,mesh_code
+from patients
+join z_scores zs on patients.id_patient = zs.patients_id_patient
+join metabolieten m on m.id_metaboliet = zs.metabolieten_id_metaboliet
+join metabolieten_pubom mp on m.id_metaboliet = mp.metabolieten_id_metaboliet
+join pub_disease_pubom pdp on mp.pubom_id_pum_om = pdp.pubom_id_pum_om
+join pub_disease pd on pd.id_article = pdp.pub_disease_id_article
+         WHERE id_patient like'{}%' AND (z_score < {} OR z_score > {})
+         ORDER BY z_score {};""").format(search,z_score_neg,z_score_pos,order_desc_asc)   # heeft voor nu even een limit anders duurt het erg lang
+    cursor.execute(postgre)
+    result = cursor.fetchall()
+    info_pat = []
+    print(list(result))
+    d = []
+
+    dict_test = {}
+    for i in result:
+        if i[0] in dict_test:
+            listt = dict_test[i[0]][1]
+            print(listt.append(i[2:5]))
+            #dict_test[i[0]] = [float(i[1])]
+        else:
+            listt = [float(i[1]),[list(i[2:5])]]
+            dict_test[str(i[0])] = listt
+    for i in dict_test:
+        print(f"{i}, >{dict_test[i]}")
+    return dict_test
 
 def get_email(reciever):
     import smtplib
