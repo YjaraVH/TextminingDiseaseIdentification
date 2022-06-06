@@ -7,7 +7,7 @@ values = []
 metabolits = []
 
 
-def get_meta_top(conn, cursor):
+def get_meta_top(cursor):
     global char
     global par
     global values
@@ -62,9 +62,6 @@ def get_meta_top(conn, cursor):
     print(values)
 
 
-
-
-
 def make_figure():
     global char
     global par
@@ -78,6 +75,7 @@ def make_figure():
     # print(par)
     # print(values)
 
+    df = px.data.tips()
     data = dict(
         character=char, parent=par, value=values)
 
@@ -85,8 +83,7 @@ def make_figure():
         data,
         names='character',
         parents='parent',
-        values='value',
-    )
+        values='value' )
     fig.show()
 
 
@@ -97,7 +94,7 @@ if __name__ == '__main__':
 
     # open een cursor
     cursor = conn.cursor()
-    get_meta_top(conn, cursor)
+    get_meta_top(cursor)
 
     # for z in char:
     #     values.append(char.count(str(z)))
