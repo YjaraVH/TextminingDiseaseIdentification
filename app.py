@@ -31,15 +31,21 @@ def hello_world():
             error = "File not selected"
             return render_template("Homepage.html", error=error)
         file = request.files['file']
-        email = request.form.get("email","")
-        print(email)
+        tijd = request.form['fileT']
+        print(fileReader.readFile(file))
+        print(tijd)
+        # Name of file with metabolites, z-scores, patients etc
         filename = file.filename
-        print(filename)
+
+        """ For further upgrades
+        email = request.form.get("email","")
         if email == "":
             print("no email is needed")
         else:
             print(email)
             get_email(email)
+        """
+
         if filename == '':
             error = "Filename is empty"
             return render_template("Homepage.html", error=error)
@@ -47,13 +53,11 @@ def hello_world():
             error = "This file is not allowed"
             return render_template("Homepage.html", error=error)
         else:
+            #file request.form['org_pro']
+
             #to obtain all information in file
-
            ##### data = fileReader.readFile(file)
-
             # to obtain metabolieten for textmining
-
-
             ######metabolieten = fileReader.getMetabolites(data)
             ######textmining2.get_ids_all_pubmed(metabolieten,True)
             return render_template("Homepage.html", error="")
@@ -113,6 +117,7 @@ def results():
             ############output = search_queri(mainOption,z_score_neg, z_score_pos,6)
             #output = info_patient_ophalen(z_score_neg,z_score_pos,order_desc_asc,search)
             output = test(z_score_neg,z_score_pos,order_desc_asc,search)
+            output2 = []
             print(f">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>{output}")
             headers = ["Metabolite","Z-score","Disease(s)"]                     # Zou nice zijn als er per disease een top 3 gevonden ziektes kan woorden, nog beter ook met score, kan ik nog een colomn voor bij maken. Laat maar weten
 
@@ -121,11 +126,12 @@ def results():
             print(f"mainOption:{mainOption}, order_by:{order_by}, metaboliteName:{search}, order:{order_desc_asc}")
                                                                                 # functie oproepen queri met alle nodige informatie, zie header tabel, onderstaande is een functie voor mezelf om te checken of alles werkt
             ###############################output = search_queri(mainOption,2,3,9)
-
-            output = info_meta_ophalen(order_by,order_desc_asc,search)
+            output = []
+            output2 = info_meta_ophalen(order_by,order_desc_asc,search)
+            print(output2)
             headers = ["name","origin_name","hmbd_code","fluids_name","relevance"]
 
-        return render_template("Results.html", output=output, headers=headers)
+        return render_template("Results.html", output=output, headers=headers,output2=output2)
     else:
         return render_template("Results.html")
 

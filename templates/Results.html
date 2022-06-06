@@ -211,7 +211,7 @@ th:nth-child(even),td:nth-child(even) {
         <p>Chose on what you want to search</p>
 
         <div id="wrapper">
-            <input onclick="hidAndShow1('patient','metabolites')" type="radio" name="org_pro" value="patient" checked>patient</input><br>
+            <input onclick="hidAndShow1('patient','metabolites')" type="radio" name="org_pro" value="patient">patient</input><br>
             <input onclick="hidAndShow2('metabolite','patient')" type="radio" name="org_pro" value="metabolite">metabolite</input><br>
         </div>
 
@@ -238,16 +238,16 @@ th:nth-child(even),td:nth-child(even) {
           <option value="1.4" selected>1.4</option>
           <option value="1.8">1.8</option>
           <option value="2">2</option>
-          <option value="5">-5</option>
-          <option value="10">-10</option>
-          <option value="20">-20</option>
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
          </select></p> </div>
 
         <!--  Checkbox for the parameters  -->
 
         <div id="patient">
             <p>Order by z-score:</p>
-            <input type="radio" name="order" value="desc" checked>descending order</input><br>
+            <input type="radio" name="order" value="desc">descending order</input><br>
             <input type="radio" name="order" value="asc">ascending order</input><br>
          <p>Type patient ID:</p>
 
@@ -341,7 +341,7 @@ th:nth-child(even),td:nth-child(even) {
         <th>{{ items }}</th>
         {% endfor %}
     </tr>
-     {% for x in output %}
+     {% for x in output2 %}
     <tr>
       {% for item in x%}
      <td>{{ item }}</td>
