@@ -207,14 +207,6 @@ th:nth-child(even),td:nth-child(even) {
     <nav>
     <ul>
     <form method="post">
-        <h2>Options</h2>
-        <p>Choose your search option:</p>
-
-        <div id="wrapper">
-            <input onclick="hidAndShow1('patient','metabolites')" type="radio" name="org_pro" value="patient">Patient</input><br>
-            <input onclick="hidAndShow2('metabolite','patient')" type="radio" name="org_pro" value="metabolite">Metabolite</input><br>
-        </div>
-
         <div id="filter">
         <h2>Filter options</h2>
         <p>Select your negative z-score threshold:
@@ -244,70 +236,30 @@ th:nth-child(even),td:nth-child(even) {
          </select></p> </div>
 
         <!--  Checkbox for the parameters  -->
-
-        <div id="patient">
             <p>Order by z-score:</p>
             <input type="radio" name="order" value="desc">Descending order</input><br>
             <input type="radio" name="order" value="asc">Ascending order</input><br>
          <p>Type patient ID:</p>
-
-     </div>
-            <div id="metabolite" style="display:none;">
-            <p>Order by:</p>
-            <input type="radio" name="order_type" value="origin_name" checked>Origin</input><br>
-            <input type="radio" name="order_type" value="fluids_name">Fluids</input><br>
-            <input type="radio" name="order_type" value="hmbd_code">HMBD_name</input><br>
-            <input type="radio" name="order_type" value="description">Description</input><br>
-            <input type="radio" name="order_type" value="relevance">Relevance</input><br>
-
-
-            <p>Order:</p>
-            <input type="radio" name="order" value="desc" checked>Descending order</input><br>
-            <input type="radio" name="order" value="asc">Ascending order</input><br>
-
-         <p>Type name metabolite:</p>
-  </div>
         <input type="text" name="answer">
         <input type="submit" value="Submit">
-        <script>
-    function hidAndShow1() {
-            var x = document.getElementById('patient');
-            var y = document.getElementById('metabolite');
-            var z = document.getElementById('filter');
-            var a = document.getElementById('MetabolitesR');
-            var b = document.getElementById('patientsR');
-            x.style.display = "block"
-            y.style.display = "none"
-            z.style.display = "block"
-            a.style.display = "none"
-            b.style.display = "block"
-        }
-    </script>
-        <script>
-    function hidAndShow2() {
-            var x = document.getElementById('metabolite');
-            var y = document.getElementById('patient');
-            var z = document.getElementById('filter');
-            var a = document.getElementById('MetabolitesR');
-            var b = document.getElementById('patientsR');
-            x.style.display = "block"
-            y.style.display = "none"
-            z.style.display = "none"
-            a.style.display = "block"
-            b.style.display = "none"
-        }
-        </script>
     </form>
+        <h2>Options after submit</h2>
+        <p>Choose your view/table option:</p>
+
+        <div id="wrapper">
+            <input onclick="hidAndShow2('patients','patientsR')" type="radio" name="org_pro" value="metabolite" checked>Metabolite</input><br>
+            <input onclick="hidAndShow2('patientsR','patients')" type="radio" name="org_pro" value="patient">Patient</input><br>
+        </div>
     </ul>
     </nav>
     <article>
-    <div id="patientsR">
+    <div id="patientsR" style="display:none;">
 
     <table style="width:100%">
     <tr>
-        {% for items in headers %}
-        <th>{{ items }}</th>
-        {% endfor %}
+        <th>Metabolite</th>
+        <th>Z-score</th>
+        <th>Disease(s)</th>
     </tr>
      {% for x in output %}
     <tr>
@@ -329,29 +281,30 @@ th:nth-child(even),td:nth-child(even) {
      </tr>
      {% endfor %}
 </table></div>
-
-
-
-
-    <div id="MetabolitesR" style="display:none;">
+        <div id="patients">
 
     <table style="width:100%">
     <tr>
-        {% for items in headers %}
-        <th>{{ items }}</th>
-        {% endfor %}
+        <th>Metabolite</th>
+        <th>Z-score</th>
     </tr>
-     {% for x in output2 %}
+     {% for x in output %}
     <tr>
-      {% for item in x%}
-     <td>{{ item }}</td>
-       {% endfor %}
+        <td>{{ x }}</td>
+        <td>{{ output[x][0] }}</td>
      </tr>
      {% endfor %}
 </table></div>
     </article>
 </section>
-
+  <script>
+    function hidAndShow2(id,id2) {
+            var x = document.getElementById(id);
+            var y = document.getElementById(id2);
+            x.style.display = "block"
+            y.style.display = "none"
+        }
+    </script>
 
 
 <script>

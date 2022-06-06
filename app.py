@@ -32,8 +32,7 @@ def hello_world():
             return render_template("Homepage.html", error=error)
         file = request.files['file']
         tijd = request.form['fileT']
-        print(fileReader.readFile(file))
-        print(tijd)
+
         # Name of file with metabolites, z-scores, patients etc
         filename = file.filename
 
@@ -94,44 +93,30 @@ def resultsGlobal():
     metabolieten = get_metabolieten()
     if request.method == "POST":
         metaboliet = request.form.get('Metabolites')
-        print(f"patient:{metaboliet}")
-        print(request.form.get('answer'))
-        return render_template("ResultsGlobal.html",Metabolites=metabolieten)
+        if metaboliet=="":
+            metaboliet = request.form.get('answer')
+        print(metaboliet)
+        output = info_meta_ophalen(metaboliet)
+        headers = ["name", "origin_name", "hmbd_code", "fluids_name"]
+        genen = genen_ophalen(metaboliet)
+        print(genen)
+        ziektes = ziekte_ophalen(metaboliet)
+        print(ziektes)
+        return render_template("ResultsGlobal.html",Metabolites=metabolieten, output=output, headers=headers,genes=genen,ziektes=ziektes)
     else:
         return render_template("ResultsGlobal.html",Metabolites=metabolieten)
 
 @app.route('/Results',methods=["POST", "GET"])
 def results():
     if request.method == "POST":
-        # Patient or Metabolite
-        mainOption = request.form['org_pro']
         order_desc_asc = request.form['order']
 
+        z_score_neg = request.form['zscoreNeg']
+        z_score_pos = request.form['zscorePos']
         # Name metabolite or patient iD
         search = request.form.get('answer')
-        if mainOption == "patient":
-            z_score_neg = request.form['zscoreNeg']
-            z_score_pos = request.form['zscorePos']
-                                                                                # functie oproepen queri met alle nodige informatie, zie header tabel, onderstaande is een functie voor mezelf om te checken of alles werkt
-            print(f"main otion:{mainOption}, zscoreNeg:{z_score_neg}, zscorePos:{z_score_pos}, id_patient:{search}, order:{order_desc_asc}")
-            ############output = search_queri(mainOption,z_score_neg, z_score_pos,6)
-            #output = info_patient_ophalen(z_score_neg,z_score_pos,order_desc_asc,search)
-            output = test(z_score_neg,z_score_pos,order_desc_asc,search)
-            output2 = []
-            print(f">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>{output}")
-            headers = ["Metabolite","Z-score","Disease(s)"]                     # Zou nice zijn als er per disease een top 3 gevonden ziektes kan woorden, nog beter ook met score, kan ik nog een colomn voor bij maken. Laat maar weten
-
-        else:
-            order_by = request.form['order_type']
-            print(f"mainOption:{mainOption}, order_by:{order_by}, metaboliteName:{search}, order:{order_desc_asc}")
-                                                                                # functie oproepen queri met alle nodige informatie, zie header tabel, onderstaande is een functie voor mezelf om te checken of alles werkt
-            ###############################output = search_queri(mainOption,2,3,9)
-            output = []
-            output2 = info_meta_ophalen(order_by,order_desc_asc,search)
-            print(output2)
-            headers = ["name","origin_name","hmbd_code","fluids_name","relevance"]
-
-        return render_template("Results.html", output=output, headers=headers,output2=output2)
+        output = get_patient_info(z_score_neg, z_score_pos, order_desc_asc, search)
+        return render_template("Results.html", output=output)
     else:
         return render_template("Results.html")
 
@@ -186,46 +171,27 @@ def get_patients():   #moet conn and cursor meekrijgen
         patients.append(patient[2:len(patient)-3])
     return patients
 
-def info_meta_ophalen(order_by,order_desc_asc,search):  #name weghalen, overweeg discription weg te halen want dat ziet er niet goed, misschien iets ander toevoegen?
-    print(
-        f"order by:{order_by}, order:{order_desc_asc},meatbo:{search}")
+def info_meta_ophalen(search):  #name weghalen, overweeg discription weg te halen want dat ziet er niet goed, misschien iets ander toevoegen?
     cursor = conn.cursor()
-    postgre = ("""SELECT name,origin_name,hmbd_code,fluids_name, relevance  FROM metabolieten
+    postgre = ("""SELECT name,origin_name,hmbd_code,fluids_name,description  FROM metabolieten
      JOIN origins_metabolieten ON metabolieten.id_metaboliet=origins_metabolieten.metabolieten_id_metaboliet
      JOIN origins ON origins_metabolieten.origins_id_orgins= origins.id_orgins
      JOIN relevance ON metabolieten.relevance_id_relevance=relevance.id_relevance
      JOIN z_scores ON metabolieten.id_metaboliet=z_scores.metabolieten_id_metaboliet
      join fluids f on metabolieten.id_fluids = f.id_fluids
-    order by {} {}
-    limit 20;""").format(order_by, order_desc_asc)
+     WHERE name like'{}%'
+    limit 1;""").format(search)
 
     cursor.execute(postgre)
     result = cursor.fetchall()
 
     info_met = []
-    for a in result:
+    for a in result: #"; \n    "
         row = []
-        name = a[0]
-        origin = a[1]
-        if origin == "; \n    ":
-            origin = "ONBEKEND"
-        else:
-            origin = origin
-        descr = a[2]
-        code = a[3]
-        rel = ""
-        relevance = a[4].split(",")
-        if relevance[3] == "f)":
-            rel = "FALSE"
-        elif relevance[3] == "t)":
-            rel = "TRUE"
-        elif relevance[3] == ")":
-            rel = "ONBEKEND"
-        row.append(name)
-        row.append(origin)
-        row.append(descr)
-        row.append(code)
-        row.append(rel)
+        for item in a:
+            if item == "; \n    " or item == ";":
+                item = ""
+            row.append(item)
         info_met.append(row)
     return info_met
 
@@ -244,10 +210,49 @@ def info_patient_ophalen(z_score_neg,z_score_pos,order_desc_asc,search):
     for i in result:  #Wat aangepast nu doet deze het ook
         info_pat.append(i)
     #z-score is nog steeds heel vreemd, denk bijna dat er echt iets niet moet kloppen!!!
-    print(info_pat)
     return info_pat
 
-def test(z_score_neg,z_score_pos,order_desc_asc,search):   #P1005.1_Zscore
+def genen_ophalen(search):  #name weghalen, overweeg discription weg te halen want dat ziet er niet goed, misschien iets ander toevoegen?
+    cursor = conn.cursor()
+    postgre = (f"""select genes,count
+from metabolieten
+join metabolieten_pubom mp on metabolieten.id_metaboliet = mp.metabolieten_id_metaboliet
+join pubom p on mp.pubom_id_pum_om = p.id_pum_om
+join pub_disease_pubom pdp on p.id_pum_om = pdp.pubom_id_pum_om
+join pubom_pub_genes ppg on p.id_pum_om = ppg.pubom_id_pum_om
+join pub_genes pg on ppg.pub_genes_id_artikel = pg.id_artikel
+where name='{search }'
+group by genes, count;""")
+
+    cursor.execute(postgre)
+    result = cursor.fetchall()
+
+    info_met = []
+    for a in result:
+        info_met.append(a)
+    return info_met
+
+def ziekte_ophalen(search):  #name weghalen, overweeg discription weg te halen want dat ziet er niet goed, misschien iets ander toevoegen?
+    cursor = conn.cursor()
+    postgre = (f"""select disease,count,mesh_code
+from metabolieten
+join metabolieten_pubom mp on metabolieten.id_metaboliet = mp.metabolieten_id_metaboliet
+join pubom p on mp.pubom_id_pum_om = p.id_pum_om
+join pub_disease_pubom pdp on p.id_pum_om = pdp.pubom_id_pum_om
+join pub_disease pd on pdp.pub_disease_id_article = pd.id_article
+where name='{search}'
+group by disease, count,mesh_code
+order by count desc;""")
+
+    cursor.execute(postgre)
+    result = cursor.fetchall()
+
+    info_met = []
+    for a in result:
+        info_met.append(a)
+    return info_met
+
+def get_patient_info(z_score_neg,z_score_pos,order_desc_asc,search):   #P1005.1_Zscore
     cursor = conn.cursor()
     postgre = ("""select name,z_score,disease,count,mesh_code
 from patients
@@ -273,8 +278,6 @@ join pub_disease pd on pd.id_article = pdp.pub_disease_id_article
         else:
             listt = [float(i[1]),[list(i[2:5])]]
             dict_test[str(i[0])] = listt
-    for i in dict_test:
-        print(f"{i}, >{dict_test[i]}")
     return dict_test
 
 def get_email(reciever):
