@@ -80,19 +80,14 @@ def get_disease_top(cursor):
     global values
     global metabolits
     for meta in metabolits:
-        patient = "P1002.1_Zscore"
-        val = -100
-        val2 = 100
         postgre = ("""SELECT name, disease, count FROM metabolieten
-          JOIN z_scores ON metabolieten.id_metaboliet=z_scores.metabolieten_id_metaboliet
-          JOIN patients ON z_scores.patients_id_patient=patients.id_patient
           JOIN metabolieten_pubom mp ON metabolieten.id_metaboliet = mp.metabolieten_id_metaboliet
           JOIN pubom ON mp.pubom_id_pum_om = pubom.id_pum_om
           JOIN pub_disease_pubom pdp ON pubom.id_pum_om = pdp.pubom_id_pum_om
           JOIN pub_disease ON pdp.pub_disease_id_article = pub_disease.id_article
-          WHERE id_patient LIKE'{}%' AND (z_score < {} OR z_score > {}) AND name LIKE '{}'
+          WHERE name LIKE '{}'
           ORDER BY count
-          LIMIT 5;""").format(patient, val, val2, meta)
+          LIMIT 5;""").format(meta)
         cursor.execute(postgre)
         result = cursor.fetchall()
 
@@ -199,6 +194,5 @@ if __name__ == '__main__':
         values.append(char.count(str(z)))
 
     get_disease_top(cursor)
-
     #get_genes(cursor)
     make_figure()
