@@ -16,7 +16,7 @@ conns = mysql.connector.connect(
 )
 
 conn = psycopg2.connect(host="postgres.biocentre.nl", user="BI2_PG1", password="blaat1234",
-                            database="bio_jaar_2_pg_1",port=5900)
+                            database="bio_jaar_2_pg_1", port="5900")
 
 app = Flask(__name__)
 
@@ -132,6 +132,7 @@ def results():
 @app.errorhandler(404)
 def not_found(e):
     return render_template("errorPage.html")
+
 
 def search_queri(mainOpt,keuzes,neg,pos):
     if keuzes == "":

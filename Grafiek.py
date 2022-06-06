@@ -6,7 +6,7 @@ from fileReader import main
 
 conn = psycopg2.connect(host="postgres.biocentre.nl",
                         user="BI2_PG1", password="blaat1234",
-                        database="bio_jaar_2_pg_1", port=5900)
+                        database="bio_jaar_2_pg_1", port="5900")
 
 def visualisatie():
     cursor = conn.cursor()
