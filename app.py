@@ -33,7 +33,11 @@ def hello_world():
         if 'file' not in request.files:
             error = "File not selected"
             return render_template("Homepage.html", error=error)
+        # Selected file
         file = request.files['file']
+
+        # For further upgrades (make a difference between excel files
+        # with only new patients or new metabolites and new patients
         tijd = request.form['fileT']
 
         # Name of file with metabolites, z-scores, patients etc
@@ -47,7 +51,7 @@ def hello_world():
             print(email)
             get_email(email)
         """
-
+        # Checks file
         if filename == '':
             error = "Filename is empty"
             return render_template("Homepage.html", error=error)
@@ -55,12 +59,13 @@ def hello_world():
             error = "This file is not allowed"
             return render_template("Homepage.html", error=error)
         else:
-            #file request.form['org_pro']
-            #to obtain all information in file
-            #data = fileReader.readFile(file)
-            #to obtain metabolieten for textmining
-            #metabolieten = fileReader.getMetabolites(data)
-            #textmining2.get_ids_all_pubmed(metabolieten,True)
+            file = request.form['org_pro']
+            # To obtain all information in file
+            data = fileReader.readFile(file)
+            # To obtain metabolieten for textmining
+            metabolieten = fileReader.getMetabolites(data)
+            # Start textmining
+            textmining2.start_textmining(metabolieten)
             return render_template("Homepage.html", error="")
     else:
         return render_template("Homepage.html")
@@ -71,14 +76,18 @@ def info():
 
 @app.route('/Resultspatient',methods=["POST", "GET"])
 def resultspatient():
-    #patients = ["piet","jan","iphone"]                                         #Needs query to get all the patient ID's
+    # To obtain all patients (names)
     patients = get_patients()
+
     if request.method == "POST":
-        patient = ""
+        # Obtain positive and negative z-score threshold
         zscoreP = str(request.form.getlist('zscorePos')).replace("[","").replace("]","").replace("'","")
         zscoreN = str(request.form.getlist('zscoreNeg')).replace("[","").replace("]","").replace("'","")
 
+        # Obtain patient ID: dropdown menu
         selected_patient = request.form.get('patientC')
+
+        # Obtain patient ID: text
         answer_patient = request.form.get('answer')
         print(f"patient:{selected_patient}, z-scorep:{zscoreP}, z-scoren:{zscoreN}")
         if selected_patient == "":
@@ -86,27 +95,36 @@ def resultspatient():
         else:
             patient = selected_patient
         print(patient)
-        print("tot hier werkt het wel")
 
+        # Obtain graph
         graph = sunburstplot.get_figure(patient,zscoreN,zscoreP)
-        return render_template("Resultspatient.html",patients=patients,grah=graph)
+        return render_template("Resultspatient.html",patients=patients)
     else:
-        return render_template("Resultspatient.html", patients=patients,grah="")
+        return render_template("Resultspatient.html", patients=patients)
 
 @app.route('/ResultsGlobal',methods=["POST", "GET"])
 def resultsGlobal():
+    # Obtain all metabolites (names)
     metabolieten = get_metabolieten()
     if request.method == "POST":
+        # Obtain chosen metabolite
         metaboliet = request.form.get('Metabolites')
         if metaboliet=="":
             metaboliet = request.form.get('answer')
-        print(metaboliet)
+
+        # Obtain name, origin_name, hmbd_code, fluids_name and description from
+        # metabolite (metaboliet)
         output = info_meta_ophalen(metaboliet)
+
+        # Headers for table in ResultsGlobal.html
         headers = ["name", "origin_name", "hmbd_code", "fluids_name"]
+
+        # Gene(s) related to give metabolite (metaboliet)
         genen = genen_ophalen(metaboliet)
-        print(genen)
+
+        # Disease(s) related to give metabolite (metaboliet)
         ziektes = ziekte_ophalen(metaboliet)
-        print(ziektes)
+
         return render_template("ResultsGlobal.html",Metabolites=metabolieten, output=output, headers=headers,genes=genen,ziektes=ziektes)
     else:
         return render_template("ResultsGlobal.html",Metabolites=metabolieten)
@@ -114,12 +132,18 @@ def resultsGlobal():
 @app.route('/Results',methods=["POST", "GET"])
 def results():
     if request.method == "POST":
+        # Order descending or ascending (queri database)
         order_desc_asc = request.form['order']
 
+        # Obtain positive and negative z-score threshold
         z_score_neg = request.form['zscoreNeg']
         z_score_pos = request.form['zscorePos']
-        # Name metabolite or patient iD
+
+        # Obtain patient iD
         search = request.form.get('answer')
+
+        # Obtain metabolites, z-score and diseases related to metabolite
+        # from patient
         output = get_patient_info(z_score_neg, z_score_pos, order_desc_asc, search)
         return render_template("Results.html", output=output)
     else:
@@ -129,42 +153,27 @@ def results():
 def not_found(e):
     return render_template("errorPage.html")
 
+def get_metabolieten():
+    """ To obtain a list with all metabolites (names)
 
-def search_queri(mainOpt,keuzes,neg,pos):
-    if keuzes == "":
-        keuzes = "*"
-
-    mainOpt = "gene"
-    keuzes = "gene_id,biotype,analysis_id"
-    cursor = conn.cursor()
-    cursor = conn.cursor()
-    sql = f"select {keuzes} from {mainOpt} " \
-          f"limit 50"
-#f"where z_score < {neg} or z_score > {pos}" \
-    # sql = f"select {zoek} from blast where {keuze_2} like '%{orga}%'"
-    cursor.execute(sql)
-    row = cursor.fetchall()
-    regels = []
-    for item in list(row):
-        # regel = str(item).strip("'()''").replace(",", " ").replace("'", "")
-        # regels.append(regel[0:len(regel)])
-        regels.append(item)
-    conn.commit()
-    return regels
-
-def get_metabolieten():   #moet conn and cursor meekrijgen
+    :return: list- with metabolites
+    """
     cursor = conn.cursor()
     postgre = ("""SELECT name FROM metabolieten;""")
     cursor.execute(postgre)
     result = cursor.fetchall()
-    patients = []
-    patients.append("")
+    metabolieten = []
+    metabolieten.append("")
     for i in result:
         meta = str(i)
-        patients.append(meta[2:len(meta)-3])
-    return patients
+        metabolieten.append(meta[2:len(meta)-3])
+    return metabolieten
 
-def get_patients():   #moet conn and cursor meekrijgen
+def get_patients():
+    """ To obtain a list with all patients (ids)
+
+    :return: list- with patients
+    """
     cursor = conn.cursor()
     postgre = ("""SELECT id_patient FROM patients;""")
     cursor.execute(postgre)
@@ -176,7 +185,14 @@ def get_patients():   #moet conn and cursor meekrijgen
         patients.append(patient[2:len(patient)-3])
     return patients
 
-def info_meta_ophalen(search):  #name weghalen, overweeg discription weg te halen want dat ziet er niet goed, misschien iets ander toevoegen?
+def info_meta_ophalen(search):
+    """ To obtain name, origin_name, hmbd_code, fluids_name and description
+    from metabolite (search)
+
+    :param search: str- metabolite
+    :return: list- with name, origin_name, hmbd_code, fluids_name and
+                description from metabolite (metaboliet)
+    """
     cursor = conn.cursor()
     postgre = ("""SELECT name,origin_name,hmbd_code,fluids_name,description  FROM metabolieten
      JOIN origins_metabolieten ON metabolieten.id_metaboliet=origins_metabolieten.metabolieten_id_metaboliet
@@ -191,33 +207,22 @@ def info_meta_ophalen(search):  #name weghalen, overweeg discription weg te hale
     result = cursor.fetchall()
 
     info_met = []
-    for a in result: #"; \n    "
+    for a in result:
         row = []
         for item in a:
+            # Make item "" if there are no results
             if item == "; \n    " or item == ";":
                 item = ""
             row.append(item)
         info_met.append(row)
     return info_met
 
-def info_patient_ophalen(z_score_neg,z_score_pos,order_desc_asc,search):
-    print(search)
-    print(f"zscoreN:{z_score_neg}, zscoreP:{z_score_pos}, order:{order_desc_asc}, patient:{search}")
-    cursor = conn.cursor()
-    postgre = ("""SELECT name, z_score FROM metabolieten
-         JOIN z_scores ON metabolieten.id_metaboliet=z_scores.metabolieten_id_metaboliet
-         JOIN patients ON z_scores.patients_id_patient=patients.id_patient
-         WHERE id_patient like'{}%' AND (z_score < {} OR z_score > {})
-         ORDER BY z_score {} limit 5;""").format(search,z_score_neg,z_score_pos,order_desc_asc)        #heeft voor nu even een limit anders duurt het erg lang
-    cursor.execute(postgre)
-    result = cursor.fetchall()
-    info_pat = []
-    for i in result:  #Wat aangepast nu doet deze het ook
-        info_pat.append(i)
-    #z-score is nog steeds heel vreemd, denk bijna dat er echt iets niet moet kloppen!!!
-    return info_pat
+def genen_ophalen(search):
+    """ Obtain gene(s) related to give metabolite (search)
 
-def genen_ophalen(search):  #name weghalen, overweeg discription weg te halen want dat ziet er niet goed, misschien iets ander toevoegen?
+    :param search: str- metabolite (name)
+    :return: list- gene(s) (and count)
+    """
     cursor = conn.cursor()
     postgre = (f"""select genes,count
 from metabolieten
@@ -237,7 +242,12 @@ group by genes, count;""")
         info_met.append(a)
     return info_met
 
-def ziekte_ophalen(search):  #name weghalen, overweeg discription weg te halen want dat ziet er niet goed, misschien iets ander toevoegen?
+def ziekte_ophalen(search):
+    """ Obtain disease(s) related to give metabolite (search)
+
+    :param search: str- metabolite (name)
+    :return: list- disease(s) (and count)
+    """
     cursor = conn.cursor()
     postgre = (f"""select disease,count,mesh_code
 from metabolieten
@@ -257,7 +267,17 @@ order by count desc;""")
         info_met.append(a)
     return info_met
 
-def get_patient_info(z_score_neg,z_score_pos,order_desc_asc,search):   #P1005.1_Zscore
+def get_patient_info(z_score_neg,z_score_pos,order_desc_asc,search):
+    """To obtain metabolites, z-score and diseases related to metabolite
+       from patient
+
+    :param z_score_neg: str- negative z-score threshold
+    :param z_score_pos: str- positive z-score threshold
+    :param order_desc_asc: str- ascending or descending
+    :param search: str- patient id
+    :return: list- with metabolites, z-score and diseases related to metabolite
+       from patient
+    """
     cursor = conn.cursor()
     postgre = ("""select name,z_score,disease,count,mesh_code
 from patients
@@ -267,43 +287,37 @@ join metabolieten_pubom mp on m.id_metaboliet = mp.metabolieten_id_metaboliet
 join pub_disease_pubom pdp on mp.pubom_id_pum_om = pdp.pubom_id_pum_om
 join pub_disease pd on pd.id_article = pdp.pub_disease_id_article
          WHERE id_patient like'{}%' AND (z_score < {} OR z_score > {})
-         ORDER BY z_score {};""").format(search,z_score_neg,z_score_pos,order_desc_asc)   # heeft voor nu even een limit anders duurt het erg lang
+         ORDER BY z_score {};""").format(search,z_score_neg,z_score_pos,order_desc_asc)
     cursor.execute(postgre)
     result = cursor.fetchall()
-    info_pat = []
-    print(list(result))
-    d = []
 
     dict_test = {}
     for i in result:
         if i[0] in dict_test:
             listt = dict_test[i[0]][1]
-            print(listt.append(i[2:5]))
-            #dict_test[i[0]] = [float(i[1])]
+            print(listt)
         else:
             listt = [float(i[1]),[list(i[2:5])]]
             dict_test[str(i[0])] = listt
     return dict_test
 
 def get_email(reciever):
+    """ Unfinished function, if finished sends email to reciever/client/user
+    to alert them that the results are ready (textmining is finished)
+
+    :param reciever: str- email of client/user
+    """
     import smtplib
 
-    host = "postgres.biocentre.nl"
+    host = ""
     server = smtplib.SMTP(host)
-    FROM = "Y.Hopmans@student.han.nl"
+    FROM = ""
     TO = reciever
-    MSG = "Subject: Test email python\n\nBody of your message!"
+    MSG = "Subject: textminingDiseaseIdentification\n\nResults are ready!"
     server.sendmail(FROM, TO, MSG)
 
     server.quit()
     print("Email Send")
-
-def opbouw_keuzes(keus):
-    search = ""
-    for item in keus:
-        if item != "":
-            search = search + str(item) + ","
-    return search[0:len(search) - 1]
 
 if __name__ == '__main__':
     app.run()
