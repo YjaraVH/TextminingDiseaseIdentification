@@ -1,4 +1,10 @@
 import pandas as pd
+'''
+    Filename: fileReader.py
+    Authors: Tosca Frederiks & Yjara Verhagen
+    Date created: 6/06/2022
+'''
+
 
 
 def readFile(file):
