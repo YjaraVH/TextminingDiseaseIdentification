@@ -6,6 +6,7 @@ import psycopg2
     Date created: 6/06/2022
 '''
 
+
 def update_fluid(fluid):
     """
     vult de tabel fluids in de database.
