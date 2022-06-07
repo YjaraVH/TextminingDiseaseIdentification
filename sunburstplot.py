@@ -12,7 +12,7 @@ values = []
 metabolits = []
 
 
-def get_meta_top(cursor,patient,val,val2):
+def get_meta_top(connect, cursor,patient,val,val2):
     """
     Verzamelt de data die nodig is voor het maken van de sunburstplot.
     :param cursor: cursor
@@ -66,6 +66,8 @@ def get_meta_top(cursor,patient,val,val2):
         par.append(meta)
         values.append(cnt)
 
+    connect.close()
+
 
 def make_figure():
     """
@@ -96,7 +98,7 @@ def get_figure(pat,neg,pos):
     # open een cursor
     cur = conn.cursor()
     # default waarde
-    get_meta_top(cur,pat,neg,pos)
+    get_meta_top(conn, cur,pat,neg,pos)
     make_figure()
 
 if __name__ == '__main__':
