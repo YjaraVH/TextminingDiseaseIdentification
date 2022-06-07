@@ -12,9 +12,13 @@ values = []
 metabolits = []
 
 
-def get_meta_top(connect, cursor,patient,val,val2):
+def get_meta_top(connect, cursor, patient, val, val2):
     """
     Verzamelt de data die nodig is voor het maken van de sunburstplot.
+    :param patient: string - patient
+    :param val: int - z-score filter 1
+    :param val2: int - z-score filter 2
+    :param connect: connection
     :param cursor: cursor
     """
     global char
@@ -89,7 +93,7 @@ def make_figure():
     return fig.show()
 
 
-def get_figure(pat,neg,pos):
+def get_figure(pat, neg, pos):
     # connect aan de database
     conn = psycopg2.connect(host="postgres.biocentre.nl", user="BI2_PG1",
                             password="blaat1234",
@@ -98,9 +102,9 @@ def get_figure(pat,neg,pos):
     # open een cursor
     cur = conn.cursor()
     # default waarde
-    get_meta_top(conn, cur,pat,neg,pos)
+    get_meta_top(conn, cur, pat, neg, pos)
     make_figure()
 
-if __name__ == '__main__':
-    get_figure("P1002.1_Zscore",-100,100)
 
+if __name__ == '__main__':
+    get_figure("P1002.1_Zscore", -100, 100)
