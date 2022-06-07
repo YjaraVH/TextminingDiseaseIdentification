@@ -1,4 +1,9 @@
 import psycopg2
+'''
+    Filename: visualisatie.py
+    Authors: Nienke Gertsen
+    Date created: 6/06/2022
+'''
 
 def info_patient_ophalen(conn, cursor):
     """

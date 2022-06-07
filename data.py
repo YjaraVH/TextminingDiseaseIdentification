@@ -1,6 +1,10 @@
 from fileReader import main
 import psycopg2
-
+'''
+    Filename: data.py
+    Authors: Nienke Gertsen & Tosca Frederiks
+    Date created: 6/06/2022
+'''
 
 def update_fluid(fluid):
     """
