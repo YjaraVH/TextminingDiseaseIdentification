@@ -243,7 +243,7 @@ def update_link_meta_path(getal):
 if __name__ == '__main__':
     # connect aan de database
     conn = psycopg2.connect(host="postgres.biocentre.nl", user="BI2_PG1", password="blaat1234",
-                            database="bio_jaar_2_pg_1")
+                            database="bio_jaar_2_pg_1", port="5900")
 
     # open een cursor
     cursor = conn.cursor()
